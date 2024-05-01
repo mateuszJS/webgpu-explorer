@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "sourceMap": true,
+    "module": "esnext",
+    "target": "es6",
+    "allowJs": true,
+    "moduleResolution": "bundler",
+    "baseUrl": "./src",
+
+    // everything below is just suggested by https://www.npmjs.com/package/@tsconfig/recommended
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "$schema": "https://json.schemastore.org/tsconfig", // @tsconfig/recommended
+  "display": "Recommended" // @tsconfig/recommended
+}

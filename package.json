@@ -8,8 +8,8 @@
     "node": ">=18.18.0"
   },
   "scripts": {
-    "start": "export NODE_ENV=development && webpack serve --open --mode=development",
-    "build": "export NODE_ENV=production && webpack --mode=production "
+    "start": "export $(cat .env | xargs) && export NODE_ENV=development && webpack serve --open --mode=development",
+    "build": "export $(cat .env | xargs) && export NODE_ENV=production && webpack --mode=production "
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",

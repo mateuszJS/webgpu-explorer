@@ -1,0 +1,20 @@
+project-step-page {
+  display: block;
+  padding: 50px;
+}
+
+.project-step-page {
+  &__title {
+    text-align: center;
+    font-size: 60px;
+    color: #ffffff99;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  &__description {
+    max-width: 400px;
+    margin: 20px auto 50px;
+    text-align: center;
+  }
+}

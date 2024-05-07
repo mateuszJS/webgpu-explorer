@@ -3,13 +3,14 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: ["./src/index.ts", "/src/styles/index.scss"],
+  entry: ["./src/index.ts", "/src/styles/index.scss"], // do we need .scss entry point??
   devtool: "eval-source-map",
   devServer: {
-    static: "./dist",
+    static: "./dist", // do we need it??
+    historyApiFallback: true // fallbakc to index.html while url not found
   },
   resolve: {
-    extensions: [".ts", ".js", ".jpg", ".png", ".svg"],
+    extensions: [".ts", ".js"],
     modules: [path.resolve(__dirname, "src"), "node_modules"],
     /* useful with absolute imports, "src" dir now takes precedence over "node_modules",
     otherwise you got an error:
@@ -22,6 +23,10 @@ module.exports = {
         test: /\.ts$/,
         use: "ts-loader",
         exclude: /node_modules/,
+      },
+      {
+        test: /\.inline\./,
+        type: "asset/source",
       },
       {
         test: /\.scss$/,
@@ -37,10 +42,6 @@ module.exports = {
         test: /\.(png|jpg|jpeg|gif|svg)$/,
         type: "asset/resource",
       },
-      {
-        test: /\.inline\.html$/,
-        type: "asset/source",
-      },
     ],
   },
   output: {
@@ -49,11 +50,12 @@ module.exports = {
     clean: true,
   },
   optimization: {
-    runtimeChunk: "single",
+    runtimeChunk: "single", // do we need that?
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "src/index.html"),
+      baseURI: process.env.BASE_URI
     }),
     new MiniCssExtractPlugin({
       filename: "[chunkhash].bundle.css"

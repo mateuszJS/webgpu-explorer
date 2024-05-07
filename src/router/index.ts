@@ -16,11 +16,12 @@ import updateView from "./updateView";
 //   '/': 
 // }
 
-// handles back and forward history buttons in browser
-export default function initRouter(main: HTMLElement) {
+export default function initRouter() {
+
+  // handles back and forward history buttons in browser
   window.onpopstate = () => {
     updateView(window.location.pathname)
   };
 
-  updateView('')
+  updateView(window.location.pathname)
 }

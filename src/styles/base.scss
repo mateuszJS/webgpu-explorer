@@ -1,0 +1,85 @@
+@property --border-gradient-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0turn;
+}
+
+:root {
+  --background: #060515;
+  --background-accent-a: #1846F720;
+  --background-accent-b: #A1458520;
+  --background-accent-c: #4595a120;
+}
+
+html {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+html, body, main {
+  height: 100%;
+}
+
+
+body {
+  color: #fff;
+
+  background: 
+    radial-gradient(20vw 20vw at 10% 10%, var(--background-accent-a), transparent),
+    radial-gradient(50vw 50vw at 90% 50%, var(--background-accent-a), transparent),
+    radial-gradient(40vw 40vw at 20% 90%, var(--background-accent-b), transparent),
+    radial-gradient(30vw 30vw at 75% 70%, var(--background-accent-c), transparent),
+    var(--background);
+
+
+    background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+            linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+            linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+  // background:
+  //   radial-gradient(circle at top left, transparent 15px, rgb(242, 76, 76) 0) top left,
+  //   radial-gradient(circle at top right, transparent 15px, rgb(122, 170, 85) 0) top right,
+  //   radial-gradient(circle at bottom right, transparent 15px, rgb(170, 85, 147) 0) bottom right,
+  //   radial-gradient(circle at bottom left, transparent 15px, #58a 0) bottom left;
+  // background: conic-gradient(
+  //   hsl(360 100% 50%),
+  //   hsl(315 100% 50%),
+  //   hsl(270 100% 50%),
+  //   hsl(225 100% 50%),
+  //   hsl(180 100% 50%),
+  //   hsl(135 100% 50%),
+  //   hsl(90 100% 50%),
+  //   hsl(45 100% 50%),
+  //   hsl(0 100% 50%)
+  // );
+  background-size: contain;
+  background-repeat: no-repeat;
+  
+}
+
+
+.view {
+  overflow: auto; // to prevents vertical margins from transfering from children
+  transition: transform 1s ease, opacity 1s ease;
+  transform: translateY(0px);
+  opacity: 1;
+
+  &.new {
+    transform: translateY(50px);
+    opacity: 0;
+    transition-delay: 5s;
+  }
+
+  &.old {
+    transform: translateY(-50px);
+    opacity: 0;
+    position: absolute;
+    width: 100%; /* remember position absoltue work as inline, shrinks width */
+    transition-delay: 0;
+
+  }
+}
+
+.in-transition {
+  overflow: hidden;
+}

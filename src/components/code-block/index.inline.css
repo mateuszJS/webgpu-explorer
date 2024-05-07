@@ -1,0 +1,19 @@
+#copy-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+:host {
+  font-size: 14px;
+}
+
+pre {
+  max-height: 100%;
+  box-sizing: border-box;
+}
+
+pre[class*=language-] {
+  background: #111;
+  border: 1px solid #222;
+}

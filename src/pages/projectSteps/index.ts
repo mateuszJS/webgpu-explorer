@@ -6,7 +6,7 @@ import('components/code-block')
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html;
 
-class ProjectPage extends HTMLElement {
+class ProjectStepsPage extends HTMLElement {
   constructor() {
     super()
   }
@@ -16,4 +16,4 @@ class ProjectPage extends HTMLElement {
   }
 }
 
-window.customElements.define('project-page', ProjectPage);
+window.customElements.define('project-steps-page', ProjectStepsPage);

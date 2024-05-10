@@ -1,4 +1,4 @@
-project-step-page {
+project-overview-page {
   display: block;
   padding: 50px;
 }
@@ -17,4 +17,11 @@ project-step-page {
     margin: 20px auto 50px;
     text-align: center;
   }
+}
+
+.project-overview-page__start-btn {
+  display: block;
+  width: fit-content;
+  margin: 30px auto;
+
 }

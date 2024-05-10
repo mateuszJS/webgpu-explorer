@@ -3,11 +3,14 @@ import './styles.scss'
 
 import("components/project-stepper")
 import("components/project-stepper-item")
+import("components/x-button")
+import("components/x-link")
+import("components/home-link")
 
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html;
 
-class ProjectStepPage extends HTMLElement {
+class ProjectOverviewPage extends HTMLElement {
   constructor() {
     super()
     // const shadowRoot = this.attachShadow({mode: 'open'});
@@ -38,4 +41,4 @@ class ProjectStepPage extends HTMLElement {
   }
 }
 
-window.customElements.define('project-step-page', ProjectStepPage);
+window.customElements.define('project-overview-page', ProjectOverviewPage);

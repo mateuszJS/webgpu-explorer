@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  padding: 5px;
+  counter-reset: section;
+}
+ol {
+  display: flex;
+  position: relative;
+  gap: 20px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+ol:before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  bottom: auto;
+  height: 40px;
+  border-radius: 20px;
+  pointer-events: none;
+
+  --progress: 50%;
+  --primary: #ffffffcc;
+  --secondary: #ffffff88;
+  background: conic-gradient(from 0 at var(--progress) 50%, var(--secondary) 225deg, var(--primary) 225deg, var(--primary) 315deg, var(--secondary) 315deg);
+  /* background: conic-gradient(from 0 at var(--progress) 50%, var(--secondary) 225deg, var(--primary) 225deg, var(--secondary) 270deg, var(--primary) 315deg, var(--secondary) 315deg); */
+}

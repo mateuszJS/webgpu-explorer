@@ -1,6 +1,6 @@
 import('pages/home')
-import('pages/project')
-import('pages/projectStep')
+import('pages/projectSteps')
+import('pages/projectOverview')
 
 export default function updateView(pathname: string) {
   const [_, page, firstParam, subPage, secondParam] = pathname.split('/')
@@ -10,12 +10,12 @@ export default function updateView(pathname: string) {
     if (subPage === 'steps' && secondParam) {
       // redirect if stepIndex is invalid
       // renderView(projectStepPage)
-      renderView('<project-step-page></project-step-page>')
+      renderView('<project-steps-page></project-steps-page>')
       return
     }
     
     // redirect if projectSlug cannot be resolved
-    renderView('<project-page></project-page>')
+    renderView('<project-overview-page></project-overview-page>')
     return
   }
 

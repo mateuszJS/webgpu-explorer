@@ -1,12 +1,14 @@
-import BaseComponent from 'BaseComponent';
 import html from './index.inline.html'
+import CSS from './styles.inline.css'
 
 let tmpl = document.createElement('template');
-tmpl.innerHTML = html;
+tmpl.innerHTML = `<style>${CSS}</style>${html}`;
 
-export default class ProjectStepper extends BaseComponent {
+export default class ProjectStepper extends HTMLElement {
   constructor() {
-    super(tmpl)
+    super()
+    const shadowRoot = this.attachShadow({mode: 'closed'});
+    shadowRoot.appendChild(tmpl.content.cloneNode(true));
   }
 
   // connectedCallback() {

@@ -1,10 +1,9 @@
 import startIcon from './icons/start-icon.png'
 import triangleIcon from './icons/triangle-icon.png'
 import html from './index.inline.html'
-import './styles.scss'
-import BaseComponent from 'BaseComponent';
+import CSS from "./styles.inline.css";
 
-import('components/inter-link')
+import('components/x-link')
 
 const MAP_IMG_SRC = {
   background: startIcon,
@@ -12,16 +11,19 @@ const MAP_IMG_SRC = {
 }
 
 const tmpl = document.createElement('template');
-tmpl.innerHTML = html;
+tmpl.innerHTML = `<style>${CSS}</style>${html}`;
 
-class ProjectPanel extends BaseComponent {
+class ProjectPanel extends HTMLElement {
   constructor() {
-    super(tmpl)
+    super()
 
-    this.querySelector('img')!.setAttribute('src', MAP_IMG_SRC[this.getAttribute('icon') as keyof typeof MAP_IMG_SRC])
-    this.querySelector('h3')!.innerText = this.getAttribute('title') as string
-    this.querySelector('p')!.innerText = this.getAttribute('text') as string
-    this.querySelector('inter-link')!.setAttribute(
+    const shadow = this.attachShadow({mode: 'open'});
+    shadow.appendChild(tmpl.content.cloneNode(true));
+
+    shadow.querySelector('img')!.setAttribute('src', MAP_IMG_SRC[this.getAttribute('icon') as keyof typeof MAP_IMG_SRC])
+    shadow.querySelector('h3')!.innerText = this.getAttribute('title') as string
+    shadow.querySelector('p')!.innerText = this.getAttribute('text') as string
+    shadow.querySelector('x-link')!.setAttribute(
       'to',
       `/projects/${this.getAttribute('project-slug')}`
     )

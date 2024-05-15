@@ -1,4 +1,4 @@
-import CSS from './styles.inline.css'
+import CSS from './styles.raw.scss'
 
 class XButton extends HTMLElement {
   constructor() {

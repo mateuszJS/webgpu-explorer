@@ -8,7 +8,7 @@
   }
 }
 
-:host {
+project-panel {
   display: block;
   position: relative;
   --outer-radius: 8px;
@@ -21,21 +21,62 @@
 
   --border-gradient-angle: 0turn;
 
-  padding: var(--border-size);
-  overflow: hidden;
+  box-shadow: 0px 4px 11px 3px rgba(255, 255, 255, 0.1);
+
+  /* padding: var(--border-size); */
+  /* overflow: hidden; */
+  /* padding: 15px; */
+
+
+  x-link {
+    display: block;
+    height: 100%;
+  }
+
+  x-link::part(anchor) {
+    height: 100%;
+    border-radius: var(--inner-radius);
+    color: var(--text-primary); 
+    display: flex;
+    text-decoration: none;
+    background-color: #ffffff11;
+    border: 2px solid #ffffff11;
+    transition: background-color 0.5s ease, transform 0.5s ease;
+    /* background-color: rgba(11, 16, 43, 1); */
+    /* overflow: hidden;  needed for effect of border */ 
+    isolation: isolate;
+    align-items: center;
+    padding: 15px 25px;
+
+  }
+
+  x-link::part(anchor):hover {
+    background-color: #ffffff22;
+    transform: scale(1.05);
+  }
+
+  svg {
+    flex: 0 0 60px;
+    min-width: 0;
+    margin-inline-end: 20px;
+    color: var(--text-secondary);
+  }
+
+  h3 {
+    margin: 0 0 5px;
+    font-weight: 500;
+    font-size: 18px;
+  }
+
+  p {
+    margin: 0;
+    font-weight: 300;
+    font-size: 15px;
+  }
+
 }
 
-x-link::part(anchor) {
-  height: 100%;
-  border-radius: var(--inner-radius);
-  color: white; 
-  display: flex;
-  text-decoration: none;
-  background-color: rgba(11, 16, 43, 1);
-  overflow: hidden;
-  isolation: isolate;
-}
-
+/*
 .flash {
   display: block;
   position: absolute;
@@ -44,16 +85,11 @@ x-link::part(anchor) {
   background-size: contain;
   pointer-events: none;
 
-  /* --color-a: #0901ff00;
-  --color-b: #ff01f700;
-  --color-c: #01eaff00; */
+
   --color-a: #0901ffff;
   --color-b: #ff01f7ff;
   --color-c: #01eaffff;
-  /* transition:
-  --color-a 1s,
-  --color-b 1s,
-  --color-c 1s; */
+
 
   background-image: conic-gradient(
     from var(--border-gradient-angle) at 50% 50%,
@@ -76,10 +112,4 @@ x-link::part(anchor) {
 :host(:hover) .flash {
   opacity: 1;
 }
-
-img {
-  display: block;
-  height: 100%;
-  margin-inline-end: 10px;
-  flex-shrink: 0;
-}
+*/

@@ -1,23 +1,12 @@
-<style>
-  .project-layout {
-    display: grid;
-    column-gap: 10px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    height: 100%;
-    padding: 30px;
-  }
-  .view {
-    height: 100%;
-  }
-
-  code-block {
-    min-height: 0;
-  }
-</style>
-<home-link></home-link>
-<div class="project-layout">
+<nav>
+  <home-link></home-link>
+  <project-stepper>
+    <project-stepper-item order-number="1" headline="Adatper"></project-stepper-item>
+    <project-stepper-item order-number="2" headline="Device"></project-stepper-item>
+    <project-stepper-item order-number="3" headline="Canvas"></project-stepper-item>
+  </project-stepper>
+</nav>
 <h1>PROJECT</h1>
-
 <code-block code-lang="language-javascript" highlight-lines="5-10">
 import getContext from "utils/gpu/getContext"
 import getDevice from "utils/gpu/getDevice"
@@ -56,4 +45,3 @@ export default async function init() {
 
 init()
 </code-block>
-</div>

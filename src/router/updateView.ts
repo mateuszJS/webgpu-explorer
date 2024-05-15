@@ -22,8 +22,11 @@ export default function updateView(pathname: string) {
   renderView('<home-page></home-page>')
 }
 
+let isDuringTransition = false
 
 function renderView(content: string) {
+  if (isDuringTransition) return
+  isDuringTransition = true
   const mainNode = document.querySelector('main')!
   const currView = mainNode.querySelector('.view')
 
@@ -44,8 +47,10 @@ function renderView(content: string) {
   newView.addEventListener("transitionend", (event) => {
     // event is called for any transition within the element
     if (event.target === newView) {
+      // TODO: check if current view is correct for the current url
       currView?.remove()
       mainNode.classList.remove('in-transition')
+      isDuringTransition = false
     }
   });
 }

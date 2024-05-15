@@ -1,6 +1,6 @@
 import Prism from './prism/prism'
-import ourStyles from './index.inline.css'
-import prismStyles from './prism/prism.inline.css'
+import ourStyles from './index.raw.scss'
+import prismStyles from './prism/prism.raw.scss'
 
 // Prism code generted from:
 // https://prismjs.com/download.html#themes=prism-okaidia&languages=markup+clike+javascript+typescript+wgsl&plugins=highlight-keywords
@@ -18,7 +18,7 @@ class CodeBlock extends HTMLElement {
 
     shadowRoot.innerHTML = `
       <style>${prismStyles}${ourStyles}</style>
-      <pre id="pre"><code id="code">${trimmed}</code><button id="copy-button">Copy</button></pre>
+      <pre id="pre"><code id="code">${trimmed}</code></pre>
     `
     this.overlayStartNode = shadowRoot.querySelector('.overlay-before')!
     this.overlayEndNode = shadowRoot.querySelector('.overlay-after')!
@@ -35,10 +35,10 @@ class CodeBlock extends HTMLElement {
     shadowRoot.querySelector('code')!.appendChild(this.overlayEndNode)
 
 
-    const copyButton = shadowRoot.querySelector('#copy-button')!; 
-    copyButton.addEventListener("click", () => {
-        this.copyCode();                   
-    });
+    // const copyButton = shadowRoot.querySelector('#copy-button')!; 
+    // copyButton.addEventListener("click", () => {
+    //     this.copyCode();                   
+    // });
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
@@ -53,18 +53,18 @@ class CodeBlock extends HTMLElement {
     }
   }
   
-  copyCode() {
-    const { shadowRoot } = this;
-    const codeNode = shadowRoot!.querySelector('#code');  
-    const range = document.createRange();  
-    range.selectNode(codeNode!);  
-    window.getSelection()!.addRange(range); 
-    try {  
-      document.execCommand('copy');  
-    } catch(err) {  
-      console.warn('Oops, unable to copy');  
-    } 
-  }
+  // copyCode() {
+  //   const { shadowRoot } = this;
+  //   const codeNode = shadowRoot!.querySelector('#code');  
+  //   const range = document.createRange();  
+  //   range.selectNode(codeNode!);  
+  //   window.getSelection()!.addRange(range); 
+  //   try {  
+  //     document.execCommand('copy');  
+  //   } catch(err) {  
+  //     console.warn('Oops, unable to copy');  
+  //   } 
+  // }
 
 
 }

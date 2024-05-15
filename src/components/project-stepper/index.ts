@@ -1,5 +1,5 @@
 import html from './index.inline.html'
-import CSS from './styles.inline.css'
+import CSS from './styles.raw.scss'
 
 let tmpl = document.createElement('template');
 tmpl.innerHTML = `<style>${CSS}</style>${html}`;

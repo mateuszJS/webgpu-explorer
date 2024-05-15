@@ -1,12 +1,14 @@
+* {box-sizing: border-box;}
+
 :host {
   display: block;
-  padding: 5px;
+  padding: calc(5px * var(--size-factor));
   counter-reset: section;
 }
 ol {
   display: flex;
   position: relative;
-  gap: 20px;
+  gap: calc(20px * var(--size-factor));
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -14,10 +16,10 @@ ol {
 ol:before {
   content: "";
   position: absolute;
-  inset: -5px;
+  inset: calc(-5px * var(--size-factor));
   bottom: auto;
-  height: 40px;
-  border-radius: 20px;
+  height: calc(40px * var(--size-factor));
+  border-radius: calc(20px * var(--size-factor));
   pointer-events: none;
 
   --progress: 50%;

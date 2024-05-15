@@ -1,25 +1,29 @@
 import html from './index.inline.html'
 import updateView from 'router/updateView';
+import CSS from './styles.raw.scss'
 
 const tmpl = document.createElement('template');
-tmpl.innerHTML = html;
+tmpl.innerHTML = `<style>${CSS}</style>${html}`;
 
 class XLink extends HTMLElement {
-  private shadow: ShadowRoot
+  private anchorNode: HTMLAnchorElement
 
   static observedAttributes = ["to"];
 
   constructor() {
     super()
-    this.shadow = this.attachShadow({mode: 'closed'});
-    this.shadow.appendChild(tmpl.content.cloneNode(true));
+    const shadow = this.attachShadow({mode: 'closed'});
+    shadow.appendChild(tmpl.content.cloneNode(true));
+    this.anchorNode = shadow.querySelector('a')!
   }
 
   attributeChangedCallback(name: string, oldVal: string, newVal: string) {
     console.log(name, oldVal, newVal)
 
     if (name === 'to') {
-      this.shadow.querySelector('a')!.addEventListener('click', () => {
+      this.anchorNode.setAttribute('href', newVal)
+      this.anchorNode.addEventListener('click', (e) => {
+        e.preventDefault();
         window.history.pushState({}, newVal, window.location.origin + newVal);
         updateView(newVal)
         return false

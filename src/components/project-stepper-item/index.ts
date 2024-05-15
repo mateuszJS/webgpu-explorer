@@ -1,5 +1,5 @@
 import html from './index.inline.html'
-import CSS from './styles.inline.css'
+import CSS from './styles.raw.scss'
 
 const tmpl = document.createElement('template');
 tmpl.innerHTML = `<style>${CSS}</style>${html}`;
@@ -18,7 +18,7 @@ export default class ProjectStepperItem extends HTMLElement {
     const shadow = this.attachShadow({mode: 'closed'});
     shadow.appendChild(tmpl.content.cloneNode(true));
 
-    shadow.querySelector('h6')!.innerHTML = this.getAttribute('title')!
+    shadow.querySelector('h6')!.innerHTML = this.getAttribute('headline')!
     shadow.querySelector('.details p')!.innerHTML = this.getAttribute('details')!
     shadow.querySelector('.number')!.innerHTML = this.getAttribute('order-number')!
   }

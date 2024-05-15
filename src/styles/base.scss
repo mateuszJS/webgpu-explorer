@@ -6,9 +6,14 @@
 
 :root {
   --background: #060515;
-  --background-accent-a: #1846F720;
-  --background-accent-b: #A1458520;
-  --background-accent-c: #4595a120;
+  --background-accent-a: #1846F750;
+  --background-accent-b: #A1458560;
+  --background-accent-c: #4556a160;
+  --background-accent-d: #a100ff1f;
+  // --background-accent-d: #00ff151f;
+  // --background-accent-d: #00ffff1f;
+  --text-secondary: #ffffffbb;
+  --text-primary: #ffffff;
 }
 
 html {
@@ -25,20 +30,24 @@ main {
   overflow: auto;
 }
 
+:host {
+  background: blue!important
+}
+
 body {
-  color: #fff;
+  color: var(--text-primary);
 
   background: 
     radial-gradient(20vw 20vw at 10% 10%, var(--background-accent-a), transparent),
-    radial-gradient(50vw 50vw at 90% 50%, var(--background-accent-a), transparent),
+    radial-gradient(50vw 50vw at 90% 30%, var(--background-accent-d), transparent),
     radial-gradient(40vw 40vw at 20% 90%, var(--background-accent-b), transparent),
     radial-gradient(30vw 30vw at 75% 70%, var(--background-accent-c), transparent),
     var(--background);
 
 
-    background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
-            linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
-            linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+    // background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+    //         linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+    //         linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
   // background:
   //   radial-gradient(circle at top left, transparent 15px, rgb(242, 76, 76) 0) top left,
   //   radial-gradient(circle at top right, transparent 15px, rgb(122, 170, 85) 0) top right,

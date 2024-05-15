@@ -25,21 +25,41 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.inline\./,
+        test: /\.link\.css$/,
+        type: "asset/resource",
+      },
+      {
+        test: /\.inline\.(svg|html)/,
         type: "asset/source",
       },
       {
         test: /\.scss$/,
-        use: [
-          process.env.NODE_ENV !== "production"
-            ? "style-loader" :
-            MiniCssExtractPlugin.loader,
-          "css-loader",
-          "sass-loader",
+        oneOf: [
+          {
+            test: /\.raw\.scss$/,
+            use: [
+              {
+                loader: "css-loader",
+                options: {
+                  exportType: "string",
+                },
+              },
+              "sass-loader",
+            ]
+          },
+          {
+            use: [
+              process.env.NODE_ENV !== "production"
+                ? "style-loader" :
+                MiniCssExtractPlugin.loader,
+              "css-loader",
+              "sass-loader",
+            ],
+          }
         ],
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg)$/,
+        test: /\.(png|jpg|jpeg|gif)$/,
         type: "asset/resource",
       },
     ],

@@ -1,9 +1,18 @@
 project-overview-page {
   display: block;
-  padding: 50px;
+  padding: 20px;
+
+  project-stepper {
+    --size-factor: 1;
+  }
 }
 
 .project-step-page {
+  &__wrapper {
+    display: block;
+    padding: 50px 50px 0;
+  }
+
   &__title {
     text-align: center;
     font-size: 60px;

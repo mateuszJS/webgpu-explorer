@@ -1,27 +1,13 @@
-import html from './index.inline.html'
+import BaseElement from 'BaseElement';
+import HTML from './index.inline2.html'
 import CSS from './styles.raw.scss'
 
-let tmpl = document.createElement('template');
-tmpl.innerHTML = `<style>${CSS}</style>${html}`;
+BaseElement.attachCSS(CSS)
 
-export default class ProjectStepper extends HTMLElement {
-  constructor() {
-    super()
-    const shadowRoot = this.attachShadow({mode: 'closed'});
-    shadowRoot.appendChild(tmpl.content.cloneNode(true));
+export default class ProjectStepper extends BaseElement {
+  get html() {
+    return HTML
   }
-
-  // connectedCallback() {
-  //   const node = tmpl.content.cloneNode(true)
-  //   const children = Array.from(this.children).reverse()
-  //   this.appendChild(node)
-
-  //   const slot = this.querySelector('slot')!
-  //   children.forEach(child => {
-  //     slot.insertAdjacentElement('afterend', child)
-  //   })
-  //   slot.remove()
-  // }
 }
 
 window.customElements.define('project-stepper', ProjectStepper);

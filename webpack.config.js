@@ -25,11 +25,16 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.link\.css$/,
-        type: "asset/resource",
+        test: /\.inline\.html/,
+        type: "asset/source",
       },
       {
-        test: /\.inline\.(svg|html)/,
+        test: /\.inline2\.html/,
+        loader: path.resolve('src/html-loader/loader.js'),
+        type: "asset/source",
+      },
+      {
+        test: /\.inline\.svg/,
         type: "asset/source",
       },
       {

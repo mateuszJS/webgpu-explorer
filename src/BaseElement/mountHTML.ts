@@ -1,9 +1,13 @@
-export default function mountHTML(root: HTMLElement, tmpl: HTMLTemplateElement) {
-  const node = tmpl.content.cloneNode(true)
-
+export default function mountHTML(root: HTMLElement, html: HTMLTemplateElement | string) {
+  
   const children = Array.from(root.children).reverse() // make safe copy of children
-
-  root.appendChild(node) // attach content of the template
+  
+  if (typeof html === 'string') {
+    root.innerHTML = html
+  } else {
+    const node = html.content.cloneNode(true)
+    root.appendChild(node) // attach content of the template
+  }
 
   const slot = root.querySelector('slot')
 

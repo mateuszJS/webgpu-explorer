@@ -1,15 +1,12 @@
-import html from './index.inline.html'
+import BaseElement from 'BaseElement';
+import HTML from './index.inline2.html'
 import CSS from './styles.raw.scss'
 
-const tmpl = document.createElement('template');
-tmpl.innerHTML = `<style>${CSS}</style>${html}`;
+BaseElement.attachCSS(CSS)
 
-class HomeLink extends HTMLElement {
-  constructor() {
-    super()
-
-    const shadowRoot = this.attachShadow({mode: 'closed'});
-    shadowRoot.appendChild(tmpl.content.cloneNode(true));
+class HomeLink extends BaseElement {
+  get html() {
+    return HTML
   }
 }
 

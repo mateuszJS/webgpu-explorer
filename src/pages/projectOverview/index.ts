@@ -1,4 +1,4 @@
-import html from './index.inline.html'
+import HEART from './index.heart'
 import './styles.scss'
 
 import("components/project-stepper")
@@ -8,7 +8,7 @@ import("components/x-link")
 import("components/home-link")
 
 const tmpl = document.createElement('template');
-tmpl.innerHTML = html;
+tmpl.innerHTML = HEART.html;
 
 class ProjectOverviewPage extends HTMLElement {
   constructor() {

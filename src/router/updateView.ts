@@ -1,6 +1,6 @@
 import('pages/home')
-import('pages/projectSteps')
-import('pages/projectOverview')
+// import('pages/projectSteps')
+// import('pages/projectOverview')
 
 export default function updateView(pathname: string) {
   const [_, page, firstParam, subPage, secondParam] = pathname.split('/')

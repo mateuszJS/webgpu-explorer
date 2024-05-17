@@ -1,10 +1,10 @@
-import html from './index.inline.html'
+import HEART from './index.heart'
 import './styles.scss'
 
 import('components/project-panel')
 
 const tmpl = document.createElement('template');
-tmpl.innerHTML = html;
+tmpl.innerHTML = HEART.html;
 
 class HomePage extends HTMLElement {
   constructor() {

@@ -24,14 +24,18 @@ module.exports = {
         use: "ts-loader",
         exclude: /node_modules/,
       },
+      // {
+      //   test: /\.inline\.html/,
+      //   type: "asset/source",
+      // },
+      // {
+      //   test: /\.inline2\.html/,
+      //   loader: path.resolve('src/html-loader/loader.js'),
+      //   type: "asset/source",
+      // },
       {
-        test: /\.inline\.html/,
-        type: "asset/source",
-      },
-      {
-        test: /\.inline2\.html/,
+        test: /\.heart/,
         loader: path.resolve('src/html-loader/loader.js'),
-        type: "asset/source",
       },
       {
         test: /\.inline\.svg/,

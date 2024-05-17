@@ -33,7 +33,7 @@ project-panel {
     height: 100%;
   }
 
-  x-link::part(anchor) {
+  a {
     height: 100%;
     border-radius: var(--inner-radius);
     color: var(--text-primary); 
@@ -50,7 +50,7 @@ project-panel {
 
   }
 
-  x-link::part(anchor):hover {
+  a:hover {
     background-color: #ffffff22;
     transform: scale(1.05);
   }

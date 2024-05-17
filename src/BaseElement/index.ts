@@ -11,33 +11,30 @@ export default class BaseElement extends HTMLElement {
     super()
   }
 
-  get html(): string { // abstract
-    return ''
+  get heart(): Heart { // abstract
+    return {dynamics: [], html: ''}
   }
 
   afterRender(){} // abstract
 
   connectedCallback() {
-    const [dynamicsStr, htmlStr] = this.html.split('@@@')
-    
-    mountHTML(this, htmlStr)
+    const {dynamics, html} = this.heart
 
-    if(dynamicsStr) {
-      dynamicsStr.split(',').forEach(text => {
-        const [selector, sourceAttr, destAttr] = text.split('|')
-        const sourceAttrValue = this.attr(sourceAttr)
+    mountHTML(this, html)
 
-        // split sourceAttr to dynamic and static part
+    dynamics.forEach(dynamic => {
+      const sourceAttrValue = dynamic.sourceAttr(this)
+      
+      // split sourceAttr to dynamic and static part
 
-        if (destAttr) {
-          // attribute
-          this.querySelector<HTMLElement>(selector)!.setAttribute(destAttr, sourceAttrValue)
-        } else {
-          //innerText
-          this.querySelector<HTMLElement>(selector)!.innerText = sourceAttrValue
-        }
-      })
-    }
+      if (dynamic.destAttr) {
+        // attribute
+        this.querySelector<HTMLElement>(dynamic.selector)!.setAttribute(dynamic.destAttr, sourceAttrValue)
+      } else {
+        //innerText
+        this.querySelector<HTMLElement>(dynamic.selector)!.innerText = sourceAttrValue
+      }
+    })
     
     this.afterRender()
   }

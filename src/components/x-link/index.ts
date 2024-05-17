@@ -1,33 +1,25 @@
-import html from './index.inline.html'
+import HEART from './index.heart'
 import updateView from 'router/updateView';
 import CSS from './styles.raw.scss'
+import BaseElement from 'BaseElement';
 
-const tmpl = document.createElement('template');
-tmpl.innerHTML = `<style>${CSS}</style>${html}`;
+BaseElement.attachCSS(CSS)
 
-class XLink extends HTMLElement {
-  private anchorNode: HTMLAnchorElement
-
+class XLink extends BaseElement {
   static observedAttributes = ["to"];
 
-  constructor() {
-    super()
-    const shadow = this.attachShadow({mode: 'closed'});
-    shadow.appendChild(tmpl.content.cloneNode(true));
-    this.anchorNode = shadow.querySelector('a')!
+  get heart() {
+    return HEART
   }
 
   attributeChangedCallback(name: string, oldVal: string, newVal: string) {
-    console.log(name, oldVal, newVal)
-
     if (name === 'to') {
-      this.anchorNode.setAttribute('href', newVal)
-      this.anchorNode.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.history.pushState({}, newVal, window.location.origin + newVal);
-        updateView(newVal)
-        return false
-      })
+      // this.querySelector('a')!.addEventListener('click', (e) => {
+      //   e.preventDefault();
+      //   window.history.pushState({}, newVal, window.location.origin + newVal);
+      //   updateView(newVal)
+      //   return false
+      // })
     }
   }
 }

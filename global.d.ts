@@ -13,9 +13,9 @@ declare module "*.svg" {
   export default content;
 }
 
-declare module "*.html" {
-  const content: string;
-  export default content;
+declare module "*.heart" {
+  const content: Heart;
+  export default content
 }
 
 declare module "*.scss" {
@@ -26,4 +26,15 @@ declare module "*.scss" {
 declare module "*.css" {
   const content: string;
   export default content;
+}
+
+interface Dynamic {
+  selector: string
+  sourceAttr: (el: HTMLElement) => string
+  destAttr?: string
+}
+
+interface Heart {
+  dynamics: Dynamic[]
+  html: string
 }

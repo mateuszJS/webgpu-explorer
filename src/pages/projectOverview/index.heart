@@ -1,0 +1,13 @@
+<home-link></home-link>
+<div class="project-step-page__wrapper">
+  <h1 class="project-step-page__title">TRIANGLE</h1>
+  <p class="project-step-page__description">The most basic particile of all WebGPU world. Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, nemo ad iure in ut possimus.</p>
+  <project-stepper>
+    <project-stepper-item order-number="1" headline="Adatper" details="We need to obtain an adapter."></project-stepper-item>
+    <project-stepper-item order-number="2" headline="Device" details="We need to obtain an adapter. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nisi maiores libero ipsum nostrum in.  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nisi maiores libero ipsum nostrum in."></project-stepper-item>
+    <project-stepper-item order-number="3" headline="Canvas" details="We need to obtain an adapter. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nisi maiores libero ipsum nostrum in."></project-stepper-item>
+  </project-stepper>
+  <x-link to="/projects/some-name/steps/1" class="project-overview-page__start-btn">
+    <x-button>start</x-button>
+  </x-link>
+</div>

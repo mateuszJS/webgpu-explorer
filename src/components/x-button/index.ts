@@ -1,14 +1,14 @@
+import BaseElement from 'BaseElement';
 import CSS from './styles.raw.scss'
 
-class XButton extends HTMLElement {
-  constructor() {
-    super()
+BaseElement.attachCSS(CSS)
 
-    const shadow = this.attachShadow({mode: 'closed'});
-
-    shadow.innerHTML = this.parentElement!.tagName === 'a'
-      ? `<style>${CSS}</style><div><slot></slot></div>`
-      : `<style>${CSS}</style><button><slot></slot></button>`
+class XButton extends BaseElement {
+  get heart() {
+    const html = this.parentElement!.tagName === 'a'
+      ? `<div><slot></slot></div>`
+      : `<button><slot></slot></button>`
+    return { dynamics: [], html }
   }
 }
 

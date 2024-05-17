@@ -1,55 +1,70 @@
 const parse = require('node-html-parser').parse
 
 let classCounter = 0
+function getClass() {
+  return `some-hash-${classCounter++}`
+}
 
 function getSourceAttr(text) {
-  if (text[0] === '{' && text[text.length - 1] === '}') {
-    return text.slice(1, -1)
+  /*
+    1. let's find if we got any '{' and '}'
+    2. return... function? template string?
+  */
+// "/projects/{project-slug}-{headline}/{text}/aa"
+  if (text.includes('{') && text.includes('}')) {
+    // might be issue when "}{"
+    const templateString = text
+      .replaceAll('{', "${el.attr('")
+      .replaceAll('}', "')}")
+    return `(el) => \`${templateString}\``
+    // return text.slice(1, -1)
   }
-  return ''
+  return null
 }
 
 const dynamicRegex = /\{[a-z\-]+\}/
 
-module.exports = function(source) {
+module.exports = function loader(source) {
   const root = parse(source)
+  root.removeWhitespace()
 
   const dynamics = []
   // contains strings, first part is class name or attribute name, then space, then attribute source
 
   function updateNodes(node) {
-    if (node.nodeType === 3) {
-      // TextNode
-      const sourceAttr = getSourceAttr(node.innerText.trim())
-      if (!sourceAttr) return
+    if (node.nodeType !== 1) return // it's not HTMLElement
 
-      const parent = node.parentNode
-      const className = `some-hash-${classCounter++}`
-      parent.classList.add(className)
-      dynamics.push(`.${className}|${sourceAttr}`)
-      parent.removeChild(node)
-    } else if (node.nodeType === 1) {
-      /*
-      TODO:
-      1. one class for name and attribute, so we just need to check both at once
-      2. value might consist of interpolation, where might be used more than one attribute
-      // sourceattr can be "prefix1{attrA}middle_part{attrB}suffic{attrC}xxx"
-      // if you noticed at leats one valid dynamic, then:
-      // into "prefix1{attrA},middle_part{attrB}suffic{attrC}xxx"
-      // and split them by {} in BaseElement?
-      */
-      // HTMLElement
-      Object.entries(node.attributes).forEach(([destAttr, value]) => {
-        const sourceAttr = getSourceAttr(value)
-        if (sourceAttr) {
-          const className = `some-hash-${classCounter++}`
-          node.classList.add(className)
-          dynamics.push(`.${className}|${sourceAttr}|${destAttr}`)
-          node.removeAttribute(destAttr)
-        }
-      })
-      node.childNodes.forEach(updateNodes)
+    const className = getClass()
+
+    // check if any fo attributes has any dynamics
+    Object.entries(node.attributes).forEach(([destAttr, value]) => {
+      const sourceAttr = getSourceAttr(value)
+      if (sourceAttr) {
+        
+        node.classList.add(className)
+        dynamics.push(`{
+          selector: '.${className}',
+          sourceAttr: ${sourceAttr},
+          destAttr: '${destAttr}'
+        }`)
+        node.removeAttribute(destAttr)
+      }
+    })
+
+    // check if innerText has any dynamics
+    if (node.childNodes.length === 1) {
+      if (node.firstChild.nodeType === 3) {
+        // TextNode
+        const sourceAttr = getSourceAttr(node.firstChild.innerText.trim())
+        if (!sourceAttr) return
+  
+        node.classList.add(className)
+        dynamics.push(`{ selector: '.${className}', sourceAttr: ${sourceAttr} }`)
+        node.removeChild(node.firstChild)
+        return
+      }
     }
+    node.childNodes.forEach(updateNodes)
   }
 
   updateNodes(root)
@@ -61,6 +76,11 @@ module.exports = function(source) {
       <span>
         ....
   */
-  return `${dynamics.join(',')}@@@${root.toString()}`
+  return `
+    export default {
+      dynamics: [${dynamics.join(',')}],
+      html: \`${root.toString()}\`
+    };
+  `
   // return source.toUpperCase()
 }

@@ -2,6 +2,9 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+// https://socket.dev/npm/package/prerender-ssg-webpack-plugin
+// it might be want we want for SSG
+
 module.exports = {
   entry: ["./src/index.ts", "/src/styles/index.scss"], // do we need .scss entry point??
   devtool: "eval-source-map",

@@ -1,30 +1,31 @@
-* {box-sizing: border-box;}
-
-:host {
+project-stepper {
   display: block;
   padding: calc(5px * var(--size-factor));
   counter-reset: section;
-}
-ol {
-  display: flex;
-  position: relative;
-  gap: calc(20px * var(--size-factor));
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-ol:before {
-  content: "";
-  position: absolute;
-  inset: calc(-5px * var(--size-factor));
-  bottom: auto;
-  height: calc(40px * var(--size-factor));
-  border-radius: calc(20px * var(--size-factor));
-  pointer-events: none;
 
-  --progress: 50%;
-  --primary: #ffffffcc;
-  --secondary: #ffffff88;
-  background: conic-gradient(from 0 at var(--progress) 50%, var(--secondary) 225deg, var(--primary) 225deg, var(--primary) 315deg, var(--secondary) 315deg);
-  /* background: conic-gradient(from 0 at var(--progress) 50%, var(--secondary) 225deg, var(--primary) 225deg, var(--secondary) 270deg, var(--primary) 315deg, var(--secondary) 315deg); */
-}
+  ol {
+    display: flex;
+    position: relative;
+    gap: calc(20px * var(--size-factor));
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: step-order;
+  }
+
+  ol:before {
+    content: "";
+    position: absolute;
+    inset: calc(-5px * var(--size-factor));
+    bottom: auto;
+    height: calc(40px * var(--size-factor));
+    border-radius: calc(20px * var(--size-factor));
+    pointer-events: none;
+
+    --progress: 50%;
+    --primary: #ffffffcc;
+    --secondary: #ffffff88;
+    background: conic-gradient(from 0 at var(--progress) 50%, var(--secondary) 225deg, var(--primary) 225deg, var(--primary) 315deg, var(--secondary) 315deg);
+    /* background: conic-gradient(from 0 at var(--progress) 50%, var(--secondary) 225deg, var(--primary) 225deg, var(--secondary) 270deg, var(--primary) 315deg, var(--secondary) 315deg); */
+  }
+  }

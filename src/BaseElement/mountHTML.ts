@@ -1,6 +1,6 @@
 export default function mountHTML(root: HTMLElement, html: HTMLTemplateElement | string) {
-  
-  const children = Array.from(root.children).reverse() // make safe copy of children
+  const children = Array.from(root.childNodes) // make safe copy of children, it copies element, text nodes and comment
+  // children has just elements!
   
   if (typeof html === 'string') {
     root.innerHTML = html
@@ -13,7 +13,7 @@ export default function mountHTML(root: HTMLElement, html: HTMLTemplateElement |
 
   if (slot && children.length > 0) {
     children.forEach(child => {
-      slot.insertAdjacentElement('afterend', child)
+      slot.parentNode!.insertBefore(child, slot)
     })
   }
 

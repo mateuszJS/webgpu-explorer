@@ -1,9 +1,6 @@
 import HEART from './index.heart'
 import updateView from 'router/updateView';
-import CSS from './styles.raw.scss'
 import BaseElement from 'BaseElement';
-
-BaseElement.attachCSS(CSS)
 
 class XLink extends BaseElement {
   static observedAttributes = ["to"];
@@ -12,15 +9,17 @@ class XLink extends BaseElement {
     return HEART
   }
 
-  attributeChangedCallback(name: string, oldVal: string, newVal: string) {
-    if (name === 'to') {
-      // this.querySelector('a')!.addEventListener('click', (e) => {
-      //   e.preventDefault();
-      //   window.history.pushState({}, newVal, window.location.origin + newVal);
-      //   updateView(newVal)
-      //   return false
-      // })
-    }
+  handleRedirect = (e: MouseEvent) => {
+    console.log('==========================')
+    const to = this.attr('to')
+    e.preventDefault();
+    window.history.pushState({}, to, window.location.origin + to);
+    updateView(to)
+    return false
+  }
+
+  get debug() {
+    return 'x-link'
   }
 }
 

@@ -31,10 +31,18 @@ declare module "*.css" {
 interface Dynamic {
   selector: string
   sourceAttr: (el: HTMLElement) => string
+  inputs: string[]
   destAttr?: string
+}
+
+interface Listener {
+  selector: string
+  event: string
+  callback: string
 }
 
 interface Heart {
   dynamics: Dynamic[]
+  listeners: Listener[]
   html: string
 }

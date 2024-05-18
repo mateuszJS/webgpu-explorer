@@ -69,8 +69,8 @@ body {
   
 }
 
-
 .view {
+  height: 100%;
   overflow: auto; // to prevents vertical margins from transfering from children
   transition: transform 1s ease, opacity 1s ease;
   transform: translateY(0px);

@@ -1,22 +1,22 @@
-* {box-sizing: border-box;}
+x-button {
+  div, button {
+    padding: 8px 14px;
+    border-radius: 5px;
+    background: #ffffffaa;
+    color: black;
+    font-size: 16px;
+    border: none;
+    text-wrap: nowrap;
+    line-height: 1.2;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
 
-:host div, :host button {
-  padding: 8px 14px;
-  border-radius: 5px;
-  background: #ffffffaa;
-  color: black;
-  font-size: 16px;
-  border: none;
-  text-wrap: nowrap;
-  line-height: 1.2;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-::slotted(svg) {
-  display: inline;
-  margin-inline-end: 4px;
-  flex-shrink: 0;
-  height: 1em;
-  margin-bottom: -2px;
-}
+  svg {
+    display: inline;
+    margin-inline-end: 4px;
+    flex-shrink: 0;
+    height: 1em;
+    margin-bottom: -2px;
+  }
+} 

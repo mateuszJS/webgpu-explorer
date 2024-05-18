@@ -1,20 +1,53 @@
+import BaseElement from 'BaseElement'
 import HEART from './index.heart'
-import './styles.scss'
+import CSS from './styles.raw.scss'
 
 import('components/code-block')
 import("components/project-stepper")
 import("components/project-stepper-item")
 
-const tmpl = document.createElement('template');
-tmpl.innerHTML = HEART.html;
+const code = `import getContext from "utils/gpu/getContext"
+import getDevice from "utils/gpu/getDevice"
+import setCanvasSizeObserver from "utils/gpu/setCanvasSizeObserver"
 
-class ProjectStepsPage extends HTMLElement {
-  constructor() {
-    super()
+export default async function init() {
+  const device = await getDevice()
+  const {canvas, context} = getContext(device)
+
+  setCanvasSizeObserver(canvas, device, render)
+
+  function render() {
+    const encoder = device.createCommandEncoder()
+    const canvasTexture = context.getCurrentTexture()
+    const renderPassDescriptor = {
+      // describe which textures we want to raw to and how use them
+      label: "our render to canvas renderPass",
+      colorAttachments: [
+        {
+          view: canvasTexture.createView(),
+          clearValue: [0, 0, 0, 1],
+          loadOp: "clear", // before rendering clear the texture to value "clear". Other option is "load" to load existing content of the texture into GPU so we can draw over it
+          storeOp: "store", // to store the result of what we draw, other option is "discard"
+        } as const,
+      ],
+    }
+    const pass = encoder.beginRenderPass(renderPassDescriptor)
+
+    // do stuff
+
+    pass.end()
+    const commandBuffer = encoder.finish()
+    device.queue.submit([commandBuffer])
   }
+}
 
-  connectedCallback() {
-    this.appendChild(tmpl.content.cloneNode(true))
+init()`
+
+BaseElement.attachCSS(CSS)
+
+class ProjectStepsPage extends BaseElement {
+  get heart() {
+    return { ...HEART, html: HEART.html.replace('@code-placeholder@', code)}
   }
 }
 

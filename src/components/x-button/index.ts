@@ -8,7 +8,7 @@ class XButton extends BaseElement {
     const html = this.parentElement!.tagName === 'a'
       ? `<div><slot></slot></div>`
       : `<button><slot></slot></button>`
-    return { dynamics: [], html }
+    return { dynamics: [], listeners: [], html }
   }
 }
 

@@ -1,7 +1,7 @@
 <li>
   <span class="number"></span>
-  <h6></h6>
+  <h6>{headline}</h6>
   <div class="details">
-    <p></p>
+    <p>{details}</p>
   </div>
 </li>

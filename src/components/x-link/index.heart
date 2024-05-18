@@ -1,1 +1,3 @@
-<a href="{to}"><slot></slot></a>
+<a href="{to}" @click="handleRedirect">
+  <slot></slot>
+</a>

@@ -6,7 +6,7 @@
     <project-stepper-item headline="Canvas"></project-stepper-item>
   </project-stepper>
 </nav>
-<h1>PROJECT</h1>
+<flash-effect><span><h1>PROJECT</h1></span></flash-effect>
 <code-block code-lang="language-javascript" highlight-lines="5-10">
 @code-placeholder@
 </code-block>

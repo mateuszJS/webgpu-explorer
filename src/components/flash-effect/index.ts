@@ -1,8 +1,6 @@
 import BaseElement from 'BaseElement';
 import HEART from './index.heart'
-import CSS from './styles.raw.scss'
-
-const tmpl = document.createElement('template');
+import CSS from './styles.css'
 
 BaseElement.attachCSS(CSS)
 

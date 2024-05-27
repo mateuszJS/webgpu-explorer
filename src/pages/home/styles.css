@@ -23,7 +23,7 @@ home-page {
   }
 
   .panel {
-    // max-width: 450px;
+    /* max-width: 450px; */
     flex: 0 0 350px;
   }
 }

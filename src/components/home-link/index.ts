@@ -1,5 +1,8 @@
-import BaseElement from 'BaseElement';
+import BaseElement from 'BaseElement'
 import HEART from './index.heart'
+import CSS from './styles.css'
+
+BaseElement.attachCSS(CSS)
 
 class HomeLink extends BaseElement {
   get heart() {

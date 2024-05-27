@@ -1,5 +1,3 @@
-* {box-sizing: border-box;}
-
 @keyframes borderSpin {
   0% {
     --border-gradient-angle: 0turn
@@ -10,9 +8,8 @@
   }
 }
 
-:host {
-  display: block;
-  position: relative;
+flash-effect {
+  display: grid;
   --outer-radius: 8px;
   --border-size: 3px;
   --inner-radius: calc(var(--outer-radius) - var(--border-size));
@@ -22,24 +19,28 @@
   /* background: rgba(255, 255, 255, 0.07); */
 
   --border-gradient-angle: 0turn;
-
-  padding: var(--border-size);
   overflow: hidden;
+
+  &:hover .flash-effect__flash {
+    opacity: 1;
+  }
+
+  > * {
+    grid-area: 1/1;
+  }
 }
 
 
-.flash {
-  display: block;
-  position: absolute;
-  inset: 0;
-
+.flash-effect__flash {
+  /* width: 100%; */
+  /* height */
   background-size: contain;
   pointer-events: none;
 
 
-  --color-a: #0901ffff;
-  --color-b: #ff01f7ff;
-  --color-c: #01eaffff;
+  --color-a: rgba(71, 0, 249, 0.442);
+  --color-b: #0901ffff;
+  --color-c: rgb(1, 192, 255);
 
 
   background-image: conic-gradient(
@@ -60,11 +61,10 @@
   opacity: 0;
 }
 
-:host(:hover) .flash {
-  opacity: 1;
-}
 
-.wrapper {
+
+.flash-effect__wrapper {
+  margin: var(--border-size);
   border-radius: var(--inner-radius);
-  background: var(--text-primary);
+  background: var(--background);
 }

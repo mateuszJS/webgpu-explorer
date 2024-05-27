@@ -6,6 +6,9 @@
   "[typescript]": {
     "editor.formatOnSave": false,
   },
+  "[html]": {
+    "editor.formatOnSave": false,
+  },
   "editor.rulers": [
     100
   ],

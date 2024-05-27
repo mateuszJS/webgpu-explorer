@@ -1,10 +1,6 @@
 import BaseElement from 'BaseElement'
 import HEART from './index.heart'
-import CSS from './styles.raw.scss'
-
-import('components/code-block')
-import("components/project-stepper")
-import("components/project-stepper-item")
+import CSS from './styles.css'
 
 const code = `import getContext from "utils/gpu/getContext"
 import getDevice from "utils/gpu/getDevice"

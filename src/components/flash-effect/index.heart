@@ -1,4 +1,2 @@
-<span class="flash"></span>
-<span class="wrapper">
-  <slot></slot>
-</span>
+<slot></slot>
+<div class="flash-effect__flash"></div>

@@ -1,27 +1,19 @@
-// async function loadPage(page: string) {
-//   const response = await fetch(page);
-//   const resHtml = await response.text();
-//   return resHtml;
-// };
-
-import updateView from "./updateView";
-
-// const loadAllPages = async () => {
-//   home = await loadPage('home.html');
-//   about = await loadPage('about.html');
-//   contact = await loadPage('contact.html');
-// };
-
-// const ROUTES = {
-//   '/': 
-// }
+import importPage from "./importsMap"
+import updateView, { getPage } from "./updateView"
 
 export default function initRouter() {
-
   // handles back and forward history buttons in browser
   window.onpopstate = () => {
-    updateView(window.location.pathname)
-  };
+    updateView(getPage(window.location.pathname))
+  }
 
-  updateView(window.location.pathname)
+  document.main = document.querySelector('main')!
+
+  const page = getPage(window.location.pathname)
+  importPage(page) 
+
+  if (document.main.children.length === 0) {
+    // so during development and server side generating we gonna updateView, but not when serving static HTML(bcuz alreayd got children in main)
+    updateView(page)
+  }
 }

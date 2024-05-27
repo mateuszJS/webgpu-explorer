@@ -1,38 +1,46 @@
 import Prism from './prism/prism'
-import ourStyles from './index.raw.scss'
-import prismStyles from './prism/prism.raw.scss'
+import ourCSS from './index.css'
+import prismCSS from './prism/prism.css'
+import BaseElement from 'BaseElement'
+import HEART from './index.heart'
 
 // Prism code generted from:
 // https://prismjs.com/download.html#themes=prism-okaidia&languages=markup+clike+javascript+typescript+wgsl&plugins=highlight-keywords
 
-class CodeBlock extends HTMLElement {
-  private overlayStartNode: HTMLElement
-  private overlayEndNode: HTMLElement
+BaseElement.attachCSS(prismCSS)
+BaseElement.attachCSS(ourCSS)
+
+class CodeBlock extends BaseElement {
+  private overlayStartNode?: HTMLElement
+  private overlayEndNode?: HTMLElement
 
   static observedAttributes = ["highlight-lines"];
 
-  constructor() {
-    super();
-    const shadowRoot = this.attachShadow({mode: 'open'});
-    const trimmed = this.innerHTML.trim();
+  get heart() {
+    return HEART
+    // return {
+    //   dynamics: [],
+    //   listeners: [],
+    //   html: `<pre id="pre"><code id="code">${this.innerHTML.trim()}</code></pre>`
+    // }
+  }
 
-    shadowRoot.innerHTML = `
-      <style>${prismStyles}${ourStyles}</style>
-      <pre id="pre"><code id="code">${trimmed}</code></pre>
-    `
-    this.overlayStartNode = shadowRoot.querySelector('.overlay-before')!
-    this.overlayEndNode = shadowRoot.querySelector('.overlay-after')!
-    shadowRoot.querySelector('pre')!.classList.add(this.getAttribute('code-lang')!)
+  afterRender(hydration: boolean) {
+    if (hydration) return
 
-    Prism.highlightAllUnder(shadowRoot);
+    this.overlayStartNode = this.querySelector('.overlay-before')!
+    this.overlayEndNode = this.querySelector('.overlay-after')!
+    this.querySelector('pre')!.classList.add(this.getAttribute('code-lang')!)
+
+    Prism.highlightAllUnder(this);
 
     this.overlayStartNode = document.createElement('span')
     this.overlayStartNode.classList.add('overlay', 'overlay-before')
-    shadowRoot.querySelector('code')!.appendChild(this.overlayStartNode)
+    this.querySelector('code')!.appendChild(this.overlayStartNode)
     
     this.overlayEndNode = document.createElement('span')
     this.overlayEndNode.classList.add('overlay', 'overlay-after')
-    shadowRoot.querySelector('code')!.appendChild(this.overlayEndNode)
+    this.querySelector('code')!.appendChild(this.overlayEndNode)
 
 
     // const copyButton = shadowRoot.querySelector('#copy-button')!; 
@@ -41,16 +49,12 @@ class CodeBlock extends HTMLElement {
     // });
   }
 
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    console.log(name, oldValue, newValue)
-    switch (name) {
-      case 'highlight-lines': {
-        const [start, end] = newValue.split('-').map(v => parseInt(v, 10))
-        this.overlayStartNode.style.bottom = `calc(100% - (${start - 1}em * 1.5))`
-        this.overlayEndNode.style.top = `calc(${end}em * 1.5)`
-        break;
-      }
-    }
+  onChangeHighlightLines(oldVal: string, newVal: string) {
+    if (!this.overlayStartNode || !this.overlayEndNode) return
+
+    const [start, end] = newVal.split('-').map(v => parseInt(v, 10))
+    this.overlayStartNode.style.bottom = `calc(100% - (${start - 1}em * 1.5))`
+    this.overlayEndNode.style.top = `calc(${end}em * 1.5)`
   }
   
   // copyCode() {

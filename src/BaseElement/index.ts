@@ -1,3 +1,4 @@
+import { attrOnChangeCallbackName } from "./attrNames"
 import mountHTML from "./mountHTML"
 
 export default class BaseElement extends HTMLElement {
@@ -12,7 +13,7 @@ export default class BaseElement extends HTMLElement {
 
   constructor() {
     super()
-    this.mounted = false
+    this.mounted = !!this.attr('mounted')
   }
 
   get heart(): Heart { // abstract
@@ -23,31 +24,19 @@ export default class BaseElement extends HTMLElement {
     return ''
   }
 
-  afterRender(){} // abstract
+  afterRender(hydration: boolean){} // abstract
 
   attributeChangedCallback(name: string, oldVal: string, newVal: string) {
     if (!this.mounted) return
-    // BaseElement.observedAttributes
-    // think about optimization
 
-    /*
-    Proposal for the future:
-    {
-      selector: '.cbdf'
-      inputs: ['a', 'b', 'c'] // remove!!!
-      callback
-      destAttr...
-    }
-    [{a: [array of dynamic dependand on a], b: [array of dynamic dependand on b]}]
-    */
     this.heart.dynamics.forEach(dynamic => {
       if (dynamic.inputs.includes(name)) {
         this.updateDynamic(dynamic)
       }
     })
-    if (this.debug) {
-      console.log(this.debug, 'attributeChangedCallback', name, oldVal, newVal)
-    }
+
+    const callbackName = attrOnChangeCallbackName(name) as keyof typeof this
+    (this[callbackName] as Function)?.(oldVal, newVal)
   }
 
 
@@ -65,32 +54,54 @@ export default class BaseElement extends HTMLElement {
     }
   }
 
-  connectedCallback() {
-    if (this.mounted) return // component content alreayd mounted
-    // whe nwe call "appendChild" with a custom-element inside,
-    // then that custom element calles connectedCallback again!
+  private updateAllAttrs() {
+    const observedAttrs = (this.constructor as unknown as { observedAttributes?: string[] }).observedAttributes
 
-    if (this.debug) {
-      console.log(this.debug, 'connectedCallback')
+    if (!observedAttrs) return
+
+    observedAttrs.forEach(attr => {
+      const callbackName = attrOnChangeCallbackName(attr) as keyof typeof this
+      (this[callbackName] as Function)?.(null, this.attr(attr))
+    })
+  }
+
+  connectedCallback() {
+    if (this.attr('hydration')) {
+      this.removeAttribute('hydration')
+
+      this.attachListeners()
+      this.updateAllAttrs()
+      this.afterRender(true)
     }
 
-    this.mounted = true
+    if (this.mounted) return // component content alreayd mounted
+    // when we call "appendChild" with a custom-element inside,
+    // then that custom element calles connectedCallback again!
 
-    const {dynamics, listeners, html} = this.heart
+    
+
+    const {dynamics, html} = this.heart
 
     mountHTML(this, html)
 
-    dynamics.forEach(this.updateDynamic)
+    this.mounted = true
+    this.setAttribute('mounted', 'true')
 
-    listeners.forEach(listener => {
+    dynamics.forEach(this.updateDynamic)
+    this.attachListeners()
+    this.updateAllAttrs()
+    this.afterRender(false)
+  }
+
+  private attachListeners() {
+    this.heart.listeners.forEach(listener => {
       const node = this.querySelector<HTMLElement>(listener.selector)!
+      console.log(node)
       node.addEventListener(
         listener.event,
         this[listener.callback as keyof typeof this] as unknown as (this: HTMLElement, ev: Event) => void
       )
     })
-    
-    this.afterRender()
   }
 
   disconnectedCallback() {

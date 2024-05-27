@@ -1,13 +1,22 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const PuppeteerPrerenderPlugin = require('puppeteer-prerender-plugin').PuppeteerPrerenderPlugin
+const { HeartPlugin } = require('./src/heart-loader/plugin.js');
 
-// https://socket.dev/npm/package/prerender-ssg-webpack-plugin
-// it might be want we want for SSG
+const isProd = process.env.NODE_ENV === 'production'
+
+const pathToSSG = {
+  '/projects/project-1': {title:'Project 1 Overview'},
+  '/projects/project-1/steps/0': {title:'Project 1 - Steps'},
+  '/': {title: 'Home'},
+}
 
 module.exports = {
-  entry: ["./src/index.ts", "/src/styles/index.scss"], // do we need .scss entry point??
-  devtool: "eval-source-map",
+  mode: process.env.NODE_ENV,
+  entry: ["./src/index.ts"],
+  devtool: isProd ? undefined : "eval-source-map",
+  watch: !isProd,
   devServer: {
     static: "./dist", // do we need it??
     historyApiFallback: true // fallbakc to index.html while url not found
@@ -27,49 +36,36 @@ module.exports = {
         use: "ts-loader",
         exclude: /node_modules/,
       },
-      // {
-      //   test: /\.inline\.html/,
-      //   type: "asset/source",
-      // },
-      // {
-      //   test: /\.inline2\.html/,
-      //   loader: path.resolve('src/html-loader/loader.js'),
-      //   type: "asset/source",
-      // },
       {
         test: /\.heart/,
-        loader: path.resolve('src/html-loader/loader.js'),
+        loader: path.resolve('src/heart-loader/loader.js'),
       },
       {
         test: /\.inline\.svg/,
         type: "asset/source",
       },
-      {
-        test: /\.scss$/,
-        oneOf: [
-          {
-            test: /\.raw\.scss$/,
-            use: [
-              {
-                loader: "css-loader",
-                options: {
-                  exportType: "string",
+      isProd
+        ? {
+          test: /\.css$/,
+          use: [
+            {
+              loader: "postcss-loader",
+              options: {
+                postcssOptions: {
+                  plugins: [
+                    ["cssnano"],
+                    // preset: advanced got us almsot no optimization, and
+                    //counter is impossible to use then, it changes the name
+                  ],
                 },
               },
-              "sass-loader",
-            ]
-          },
-          {
-            use: [
-              process.env.NODE_ENV !== "production"
-                ? "style-loader" :
-                MiniCssExtractPlugin.loader,
-              "css-loader",
-              "sass-loader",
-            ],
-          }
-        ],
-      },
+            },
+          ],
+          type: "asset/source",
+        } : {
+          test: /\.css$/,
+          use: ['style-loader', "css-loader"]
+        },
       {
         test: /\.(png|jpg|jpeg|gif)$/,
         type: "asset/resource",
@@ -77,20 +73,58 @@ module.exports = {
     ],
   },
   output: {
-    filename: "[chunkhash].bundle.js",
+    filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, "dist"),
     clean: true,
   },
   optimization: {
-    runtimeChunk: "single", // do we need that?
+    // https://webpack.jakoblind.no/optimize/ suppose to give you suggestion how to improve build
+    runtimeChunk: "single", // split runtime code into a separate chunk using the
+    // looks like it's needed because each deployment, reach changes something
+    // so [contenthash] also gonna change each time
+    // it contains references to all modules, so changes in each deployment
+
+    moduleIds: 'deterministic', /* still some modules can change because order of improts has changed
+    so with deterministic module id, the order won't matter!! contenthash should stay the same*/
   },
   plugins: [
+    new HeartPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "src/index.html"),
-      baseURI: process.env.BASE_URI
     }),
-    new MiniCssExtractPlugin({
-      filename: "[chunkhash].bundle.css"
+      new PuppeteerPrerenderPlugin({
+        enabled: isProd,
+        entryDir: path.join(__dirname, 'dist'),
+        outputDir: path.join(__dirname, 'dist'),
+        renderAfterTime: 5000, // * 10,
+        postProcess: (result) => {
+          result.html = result.html
+            .replace(
+              '<base href="/">',
+              `<base href="${process.env.BASE_URI}">`,
+            )
+            .replace(
+              /<link rel="stylesheet" href=(.*?)>/,
+              `<link rel="preload" href=$1 as="style" onload="this.onload=null;this.rel='stylesheet'">`
+              // idea from https://web.dev/articles/defer-non-critical-css
+            )
+            .replace(
+              '<title></title>',
+              '<title>' + pathToSSG[result.route]?.title + '</title>'
+            )
+            .replace(
+              /mounted="true"/g,
+              'mounted="true" hydration="true"'
+            )
+        },
+        routes: Object.keys(pathToSSG),
+        // puppeteerOptions: {
+        //   headless: false,
+        //   devtools: true,
+        // },
+    }),
+    isProd && new BundleAnalyzerPlugin({
+      analyzerMode: 'static' // 'server' had issue running along with PrerendererWebpackPlugin
     }),
   ],
 };

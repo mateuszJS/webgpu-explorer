@@ -2,9 +2,7 @@ import BaseElement from 'BaseElement';
 import startIcon from './icons/start-icon.inline.svg'
 import triangleIcon from './icons/triangle-icon.inline.svg'
 import HEART from './index.heart'
-import CSS from "./styles.raw.scss";
-
-import('components/x-link')
+import CSS from "./styles.css";
 
 const MAP_IMG_SRC = {
   background: startIcon,
@@ -20,6 +18,8 @@ convert CSS backgroudn gradient to SVG https://www.kmhcreative.com/downloads/CSS
 BaseElement.attachCSS(CSS)
 
 class ProjectPanel extends BaseElement {
+  static observedAttributes = ['project-slug']
+
   get heart(): Heart {
     const svgString = MAP_IMG_SRC[this.attr('icon') as keyof typeof MAP_IMG_SRC]
     return {...HEART, html: HEART.html.replace('<svg></svg>', svgString)}

@@ -1,18 +1,12 @@
+import BaseElement from 'BaseElement';
 import HEART from './index.heart'
-import './styles.scss'
+import CSS from './styles.css'
 
-import('components/project-panel')
+BaseElement.attachCSS(CSS)
 
-const tmpl = document.createElement('template');
-tmpl.innerHTML = HEART.html;
-
-class HomePage extends HTMLElement {
-  constructor() {
-    super()
-  }
-
-  connectedCallback() {
-    this.appendChild(tmpl.content.cloneNode(true))
+class HomePage extends BaseElement {
+  get heart() {
+    return HEART
   }
 }
 

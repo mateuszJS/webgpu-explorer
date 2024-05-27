@@ -1,4 +1,5 @@
 const parse = require('node-html-parser').parse
+const storage = require('./deps-storage')
 
 let classCounter = 0
 function getClass() {
@@ -26,21 +27,18 @@ function getSourceAttr(text) {
   return [null, null]
 }
 
-function getListenerAttr(attr, callback) {
-  if (attr[0] === '@') {
-    // might be issue when "}{"
-    const templateString = text
-      .replaceAll('{', "${el.attr('")
-      .replaceAll('}', "')}")
-    return `(el) => \`${templateString}\``
-  }
-  return null
-}
-
 module.exports = function loader(source) {
+  // console.log('ooooooooooooooooooooo')
+  // const { _compiler, _compilation, _module, fs, environment, resourcePath, ...rest } = this
+  // _module got a lot of details
+  // console.log(resourcePath, rest)
+
+
+  // resourcePath: '/Users/mateuszwalendzik/Documents/repos/webgpu-explorer/src/components/project-panel/index.heart',
   const root = parse(source)
   root.removeWhitespace()
 
+  const dependencies = new Set()
   const dynamics = []
   const listeners = []
 
@@ -56,13 +54,6 @@ module.exports = function loader(source) {
     }
   }
 
-  /**
-   * If dynamic exists in value, then adds it to dynamics list and removes from the node
-   * @param {*} node 
-   * @param {*} className 
-   * @param {*} value 
-   * @param {*} destAttr 
-   */
   function handleDynamic(node, className, attrValue, attrName) {
     const [callbackFn, cbFnAttrsInput] = getSourceAttr(attrValue)
     if (!callbackFn) return
@@ -87,6 +78,29 @@ module.exports = function loader(source) {
 
     const className = getClass()
 
+    // const isCustomElem = node.tagName.includes('-')
+    // console.log('===========================')
+    // const { global, ...rest } = this
+    // console.log(rest)
+    /*console.log('*******restParams*******')
+    console.log(restParams) // []
+    console.log('*******GLOBAL*******')
+    console.log(this.global)
+    console.log('*******_PARAM*******')
+    console.log(this.__param())
+    console.log('*******_PROPS_KEY*******')
+    console.log(this.__propKey()) // undefined
+    */
+    // console.log(node.tagName)
+    // console.log(this.resourcePath)
+    if (node.tagName && node.tagName.includes('-')) {
+      dependencies.add(node.tagName.toLowerCase())
+      // maybe we need to pass soemthing from param?
+      // we need current file path
+      // storage.add(this.module, node.tagName)
+    }
+    
+
     // check if any fo attributes has any dynamics
     Object.entries(node.attributes).forEach(([attrName, attrValue]) => {
       handleDynamic(node, className, attrValue, attrName)
@@ -103,6 +117,14 @@ module.exports = function loader(source) {
   }
 
   updateNodes(root)
+
+  const componentName = this.resourcePath.match(/.+\/([-a-z]+)\/index.heart$/)?.[1]
+  if (!componentName) {
+    throw Error(`Not a valid custom element name for path ${this.resourcePath}`)
+  }
+  console.log(componentName)
+  storage.add(componentName, Array.from(dependencies))
+
 
   return `export default {
   dynamics: [${dynamics.join(',')}],

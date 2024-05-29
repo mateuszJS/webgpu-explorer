@@ -28,13 +28,6 @@ function getSourceAttr(text) {
 }
 
 module.exports = function loader(source) {
-  // console.log('ooooooooooooooooooooo')
-  // const { _compiler, _compilation, _module, fs, environment, resourcePath, ...rest } = this
-  // _module got a lot of details
-  // console.log(resourcePath, rest)
-
-
-  // resourcePath: '/Users/mateuszwalendzik/Documents/repos/webgpu-explorer/src/components/project-panel/index.heart',
   const root = parse(source)
   root.removeWhitespace()
 
@@ -78,26 +71,8 @@ module.exports = function loader(source) {
 
     const className = getClass()
 
-    // const isCustomElem = node.tagName.includes('-')
-    // console.log('===========================')
-    // const { global, ...rest } = this
-    // console.log(rest)
-    /*console.log('*******restParams*******')
-    console.log(restParams) // []
-    console.log('*******GLOBAL*******')
-    console.log(this.global)
-    console.log('*******_PARAM*******')
-    console.log(this.__param())
-    console.log('*******_PROPS_KEY*******')
-    console.log(this.__propKey()) // undefined
-    */
-    // console.log(node.tagName)
-    // console.log(this.resourcePath)
     if (node.tagName && node.tagName.includes('-')) {
       dependencies.add(node.tagName.toLowerCase())
-      // maybe we need to pass soemthing from param?
-      // we need current file path
-      // storage.add(this.module, node.tagName)
     }
     
 
@@ -122,9 +97,8 @@ module.exports = function loader(source) {
   if (!componentName) {
     throw Error(`Not a valid custom element name for path ${this.resourcePath}`)
   }
-  console.log(componentName)
-  storage.add(componentName, Array.from(dependencies))
 
+  storage.add(componentName, Array.from(dependencies))
 
   return `export default {
   dynamics: [${dynamics.join(',')}],

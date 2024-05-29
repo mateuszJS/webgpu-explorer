@@ -96,7 +96,6 @@ export default class BaseElement extends HTMLElement {
   private attachListeners() {
     this.heart.listeners.forEach(listener => {
       const node = this.querySelector<HTMLElement>(listener.selector)!
-      console.log(node)
       node.addEventListener(
         listener.event,
         this[listener.callback as keyof typeof this] as unknown as (this: HTMLElement, ev: Event) => void

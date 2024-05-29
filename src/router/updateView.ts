@@ -2,7 +2,11 @@ let isDuringTransition = false
 
 // check if when we load just nest page html components(because of link) then does webpack also load subimports or not?
 
-type Page = 'project-steps' | 'project-overview' | 'home'
+enum Page {
+  ProjectSteps = 'project-steps',
+  ProjectOverview = 'project-overview',
+  Home = 'home',
+}
 
 export function getPage(pathname: string): Page {
   const [_, page, firstParam, subPage, secondParam] = pathname.split('/')
@@ -11,14 +15,14 @@ export function getPage(pathname: string): Page {
 
     if (subPage === 'steps' && secondParam) {
       // redirect if stepIndex is invalid
-      return 'project-steps'
+      return Page.ProjectSteps
     }
 
     // redirect if projectSlug cannot be resolved
-    return 'project-overview'
+    return Page.ProjectOverview
   }
 
-  return 'home'
+  return Page.Home
 }
 
 export default async function updateView(page: Page) {

@@ -1,4 +1,4 @@
-<x-link to="/projects/{project-slug}">
+<x-link to="/projects/{project_slug}">
   <svg></svg>
   <div>
     <h3>{headline}</h3>

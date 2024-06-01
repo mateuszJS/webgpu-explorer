@@ -37,8 +37,17 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
+        test: /\.json5$/,
+        loader: 'json5-loader',
+        type: 'javascript/auto',
+      },
+      {
         test: /\.heart/,
         loader: path.resolve('src/heart-loader/loader.js'),
+      },
+      {
+        test: /\.inline\.html/,
+        type: "asset/source",
       },
       {
         test: /\.inline\.svg/,

@@ -1,4 +1,4 @@
-const IMPORTS_TREE: Record<string, string[]> = {}
+const IMPORTS_TREE: Record<string, string[]> = {/*IMPORTS-TREE-PLACEHOLDER*/}
 
   /* webpackInclude: /\.json$/ */
   /* webpackExclude: /\.noimport\.json$/ */

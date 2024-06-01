@@ -14,7 +14,7 @@ class CodeBlock extends BaseElement {
   private overlayStartNode?: HTMLElement
   private overlayEndNode?: HTMLElement
 
-  static observedAttributes = ["highlight-lines"];
+  static observedAttributes = ["highlight_lines"];
 
   get heart() {
     return HEART
@@ -30,18 +30,9 @@ class CodeBlock extends BaseElement {
 
     this.overlayStartNode = this.querySelector('.overlay-before')!
     this.overlayEndNode = this.querySelector('.overlay-after')!
-    this.querySelector('pre')!.classList.add(this.getAttribute('code-lang')!)
+    this.querySelector('pre')!.classList.add(this.state.code_lang)
 
     Prism.highlightAllUnder(this);
-
-    this.overlayStartNode = document.createElement('span')
-    this.overlayStartNode.classList.add('overlay', 'overlay-before')
-    this.querySelector('code')!.appendChild(this.overlayStartNode)
-    
-    this.overlayEndNode = document.createElement('span')
-    this.overlayEndNode.classList.add('overlay', 'overlay-after')
-    this.querySelector('code')!.appendChild(this.overlayEndNode)
-
 
     // const copyButton = shadowRoot.querySelector('#copy-button')!; 
     // copyButton.addEventListener("click", () => {
@@ -49,12 +40,12 @@ class CodeBlock extends BaseElement {
     // });
   }
 
-  onChangeHighlightLines(oldVal: string, newVal: string) {
-    if (!this.overlayStartNode || !this.overlayEndNode) return
+  onChange_highlight_lines(oldVal: string, newVal: string) {
+    if (newVal === undefined) return
 
     const [start, end] = newVal.split('-').map(v => parseInt(v, 10))
-    this.overlayStartNode.style.bottom = `calc(100% - (${start - 1}em * 1.5))`
-    this.overlayEndNode.style.top = `calc(${end}em * 1.5)`
+    this.overlayStartNode!.style.height = `calc(${start}lh)`
+    this.overlayEndNode!.style.marginTop = `calc(${end}lh)`
   }
   
   // copyCode() {

@@ -1,28 +1,35 @@
 code-block {
   font-size: 14px;
+  line-height: 1.5;
 
   pre {
     max-height: 100%;
     box-sizing: border-box;
+    display: grid;
+    > * {
+      grid-area: 1/1;
+    }
   }
 
   pre[class*=language-] { /* just to create stronger selector to override default */
     background: #11111155;
-    border: 1px solid #222;
+    /* border: 1px solid #222; */
     margin: 0;
   }
 
-  code {
-    display: inline-block;
-    position: relative;
-  }
-
   .overlay {
-    position: absolute;
     background: #000000;
-    inset: -1em;
+    opacity: 0.35;
     pointer-events: none;
-    opacity: 0.7
+    margin-inline: -1em;
+
+    &:first-of-type {
+      margin-block-start: -1lh;
+    }
+
+    &:last-of-type {
+      margin-block-end: -1lh;
+    }
   }
 
   &:hover .overlay {

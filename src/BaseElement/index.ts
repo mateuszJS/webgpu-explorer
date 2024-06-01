@@ -1,8 +1,10 @@
-import { attrOnChangeCallbackName } from "./attrNames"
 import mountHTML from "./mountHTML"
+import {restore} from 'complex-storage'
+
+type State = Record<string, any>
 
 export default class BaseElement extends HTMLElement {
-  private mounted: boolean
+  protected state: State
 
   static attachCSS(source: string) {
     // we may also check if already doesn't exist, because of inital SSG HTML
@@ -13,21 +15,39 @@ export default class BaseElement extends HTMLElement {
 
   constructor() {
     super()
-    this.mounted = !!this.attr('mounted')
+    const handler = {
+      set: (obj: State, prop: string, value: any) => {
+        obj[prop] = value
+        this.onStateChange(prop)
+        return true
+      }
+    };
+
+    this.state = new Proxy({}, handler)
+    Array.from(this.attributes).forEach(attr => {
+      this.attributeChangedCallback(attr.nodeName, null, attr.nodeValue as string)
+      // how is it even posssible that this.attribute(NamedNodeMap) can have value null??
+    })
   }
 
   get heart(): Heart { // abstract
     return {dynamics: [], html: '', listeners: []}
   }
 
-  get debug() {
+  get debug() { // abstract
     return ''
   }
 
   afterRender(hydration: boolean){} // abstract
 
-  attributeChangedCallback(name: string, oldVal: string, newVal: string) {
-    if (!this.mounted) return
+  attributeChangedCallback(name: string, _oldVal: string | null, newVal: string) {
+    this.state[name] = newVal[0] === '#'
+      ? restore(newVal)
+      : newVal
+  }
+
+  onStateChange(name: string) {
+    if (!this.state.mounted) return
 
     this.heart.dynamics.forEach(dynamic => {
       if (dynamic.inputs.includes(name)) {
@@ -35,8 +55,12 @@ export default class BaseElement extends HTMLElement {
       }
     })
 
-    const callbackName = attrOnChangeCallbackName(name) as keyof typeof this
-    (this[callbackName] as Function)?.(oldVal, newVal)
+    this.callOnChangeCallback(name)
+  }
+
+  callOnChangeCallback(propName: string) {
+    const callbackName = 'onChange_' + propName as keyof typeof this
+    (this[callbackName] as Function)?.(null, this.state[propName])
   }
 
 
@@ -54,43 +78,42 @@ export default class BaseElement extends HTMLElement {
     }
   }
 
-  private updateAllAttrs() {
+  private updateAllAttrs() { // called after mount/hydration
+    // not sure if we need here a change to make it go thoug hwhole this.state? or just
+    // as it is right now, obervedAttributes?
     const observedAttrs = (this.constructor as unknown as { observedAttributes?: string[] }).observedAttributes
 
     if (!observedAttrs) return
 
     observedAttrs.forEach(attr => {
-      const callbackName = attrOnChangeCallbackName(attr) as keyof typeof this
-      (this[callbackName] as Function)?.(null, this.attr(attr))
+      if (this.state[attr] !== undefined) {
+        this.callOnChangeCallback(attr)
+      }
     })
   }
 
   connectedCallback() {
-    if (this.attr('hydration')) {
-      this.removeAttribute('hydration')
-
+    if (this.state.hydration) {
+      this.state.hydration = false
       this.attachListeners()
+      this.afterRender(true) // sometimes we depend on stuff from afterRender in reacting to attribute changes
       this.updateAllAttrs()
-      this.afterRender(true)
     }
 
-    if (this.mounted) return // component content alreayd mounted
+    if (this.state.mounted) return // component content alreayd mounted
     // when we call "appendChild" with a custom-element inside,
     // then that custom element calles connectedCallback again!
-
-    
 
     const {dynamics, html} = this.heart
 
     mountHTML(this, html)
 
-    this.mounted = true
-    this.setAttribute('mounted', 'true')
+    this.state.mounted = true
 
     dynamics.forEach(this.updateDynamic)
     this.attachListeners()
+    this.afterRender(false) // sometimes we depend on stuff from afterRender in reacting to attribute changes
     this.updateAllAttrs()
-    this.afterRender(false)
   }
 
   private attachListeners() {
@@ -111,9 +134,5 @@ export default class BaseElement extends HTMLElement {
         this[listener.callback as keyof typeof this] as unknown as (this: HTMLElement, ev: Event) => void
       )
     })
-  }
-
-  attr(attributeName: string) {
-    return this.getAttribute(attributeName)!
   }
 }

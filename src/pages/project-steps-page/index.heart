@@ -6,7 +6,11 @@
     <project-stepper-item headline="Canvas"></project-stepper-item>
   </project-stepper>
 </nav>
-<flash-effect><span><h1>PROJECT</h1></span></flash-effect>
-<code-block code-lang="language-javascript" highlight-lines="5-10">
+<div>
+  <h2 class="project-steps-page__title"></h2>
+  <div class="project-steps-page__content"></div>
+</div>
+<!-- <flash-effect><span><h1>PROJECT</h1></span></flash-effect> -->
+<code-block code_lang="language-javascript" highlight_lines="{code_highlight}">
 @code-placeholder@
 </code-block>

@@ -5,7 +5,7 @@ import HEART from './index.heart'
 import CSS from "./styles.css";
 
 const MAP_IMG_SRC = {
-  background: startIcon,
+  play: startIcon,
 /*
 convert CSS backgroudn gradient to SVG https://www.kmhcreative.com/downloads/CSS2SVG.htm
  background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
@@ -18,10 +18,10 @@ convert CSS backgroudn gradient to SVG https://www.kmhcreative.com/downloads/CSS
 BaseElement.attachCSS(CSS)
 
 class ProjectPanel extends BaseElement {
-  static observedAttributes = ['project-slug']
+  static observedAttributes = ['project_slug']
 
   get heart(): Heart {
-    const svgString = MAP_IMG_SRC[this.attr('icon') as keyof typeof MAP_IMG_SRC]
+    const svgString = MAP_IMG_SRC[this.state.icon as keyof typeof MAP_IMG_SRC]
     return {...HEART, html: HEART.html.replace('<svg></svg>', svgString)}
   }
 }

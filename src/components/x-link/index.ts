@@ -13,15 +13,15 @@ class XLink extends BaseElement {
     return HEART
   }
 
-  onChangeTo(_oldVal: string, newVal: string): void {
-    if (newVal === null) return // attribute 'to' can be set in dynamic way also
+  onChange_to(_oldVal: string, newVal: string): void {
+    if (!newVal) return // attribute 'to' can be set in dynamic way also
     const page = getPage(newVal)
     importPage(page)
   }
 
   handleRedirect = (e: MouseEvent) => {
     e.preventDefault();
-    const to = this.attr('to')
+    const to = this.state.to
     window.history.pushState({}, to, window.location.origin + to);
     
     const page = getPage(to)

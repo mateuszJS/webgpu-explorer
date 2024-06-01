@@ -10,7 +10,7 @@
     <project-stepper-item headline="Canvas"
       details="We need to obtain an adapter. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nisi maiores libero ipsum nostrum in."></project-stepper-item>
   </project-stepper>
-  <x-link to="/projects/project-1/steps/0" class="project-overview-page__start-btn">
+  <x-link to="/projects/setup/steps/0" class="project-overview-page__start-btn">
     <x-button>start</x-button>
   </x-link>
 </div>

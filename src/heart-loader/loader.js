@@ -6,9 +6,10 @@ function getClass() {
   return `h3t-${classCounter++}`
 }
 
-const reAllDynamics = /\{[-a-z]+\}/g
+const regexOnlyOneDynamic= /^\{[_a-z]+\}$/
+const reAllDynamics = /\{[_a-z]+\}/g
 
-function getSourceAttr(text) {
+function getSourceAttr(text, useComplexStorage) {
   if (text.includes('{') && text.includes('}')) {
     // might be issue when "}{"
     const inputs = Array.from(
@@ -16,11 +17,16 @@ function getSourceAttr(text) {
     ).map(match => `'${match[0].slice(1, -1)}'`)
 
     const cbFnAttrsInput = `[${inputs.join(',')}]`
-
-    const templateString = text
-      .replaceAll('{', "${el.attr('")
-      .replaceAll('}', "')}")
-    const callbackFn = `(el) => \`${templateString}\``
+    let callbackFn;
+    if (useComplexStorage) {
+      callbackFn = `(el) => store(el.state.${text.slice(1, -1)})`
+    } else {
+      // whenever we use other type than string, we need to use #
+      const templateString = text
+        .replaceAll('{', "${el.state.")
+        .replaceAll('}', "}")
+      callbackFn = `(el) => \`${templateString}\``
+    }
 
     return [callbackFn, cbFnAttrsInput]
   }
@@ -48,7 +54,9 @@ module.exports = function loader(source) {
   }
 
   function handleDynamic(node, className, attrValue, attrName) {
-    const [callbackFn, cbFnAttrsInput] = getSourceAttr(attrValue)
+    const useComplexStorage = node.tagName.includes('-') && !!attrName && regexOnlyOneDynamic.test(attrValue)
+    // if it's custom element but innerText, then stringify. And also if there is no string interpolation
+    const [callbackFn, cbFnAttrsInput] = getSourceAttr(attrValue, useComplexStorage)
     if (!callbackFn) return
 
     node.classList.add(className)
@@ -100,9 +108,11 @@ module.exports = function loader(source) {
 
   storage.add(componentName, Array.from(dependencies))
 
-  return `export default {
-  dynamics: [${dynamics.join(',')}],
-  listeners: [${listeners.join(',')}],
-  html: \`${root.toString()}\`
-};`
+  return `
+  import {store} from 'complex-storage';
+  export default {
+    dynamics: [${dynamics.join(',')}],
+    listeners: [${listeners.join(',')}],
+    html: \`${root.toString()}\`
+  };`
 }

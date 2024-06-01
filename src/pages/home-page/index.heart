@@ -3,36 +3,36 @@
 <section class="panels-list">
   <project-panel
     class="panel"
-    icon="background"
-    project-slug="project-1"
+    icon="play"
+    project_slug="setup"
     headline="Setup, Set, Go!"
     text="Base for WebGPU renderings."
   ></project-panel>
   <project-panel
     class="panel"
     icon="triangle"
-    project-slug="project-2"
+    project_slug="project-2"
     headline="Triangle"
     text="The fundamental element of modern rendering - triangle."
   ></project-panel>
   <project-panel
   class="panel"
-  icon="background"
-  project-slug="project-1"
+  icon="play"
+  project_slug="project-1"
   headline="Setup, Set, Go!"
   text="Base for WebGPU renderings."
 ></project-panel>
 <project-panel
   class="panel"
   icon="triangle"
-  project-slug="project-2"
+  project_slug="project-2"
   headline="Triangle"
   text="The fundamental element of modern rendering - triangle."
 ></project-panel>
 <project-panel
   class="panel"
   icon="triangle"
-  project-slug="project-2"
+  project_slug="project-2"
   headline="Triangle"
   text="The fundamental element of modern rendering - triangle."
 ></project-panel>

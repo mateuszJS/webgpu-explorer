@@ -45,6 +45,26 @@ class ProjectStepsPage extends BaseElement {
   get heart() {
     return { ...HEART, html: HEART.html.replace('@code-placeholder@', code)}
   }
+
+  afterRender(hydration: boolean): void {
+    const [_, _page, projectSlug, _subPage, stepIndex] = window.location.pathname.split('/')
+
+    import(`content/${projectSlug}/steps/${stepIndex}/index.ts`).then(module => {
+      this.querySelector('.project-steps-page__title')!.innerHTML = module.default.title
+      const contentNode = this.querySelector('.project-steps-page__content')!
+      contentNode.innerHTML = module.default.html
+      this.state.code_highlight = module.default.code_highlight// maybe exists
+
+      // setInterval(() => {
+      //   const [oldStart, oldEnd] = this.state.code_highlight.split('-')
+      //   this.state.code_highlight = `${(Number.parseInt(oldStart, 10) + 1) % 30}-${(Number.parseInt(oldEnd, 10) + 1) % 30}`
+      // }, 1000)
+    })
+  }
+
+  // get debug() {
+  //   return 'project-steps-page'
+  // }
 }
 
 window.customElements.define('project-steps-page', ProjectStepsPage);

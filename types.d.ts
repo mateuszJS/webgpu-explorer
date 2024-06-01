@@ -28,6 +28,11 @@ declare module "*.css" {
   export default content;
 }
 
+declare module "*.inline.html" {
+  const content: string;
+  export default content;
+}
+
 interface Dynamic {
   selector: string
   sourceAttr: (el: HTMLElement) => string

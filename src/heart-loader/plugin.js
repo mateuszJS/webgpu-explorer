@@ -20,8 +20,9 @@ class HeartPlugin {
               const asset = compilation.getAsset(i);
               const contents = asset.source.source();
               const updatedSrc = contents.replace(
-                'const IMPORTS_TREE = {}',
-                `const IMPORTS_TREE = ${JSON.stringify(storage.getAll()).replaceAll("\"", "'")}` // double quatoers is used by source maps
+                '/*IMPORTS-TREE-PLACEHOLDER*/',
+                JSON.stringify(storage.getAll()).replaceAll("\"", "'").slice(1, -1) // double quatoers is used by source maps
+                // slice removes { and }
               )
               compilation.updateAsset(i, new RawSource(updatedSrc));
             }

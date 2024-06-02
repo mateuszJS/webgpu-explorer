@@ -1,15 +1,8 @@
 <home-link></home-link>
 <div class="project-overview-page__wrapper">
-  <h1 class="project-overview-page__title">TRIANGLE</h1>
-  <p class="project-overview-page__description">The most basic particile of all WebGPU world. Lorem ipsum dolor sit amet
-    consectetur adipisicing elit. Cupiditate, nemo ad iure in ut possimus.</p>
-  <project-stepper>
-    <project-stepper-item headline="Adatper" details="We need to obtain an adapter."></project-stepper-item>
-    <project-stepper-item headline="Device"
-      details="We need to obtain an adapter. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nisi maiores libero ipsum nostrum in.  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nisi maiores libero ipsum nostrum in."></project-stepper-item>
-    <project-stepper-item headline="Canvas"
-      details="We need to obtain an adapter. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nisi maiores libero ipsum nostrum in."></project-stepper-item>
-  </project-stepper>
+  <h1 class="project-overview-page__title">{title}</h1>
+  <p class="project-overview-page__description">{description}</p>
+  <project-nav items="{nav_items}" with_details="true"></project-nav>
   <x-link to="/projects/setup/steps/0" class="project-overview-page__start-btn">
     <x-button>start</x-button>
   </x-link>

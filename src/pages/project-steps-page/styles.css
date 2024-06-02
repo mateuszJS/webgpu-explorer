@@ -21,9 +21,8 @@ code-block {
 }
 
 
-  project-stepper {
+  project-nav {
     --size-factor: .75;
-    flex-grow: 1;
   }
 
   nav {
@@ -31,5 +30,11 @@ code-block {
     align-items: center;
     gap: 10px;
     grid-area: top;
+  }
+
+  .project-steps-page__actions-bar {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
   }
 }

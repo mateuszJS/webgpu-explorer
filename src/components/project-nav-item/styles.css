@@ -1,12 +1,17 @@
-project-stepper-item {
+project-nav-item {
   flex: 1 1 0;
+  min-width: 0;
   line-height: var(--size-factor);
   .number:before {
     counter-increment: step-order;
     content: counter(step-order);
   }
+  .header {
+    display: flex;
+    align-items: center;
+  }
   .number {
-    display: inline-block;
+    flex: 0 0 auto;
     font-size: calc(20px * var(--size-factor));
     line-height: 1.5em;
     font-weight: 600;
@@ -17,20 +22,23 @@ project-stepper-item {
     height: calc(30px * var(--size-factor));
     border-radius: 50%;
     background-color: #151240; /* pretends that is the color of the body */
-    /* var(--background); */
-    isolation: isolate; /* to be above :before position:absolute inside "project-stepper ol"*/
+    isolation: isolate; /* to be above :before position:absolute inside "project-nav ol"*/
   }
   h6 {
-    display: inline-block;
+    flex-shrink: 1;
     margin: 0;
-    font-size: calc(22px * var(--size-factor));
+    font-size: calc(20px * var(--size-factor));
     font-weight: 400;
     line-height: 1;
     
     vertical-align: middle;
     padding-inline-start: calc(5px * var(--size-factor));
     color: var(--background);
-    isolation: isolate; /* to be above :before position:absolute inside "project-stepper ol"*/
+    isolation: isolate; /* to be above :before position:absolute inside "project-nav ol"*/
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .details {
     padding-block-start: calc(13px * var(--size-factor));
@@ -52,6 +60,10 @@ project-stepper-item {
   }
 
   &:not([details]) .details {
+    display: none;
+  }
+
+  .details:has(p:empty) {
     display: none;
   }
 }

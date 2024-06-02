@@ -14,7 +14,7 @@ class CodeBlock extends BaseElement {
   private overlayStartNode?: HTMLElement
   private overlayEndNode?: HTMLElement
 
-  static observedAttributes = ["highlight_lines"];
+  static observedAttributes = ["highlight_lines", 'code_lang'];
 
   get heart() {
     return HEART
@@ -40,10 +40,10 @@ class CodeBlock extends BaseElement {
     // });
   }
 
-  onChange_highlight_lines(oldVal: string, newVal: string) {
-    if (newVal === undefined) return
+  onChange_highlight_lines(value: string) {
+    if (value === undefined) return
 
-    const [start, end] = newVal.split('-').map(v => parseInt(v, 10))
+    const [start, end] = value.split('-').map(v => parseInt(v, 10))
     this.overlayStartNode!.style.height = `calc(${start}lh)`
     this.overlayEndNode!.style.marginTop = `calc(${end}lh)`
   }

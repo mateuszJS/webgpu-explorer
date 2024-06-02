@@ -15,7 +15,8 @@ declare module "*.svg" {
 
 declare module "*.heart" {
   const content: Heart;
-  export default content
+  declare export default content;
+  declare export const propsUsedInTemplate: string[];
 }
 
 declare module "*.scss" {

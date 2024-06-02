@@ -23,9 +23,14 @@ export default class BaseElement extends HTMLElement {
       }
     };
 
+    const observedAttrs = (this.constructor as unknown as { observedAttributes?: string[] }).observedAttributes || []
+    const attributesWeObserve = [...observedAttrs, 'mounted', 'hydration']
+
     this.state = new Proxy({}, handler)
     Array.from(this.attributes).forEach(attr => {
-      this.attributeChangedCallback(attr.nodeName, null, attr.nodeValue as string)
+      if (attributesWeObserve.includes(attr.nodeName)) { // we don;t want to call callback when "class" is changign for example
+        this.attributeChangedCallback(attr.nodeName, null, attr.nodeValue as string)
+      }
       // how is it even posssible that this.attribute(NamedNodeMap) can have value null??
     })
   }
@@ -60,13 +65,13 @@ export default class BaseElement extends HTMLElement {
 
   callOnChangeCallback(propName: string) {
     const callbackName = 'onChange_' + propName as keyof typeof this
-    (this[callbackName] as Function)?.(null, this.state[propName])
+    (this[callbackName] as Function)?.(this.state[propName])
   }
 
 
   updateDynamic = (dynamic: Dynamic) => {
     const sourceAttrValue = dynamic.sourceAttr(this)
-      
+    
     // split sourceAttr to dynamic and static part
     const node = this.querySelector<HTMLElement>(dynamic.selector)!
     if (dynamic.destAttr) {

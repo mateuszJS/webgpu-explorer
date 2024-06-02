@@ -1,6 +1,7 @@
 import BaseElement from 'BaseElement'
 import HEART from './index.heart'
 import CSS from './styles.css'
+import type { Base5Json } from 'content/types'
 
 const code = `import getContext from "utils/gpu/getContext"
 import getDevice from "utils/gpu/getDevice"
@@ -48,9 +49,20 @@ class ProjectStepsPage extends BaseElement {
 
   afterRender(hydration: boolean): void {
     const [_, _page, projectSlug, _subPage, stepIndex] = window.location.pathname.split('/')
+    
+    this.state.project_slug = projectSlug
+
+    const stepIndexInt = Number.parseInt(stepIndex, 10)
+    this.state.next_step = `${stepIndexInt + 1}`
+    this.state.prev_step = `${stepIndexInt - 1}`
+
+    import(`content/${projectSlug}/base.json5`).then((module: Base5Json) => {
+      this.state.title = module.default.title
+      // this.state.description = module.default.descriptionLong
+      this.state.nav_items = module.default.nav
+    })
 
     import(`content/${projectSlug}/steps/${stepIndex}/index.ts`).then(module => {
-      this.querySelector('.project-steps-page__title')!.innerHTML = module.default.title
       const contentNode = this.querySelector('.project-steps-page__content')!
       contentNode.innerHTML = module.default.html
       this.state.code_highlight = module.default.code_highlight// maybe exists

@@ -2,7 +2,7 @@ project-overview-page {
   display: block;
   padding: 20px;
 
-  project-stepper {
+  project-nav {
     --size-factor: 1;
   }
 }
@@ -27,7 +27,7 @@ project-overview-page {
 }
 
 .project-overview-page__description {
-  max-width: 400px;
+  max-width: 50%;
   margin: 20px auto 50px;
   text-align: center;
 }

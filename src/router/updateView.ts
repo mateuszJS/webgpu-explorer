@@ -1,4 +1,4 @@
-enum Page {
+export enum Page {
   ProjectSteps = 'project-steps-page',
   ProjectOverview = 'project-overview-page',
   Home = 'home-page',

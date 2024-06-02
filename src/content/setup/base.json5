@@ -5,4 +5,26 @@
   // "Good explanation is the key point to release the power of your GPU faster",
   // "Understand the foundation/basis of WebGPU quickly to start levaragign the pwoer of you GPU"
   descriptionLong: "Unlocking the power of your user's graphics card for blazing fast web graphics? WebGPU is here, but getting started can be daunting. This post cuts through the complexity, guiding you through the essential setup to render your first (admittedly empty) WebGPU scene. It's the foundation for building incredible visuals -  let's dive in!",
+  nav: [
+    {
+      title: "Pre-work",
+      description: "Let's setup environment before we start.",
+    },
+    {
+      title: "Device & Canvas",
+      description: "",
+    },
+    {
+      title: "Setup Render Pass",
+      description: "",
+    },
+    {
+      title: "Render",
+      description: "",
+    },
+    {
+      title: "Handle Resize",
+      description: "",
+    },
+  ],
 }

@@ -6,17 +6,18 @@ function getClass() {
   return `h3t-${classCounter++}`
 }
 
+const regexUppercaseLetter = /[A-Z]/
 const regexOnlyOneDynamic= /^\{[_a-z]+\}$/
 const reAllDynamics = /\{[_a-z]+\}/g
 
 function getSourceAttr(text, useComplexStorage) {
   if (text.includes('{') && text.includes('}')) {
     // might be issue when "}{"
-    const inputs = Array.from(
+    const cbFnAttrsInput = Array.from(
       text.matchAll(reAllDynamics)
     ).map(match => `'${match[0].slice(1, -1)}'`)
 
-    const cbFnAttrsInput = `[${inputs.join(',')}]`
+
     let callbackFn;
     if (useComplexStorage) {
       callbackFn = `(el) => store(el.state.${text.slice(1, -1)})`
@@ -24,7 +25,7 @@ function getSourceAttr(text, useComplexStorage) {
       // whenever we use other type than string, we need to use #
       const templateString = text
         .replaceAll('{', "${el.state.")
-        .replaceAll('}', "}")
+        .replaceAll('}', ' || ""}')
       callbackFn = `(el) => \`${templateString}\``
     }
 
@@ -34,12 +35,14 @@ function getSourceAttr(text, useComplexStorage) {
 }
 
 module.exports = function loader(source) {
+  const resourcePath = this.resourcePath
   const root = parse(source)
   root.removeWhitespace()
 
   const dependencies = new Set()
   const dynamics = []
   const listeners = []
+  const propsUsedInTemplate = new Set()
 
   function handleListeners(node, className, attrValue, attrName) {
     if (attrName[0] === '@') {
@@ -54,16 +57,38 @@ module.exports = function loader(source) {
   }
 
   function handleDynamic(node, className, attrValue, attrName) {
+    if (node.tagName.includes('-') && regexUppercaseLetter.test(attrName)) {
+      // check if its cusotm-element, because ofr example svg viewBox ususally is camelCase
+      throw Error(`Usage of camelCase is not allowed for attribute names. Use sneak_case, not camelCase.
+        file: ${resourcePath}
+        node: ${node.tagName}
+        attribute name: ${attrName}
+        attribute value: ${attrValue}
+      `)
+    }
+    if (attrValue.includes('{') && regexUppercaseLetter.test(attrValue)) {
+      // we cannot use regexOnlyOneDynamic instead of includes('{') because that regex return false if we got any big letter!
+      throw Error(`Usage of upper case is not allowed for dynamic values. Use sneak_case, not camelCase.
+        file: ${resourcePath}
+        node: ${node.tagName}
+        attribute name: ${attrName}
+        attribute value: ${attrValue}
+      `)
+    }
     const useComplexStorage = node.tagName.includes('-') && !!attrName && regexOnlyOneDynamic.test(attrValue)
     // if it's custom element but innerText, then stringify. And also if there is no string interpolation
     const [callbackFn, cbFnAttrsInput] = getSourceAttr(attrValue, useComplexStorage)
     if (!callbackFn) return
 
+    cbFnAttrsInput.forEach(input => {
+      propsUsedInTemplate.add(input)
+    })
+
     node.classList.add(className)
     dynamics.push(`{
       selector: '.${className}',
       sourceAttr: ${callbackFn},
-      inputs: ${cbFnAttrsInput}
+      inputs: [${cbFnAttrsInput.join(',')}]
       ${attrName ? `,destAttr: '${attrName}'` : ''}
     }`)
 
@@ -83,7 +108,6 @@ module.exports = function loader(source) {
       dependencies.add(node.tagName.toLowerCase())
     }
     
-
     // check if any fo attributes has any dynamics
     Object.entries(node.attributes).forEach(([attrName, attrValue]) => {
       handleDynamic(node, className, attrValue, attrName)
@@ -101,15 +125,16 @@ module.exports = function loader(source) {
 
   updateNodes(root)
 
-  const componentName = this.resourcePath.match(/.+\/([-a-z]+)\/index.heart$/)?.[1]
+  const componentName = resourcePath.match(/.+\/([-a-z]+)\/index.heart$/)?.[1]
   if (!componentName) {
-    throw Error(`Not a valid custom element name for path ${this.resourcePath}`)
+    throw Error(`Not a valid custom element name for path ${resourcePath}`)
   }
 
   storage.add(componentName, Array.from(dependencies))
 
   return `
   import {store} from 'complex-storage';
+  export const propsUsedInTemplate = [${Array.from(propsUsedInTemplate).join(',')}]
   export default {
     dynamics: [${dynamics.join(',')}],
     listeners: [${listeners.join(',')}],

@@ -1,7 +1,10 @@
-project-stepper {
+project-nav {
   display: block;
   padding: calc(5px * var(--size-factor));
   counter-reset: section;
+
+  flex: 1 1 auto;
+  min-width: 0;
 
   ol {
     display: flex;

@@ -6,7 +6,7 @@
     icon="play"
     project_slug="setup"
     headline="Setup, Set, Go!"
-    text="Base for WebGPU renderings."
+    text="Skip the struggle. Build strong knowledge about WebGPU fundation quickly!"
   ></project-panel>
   <project-panel
     class="panel"

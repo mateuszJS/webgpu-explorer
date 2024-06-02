@@ -1,14 +1,18 @@
 <nav>
   <home-link></home-link>
-  <project-stepper>
-    <project-stepper-item headline="Adatper"></project-stepper-item>
-    <project-stepper-item headline="Device"></project-stepper-item>
-    <project-stepper-item headline="Canvas"></project-stepper-item>
-  </project-stepper>
+  <project-nav items="{nav_items}"></project-nav>
 </nav>
 <div>
-  <h2 class="project-steps-page__title"></h2>
+  <h2 class="project-steps-page__title">{title}</h2>
   <div class="project-steps-page__content"></div>
+  <div class="project-steps-page__actions-bar">
+    <x-link to="/projects/{project_slug}/steps/{prev_step}">
+      <x-button>Previous Step</x-button>
+    </x-link>
+    <x-link to="/projects/{project_slug}/steps/{next_step}">
+      <x-button>Next Step</x-button>
+    </x-link>
+  </div>
 </div>
 <!-- <flash-effect><span><h1>PROJECT</h1></span></flash-effect> -->
 <code-block code_lang="language-javascript" highlight_lines="{code_highlight}">

@@ -1,5 +1,6 @@
 home-link {
   display: inline-block;
+  flex: 0 0 auto;
   --anim-delay: .15s;
 
   x-button .btn_content {

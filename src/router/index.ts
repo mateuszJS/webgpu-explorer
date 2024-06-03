@@ -1,15 +1,30 @@
 import importPage from "./importsMap"
-import updateView, { Page, getPage } from "./updateView"
+import renderView, { PageDetails, PageTagName, getPageDetails } from "./renderView"
 
-let lastPage: Page | undefined;
+let lastPage: PageTagName | undefined;
+
+type PageDetailsCallback = (pageDetails: PageDetails) => void
+
+let listeners: PageDetailsCallback[] = []
+
+export function subscribeUrlParams(callback: PageDetailsCallback): VoidFunction {
+  listeners.push(callback)
+  callback(getPageDetails(window.location.pathname))
+  return () => {
+    listeners = listeners.filter(cb => cb !== callback)
+  }
+}
 
 export function updatePathname(pathname: string) {
-  const newPage = getPage(pathname)
+  const newPage = getPageDetails(pathname)
 
-  if (lastPage !== newPage) {
-    updateView(newPage)
-    lastPage = newPage
+  if (lastPage !== newPage.tagName) {
+    renderView(newPage.tagName)
+    lastPage = newPage.tagName
   }
+
+  listeners.forEach(callback => callback(newPage))
+  // TODO: notify about the change
 }
 
 export default function initRouter() {
@@ -20,11 +35,11 @@ export default function initRouter() {
 
   document.main = document.querySelector('main')!
 
-  lastPage = getPage(window.location.pathname)
+  lastPage = getPageDetails(window.location.pathname).tagName
   importPage(lastPage)
 
   if (document.main.children.length === 0) {
-    // so during development and server side generating we gonna updateView, but not when serving static HTML(bcuz alreayd got children in main)
-    updateView(lastPage)
+    // so during development and server side generating we gonna renderView, but not when serving static HTML(bcuz alreayd got children in main)
+    renderView(lastPage)
   }
 }

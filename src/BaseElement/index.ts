@@ -1,9 +1,13 @@
+import { subscribeUrlParams } from "router"
 import mountHTML from "./mountHTML"
 import {restore} from 'complex-storage'
+import { PageDetails } from "router/renderView"
 
 type State = Record<string, any>
 
 export default class BaseElement extends HTMLElement {
+  private unsubscribeUrlParams?: VoidFunction
+
   protected state: State
 
   static attachCSS(source: string) {
@@ -32,6 +36,23 @@ export default class BaseElement extends HTMLElement {
         this.attributeChangedCallback(attr.nodeName, null, attr.nodeValue as string)
       }
       // how is it even posssible that this.attribute(NamedNodeMap) can have value null??
+    })
+
+    const observedUrlParams = (this.constructor as unknown as { observedUrlParams?: string[] }).observedUrlParams
+    if (observedUrlParams) {
+      this.unsubscribeUrlParams = subscribeUrlParams(this.onChangeUrlParams)
+    }
+  }
+
+
+  // TODO: Handle multiple params changing,
+  private onChangeUrlParams = (pageDetails: PageDetails) => {
+    const observedUrlParams = (this.constructor as unknown as { observedUrlParams?: string[] }).observedUrlParams
+    if (!observedUrlParams) return
+    observedUrlParams.forEach(paramName => {
+      if (this.state[paramName] !== pageDetails.params[paramName]) { // TODO: check if needed
+        this.state[paramName] = pageDetails.params[paramName]
+      }
     })
   }
 
@@ -65,7 +86,7 @@ export default class BaseElement extends HTMLElement {
 
   callOnChangeCallback(propName: string) {
     const callbackName = 'onChange_' + propName as keyof typeof this
-    (this[callbackName] as Function)?.(this.state[propName])
+    ;(this[callbackName] as Function)?.(this.state[propName])
   }
 
 
@@ -81,6 +102,20 @@ export default class BaseElement extends HTMLElement {
       //innerText
       node.innerText = sourceAttrValue
     }
+  }
+
+  private runUrlParamsCallbacks() { // called after mount/hydration
+    // not sure if we need here a change to make it go thoug hwhole this.state? or just
+    // as it is right now, obervedAttributes?
+    const observedParams = (this.constructor as unknown as { observedUrlParams?: string[] }).observedUrlParams
+
+    if (!observedParams) return
+
+    observedParams.forEach(param => {
+      if (this.state[param] !== undefined) {
+        this.callOnChangeCallback(param)
+      }
+    })
   }
 
   private updateAllAttrs() { // called after mount/hydration
@@ -103,6 +138,7 @@ export default class BaseElement extends HTMLElement {
       this.attachListeners()
       this.afterRender(true) // sometimes we depend on stuff from afterRender in reacting to attribute changes
       this.updateAllAttrs()
+      this.runUrlParamsCallbacks()
     }
 
     if (this.state.mounted) return // component content alreayd mounted
@@ -119,6 +155,7 @@ export default class BaseElement extends HTMLElement {
     this.attachListeners()
     this.afterRender(false) // sometimes we depend on stuff from afterRender in reacting to attribute changes
     this.updateAllAttrs()
+    this.runUrlParamsCallbacks()
   }
 
   private attachListeners() {
@@ -132,6 +169,8 @@ export default class BaseElement extends HTMLElement {
   }
 
   disconnectedCallback() {
+    this.unsubscribeUrlParams?.()
+
     this.heart.listeners.forEach(listener => {
       const node = this.querySelector<HTMLElement>(listener.selector)!
       node.removeEventListener(

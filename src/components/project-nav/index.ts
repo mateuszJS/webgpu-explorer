@@ -2,10 +2,11 @@ import BaseElement from 'BaseElement';
 import HEART from './index.heart'
 import CSS from './styles.css'
 import type { NavItem } from 'content/types';
+import 'components/project-nav-item';
+// TODO: once we implement loop in template, we can remvoe this import
+// it's gonna be handled by IMPORTS_TREE then
 
 BaseElement.attachCSS(CSS)
-
-import('components/project-nav-item')
 
 export default class ProjectNav extends BaseElement {
   static observedAttributes = ['items', 'with_details']

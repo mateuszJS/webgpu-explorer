@@ -43,14 +43,16 @@ init()`
 BaseElement.attachCSS(CSS)
 
 class ProjectStepsPage extends BaseElement {
+  static observedUrlParams = ['project_slug', 'step_index']
+  // Page should somehow dubscribe to all dynamic params!!!!
+  // Shoudl be automatically attach to the state!
+
   get heart() {
     return { ...HEART, html: HEART.html.replace('@code-placeholder@', code)}
   }
 
-  afterRender(hydration: boolean): void {
-    const [_, _page, projectSlug, _subPage, stepIndex] = window.location.pathname.split('/')
-    
-    this.state.project_slug = projectSlug
+  onChange_step_index(stepIndex: string) {
+    const projectSlug = this.state.project_slug
 
     const stepIndexInt = Number.parseInt(stepIndex, 10)
     this.state.next_step = `${stepIndexInt + 1}`
@@ -58,7 +60,6 @@ class ProjectStepsPage extends BaseElement {
 
     import(`content/${projectSlug}/base.json5`).then((module: Base5Json) => {
       this.state.title = module.default.title
-      // this.state.description = module.default.descriptionLong
       this.state.nav_items = module.default.nav
     })
 
@@ -66,16 +67,11 @@ class ProjectStepsPage extends BaseElement {
       const contentNode = this.querySelector('.project-steps-page__content')!
       contentNode.innerHTML = module.default.html
       this.state.code_highlight = module.default.code_highlight// maybe exists
-
-      // setInterval(() => {
-      //   const [oldStart, oldEnd] = this.state.code_highlight.split('-')
-      //   this.state.code_highlight = `${(Number.parseInt(oldStart, 10) + 1) % 30}-${(Number.parseInt(oldEnd, 10) + 1) % 30}`
-      // }, 1000)
     })
   }
 
   // get debug() {
-  //   return 'project-steps-page'
+  //   return 'project-nav-page'
   // }
 }
 

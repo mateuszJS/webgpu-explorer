@@ -1,37 +1,45 @@
-export enum Page {
+export enum PageTagName {
   ProjectSteps = 'project-steps-page',
   ProjectOverview = 'project-overview-page',
   Home = 'home-page',
 }
 
-export function getPage(pathname: string): Page {
+export interface PageDetails {
+  tagName: PageTagName
+  params: Record<string, string> // snake_case because are connected to state/dynamics
+}
+
+export function getPageDetails(pathname: string): PageDetails {
   const [_, page, firstParam, subPage, secondParam] = pathname.split('/')
 
   if (page === 'projects' && firstParam) {
 
     if (subPage === 'steps' && secondParam) {
       // redirect if stepIndex is invalid
-      return Page.ProjectSteps
+      return {
+        tagName: PageTagName.ProjectSteps,
+        params: { project_slug: firstParam, step_index: secondParam }
+      }
     }
 
     // redirect if projectSlug cannot be resolved
-    return Page.ProjectOverview
+    return {
+      tagName: PageTagName.ProjectOverview,
+      params: { project_slug: firstParam }
+    }
   }
 
-  return Page.Home
-}
-
-export default async function updateView(page: Page) {
-  switch (page) {
-    case Page.ProjectSteps: return renderView('<project-steps-page></project-steps-page>')
-    case Page.ProjectOverview: return renderView('<project-overview-page></project-overview-page>')
-    case Page.Home: return renderView('<home-page></home-page>')
+  return {
+    tagName: PageTagName.Home,
+    params: {}
   }
 }
 
 let isDuringTransition = false
 
-function renderView(content: string) {
+export default function renderView(tagName: PageTagName) {
+  const content = `<${tagName}></${tagName}>`
+
   if (isDuringTransition) return
   isDuringTransition = true
 

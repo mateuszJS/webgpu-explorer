@@ -41,11 +41,14 @@ class CodeBlock extends BaseElement {
   }
 
   onChange_highlight_lines(value: string) {
-    if (value === undefined) return
-
-    const [start, end] = value.split('-').map(v => parseInt(v, 10))
-    this.overlayStartNode!.style.height = `calc(${start}lh)`
-    this.overlayEndNode!.style.marginTop = `calc(${end}lh)`
+    if (value === undefined) {
+      this.overlayStartNode!.style.height = 'auto'
+      this.overlayEndNode!.style.marginTop = 'auto'
+    } else {
+      const [start, end] = value.split('-').map(v => parseInt(v, 10))
+      this.overlayStartNode!.style.height = `calc(${start}lh)`
+      this.overlayEndNode!.style.marginTop = `calc(${end}lh)`
+    }
   }
   
   // copyCode() {

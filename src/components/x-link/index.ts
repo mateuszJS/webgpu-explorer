@@ -1,5 +1,5 @@
 import HEART, {propsUsedInTemplate} from './index.heart'
-import updateView, { getPage } from 'router/updateView';
+import { getPageDetails } from 'router/renderView';
 import BaseElement from 'BaseElement';
 import CSS from './styles.css';
 import importPage from 'router/importsMap';
@@ -16,7 +16,7 @@ class XLink extends BaseElement {
 
   onChange_to(value: string): void {
     if (!value) return // attribute 'to' can be set in dynamic way also
-    const page = getPage(value)
+    const page = getPageDetails(value).tagName
     importPage(page)
   }
 

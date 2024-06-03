@@ -19,6 +19,7 @@ export function updatePathname(pathname: string) {
   const newPage = getPageDetails(pathname)
 
   if (lastPage !== newPage.tagName) {
+    listeners = [] // otherwise all callbacks will be called, while new URL doesn't match currently rendered page
     renderView(newPage.tagName)
     lastPage = newPage.tagName
   }

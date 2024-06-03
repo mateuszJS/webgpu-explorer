@@ -53,18 +53,19 @@ function renderView(content: string) {
   
   newView.classList.remove('new')
 
-  newView.addEventListener("transitionend", (event) => {
+  function removeArtifacts(event: TransitionEvent) {
     // event is called for any transition within the element
-    if (event.target === newView) {
-      // TODO: check if current view is correct for the current url
-      newView.classList.remove('delay')
+    if (event.target !== newView) return
+    // TODO: check if current view is correct for the current url
+    newView.classList.remove('delay')
 
-      currView?.remove()
-      setTimeout(
-        () => document.main.classList.remove('in-transition'),
-        100, // TODO, fix it!!!!!
-      )
-      isDuringTransition = false
-    }
-  });
+    currView?.remove()
+
+    document.main.classList.remove('in-transition')
+
+    newView.removeEventListener("transitionend", removeArtifacts);
+    isDuringTransition = false
+  }
+
+  newView.addEventListener("transitionend", removeArtifacts);
 }

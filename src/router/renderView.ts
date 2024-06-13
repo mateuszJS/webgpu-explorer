@@ -7,9 +7,12 @@ export enum PageTagName {
 export interface PageDetails {
   tagName: PageTagName
   params: Record<string, string> // snake_case because are connected to state/dynamics
+  query?: Record<string, string | null>
 }
 
-export function getPageDetails(pathname: string): PageDetails {
+export function getPageDetails(pathanmeWithQuery: string): PageDetails {
+  const [pathname, query] = pathanmeWithQuery.split('?')
+  const searchParams = new URLSearchParams(query)
   const [_, page, firstParam, subPage, secondParam] = pathname.split('/')
 
   if (page === 'projects' && firstParam) {
@@ -18,7 +21,8 @@ export function getPageDetails(pathname: string): PageDetails {
       // redirect if stepIndex is invalid
       return {
         tagName: PageTagName.ProjectSteps,
-        params: { project_slug: firstParam, step_index: secondParam }
+        params: { project_slug: firstParam, step_index: secondParam },
+        query: { file: searchParams.get('file') }
       }
     }
 

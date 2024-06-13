@@ -1,9 +1,11 @@
 project-steps-page {
+  --code-background: #272822;
+
   display: block;
   height: 100%;
   padding: 20px;
   display: grid;
-  grid-gap: 10px;
+  grid-gap: 30px;
   grid-template-areas: 
     "top top"
     "left right";
@@ -13,13 +15,6 @@ project-steps-page {
   h1 {
     grid-area: left;
   }
-
-
-code-block {
-  min-height: 0;
-  grid-area: right;
-}
-
 
   project-nav {
     --size-factor: .75;
@@ -36,5 +31,21 @@ code-block {
     margin-top: 50px;
     display: flex;
     justify-content: space-between;
+  }
+
+  .project-steps-page__description-panel {
+    overflow: auto;
+    grid-area: left;
+  }
+
+  .project-steps-page__code-panel {
+    min-height: 0;
+    grid-area: right;
+    display: flex;
+    flex-direction: column;
+  }
+
+  code-block {
+    min-height: 0;
   }
 }

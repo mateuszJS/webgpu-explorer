@@ -8,9 +8,8 @@
     "node": ">=18.18.0"
   },
   "scripts": {
-    "env": "export $(grep -v '^#' .env | xargs)",
     "start": "export NODE_ENV=development && webpack serve --open",
-    "build": "npm env && export NODE_ENV=production && webpack",
+    "build": "export $(grep -v '^#' .env | xargs) && export NODE_ENV=production && webpack",
     "serve": "http-server dist -p 8080"
   },
   "devDependencies": {
@@ -19,7 +18,7 @@
     "cssnano": "^7.0.1",
     "html-webpack-plugin": "^5.5.0",
     "http-server": "^14.1.1",
-    "json5-loader": "^4.0.1",
+    "json5": "^2.2.3",
     "node-html-parser": "^6.1.13",
     "postcss": "^8.4.38",
     "postcss-loader": "^8.1.1",

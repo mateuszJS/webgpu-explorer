@@ -1,0 +1,44 @@
+code-tabs {
+  ul {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    overflow: hidden;
+    --tabs-background: var(--code-background); 
+  }
+
+  li {
+    display: inline;
+    isolation: isolate;
+    line-height: 2;
+    margin-inline-end: -1lh;
+    filter: drop-shadow(0px 0px 8px var(--background));
+
+    &:not(:target) {
+      --tabs-background: color-mix(in srgb, #000 20%, var(--code-background)); 
+    }
+    &:hover {
+      --tabs-background: color-mix(in srgb, #fff 10%, var(--code-background)); 
+    }
+  }
+
+  a {
+    display: block flex;
+  }
+
+  svg {
+    color: var(--tabs-background);
+    height: 1lh;
+    flex: 0 0 auto;
+  }
+
+  svg:last-child {
+    transform: scaleX(-1);
+  }
+
+  span {
+    background: var(--tabs-background);
+    margin-inline: -1px; /* browser doesn't perfectly aligns edges */
+    padding-inline: 0.2lh;
+  }
+}

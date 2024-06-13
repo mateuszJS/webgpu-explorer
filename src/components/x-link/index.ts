@@ -1,11 +1,8 @@
 import HEART, {propsUsedInTemplate} from './index.heart'
 import { getPageDetails } from 'router/renderView';
 import BaseElement from 'BaseElement';
-import CSS from './styles.css';
 import importPage from 'router/importsMap';
-import { updatePathname } from 'router';
-
-BaseElement.attachCSS(CSS)
+import { navigate } from 'router';
 
 class XLink extends BaseElement {
   static observedAttributes = propsUsedInTemplate;
@@ -25,7 +22,7 @@ class XLink extends BaseElement {
     const to = this.state.to
 
     window.history.pushState({}, to, window.location.origin + to);
-    updatePathname(to)
+    navigate(to)
 
     return false
   }

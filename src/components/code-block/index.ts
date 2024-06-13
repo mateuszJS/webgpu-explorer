@@ -1,6 +1,6 @@
 import Prism from './prism/prism'
-import ourCSS from './index.css'
 import prismCSS from './prism/prism.css'
+import ourCSS from './index.css'
 import BaseElement from 'BaseElement'
 import HEART from './index.heart'
 

@@ -27,4 +27,5 @@
       description: "",
     },
   ],
+  files: ["getContext.ts", "getDevice.ts", "index.ts", "setCanvasObserver.ts"],
 }

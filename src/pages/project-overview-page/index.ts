@@ -1,7 +1,8 @@
 import BaseElement from 'BaseElement'
 import HEART from './index.heart'
 import CSS from './styles.css'
-import type { Base5Json } from 'content/types'
+import { Nav } from 'content/types'
+// import type { Base5Json } from 'content/types'
 
 BaseElement.attachCSS(CSS)
 
@@ -13,10 +14,12 @@ class ProjectOverviewPage extends BaseElement {
   afterRender(hydration: boolean): void {
     const [_, _page, projectSlug] = window.location.pathname.split('/')
 
-    import(`content/${projectSlug}/base.json5`).then((module: Base5Json) => {
-      this.state.title = module.default.title
-      this.state.description = module.default.descriptionLong
-      this.state.nav_items = module.default.nav
+    fetch(require(`content/${projectSlug}/base.json5`))
+      .then(res => res.json())
+      .then((json: Nav) => {
+      this.state.title = json.title
+      this.state.description = json.descriptionLong
+      this.state.nav_items = json.nav
     })
   }
 }

@@ -2,7 +2,7 @@
   <home-link></home-link>
   <project-nav items="{nav_items}"></project-nav>
 </nav>
-<div>
+<section class="project-steps-page__description-panel">
   <h2 class="project-steps-page__title">{title}</h2>
   <div class="project-steps-page__content"></div>
   <div class="project-steps-page__actions-bar">
@@ -13,8 +13,11 @@
       <x-button>Next Step</x-button>
     </x-link>
   </div>
-</div>
+</section>
 <!-- <flash-effect><span><h1>PROJECT</h1></span></flash-effect> -->
-<code-block code_lang="language-javascript" highlight_lines="{code_highlight}">
-@code-placeholder@
-</code-block>
+<section class="project-steps-page__code-panel">
+  <code-tabs tabs="{tabs}"></code-tabs>
+  <code-block code_lang="language-javascript" highlight_lines="{code_highlight}">
+  @code-placeholder@
+  </code-block>
+</section>

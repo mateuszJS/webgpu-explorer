@@ -1,4 +1,4 @@
-import { subscribeUrlParams } from "router"
+import { subscribeUrl } from "router"
 import mountHTML from "./mountHTML"
 import {restore} from 'complex-storage'
 import { PageDetails } from "router/renderView"
@@ -6,7 +6,7 @@ import { PageDetails } from "router/renderView"
 type State = Record<string, any>
 
 export default class BaseElement extends HTMLElement {
-  private unsubscribeUrlParams?: VoidFunction
+  private unsubscribeUrl?: VoidFunction
 
   protected state: State
 
@@ -40,7 +40,7 @@ export default class BaseElement extends HTMLElement {
 
     const observedUrlParams = (this.constructor as unknown as { observedUrlParams?: string[] }).observedUrlParams
     if (observedUrlParams) {
-      this.unsubscribeUrlParams = subscribeUrlParams(this.onChangeUrlParams)
+      this.unsubscribeUrl = subscribeUrl(this.onChangeUrlParams)
     }
   }
 
@@ -50,8 +50,9 @@ export default class BaseElement extends HTMLElement {
     const observedUrlParams = (this.constructor as unknown as { observedUrlParams?: string[] }).observedUrlParams
     if (!observedUrlParams) return
     observedUrlParams.forEach(paramName => {
-      if (this.state[paramName] !== pageDetails.params[paramName]) { // TODO: check if needed
-        this.state[paramName] = pageDetails.params[paramName]
+      const value = pageDetails.params[paramName] || pageDetails.query?.[paramName]
+      if (this.state[paramName] !== value) { // TODO: check if needed
+        this.state[paramName] = value
       }
     })
   }
@@ -169,7 +170,7 @@ export default class BaseElement extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.unsubscribeUrlParams?.()
+    this.unsubscribeUrl?.()
 
     this.heart.listeners.forEach(listener => {
       const node = this.querySelector<HTMLElement>(listener.selector)!

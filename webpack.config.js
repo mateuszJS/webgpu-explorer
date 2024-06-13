@@ -7,11 +7,11 @@ const { HeartPlugin } = require('./src/heart-loader/plugin.js');
 const isProd = process.env.NODE_ENV === 'production'
 
 const pathToSSG = {
-  '/projects/project-1': {title:'Project 1 Overview'},
-  '/projects/project-1/steps/0': {title:'Project 1 - Steps'},
+  '/projects/setup': {title:'Project 1 Overview'},
+  '/projects/setup/steps/0': {title:'Project 1 - Steps'},
   '/': {title: 'Home'},
 }
-
+console.log('process.env.BASE_URI', process.env.BASE_URI)
 module.exports = {
   mode: process.env.NODE_ENV,
   entry: ["./src/index.ts"],
@@ -32,25 +32,29 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.txt$/,
+        type: "asset/resource",
+      },
+      {
         test: /\.ts$/,
         use: "ts-loader",
         exclude: /node_modules/,
       },
       {
         test: /\.json5$/,
-        loader: 'json5-loader',
-        type: 'javascript/auto',
+        loader: path.resolve('src/heart-loader/json5.js'),
+        type: "asset/resource",
       },
       {
-        test: /\.heart/,
+        test: /\.heart$/,
         loader: path.resolve('src/heart-loader/loader.js'),
       },
       {
-        test: /\.inline\.html/,
+        test: /\.inline\.html$/,
         type: "asset/source",
       },
       {
-        test: /\.inline\.svg/,
+        test: /\.inline\.svg$/,
         type: "asset/source",
       },
       isProd

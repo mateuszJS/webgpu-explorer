@@ -12,7 +12,7 @@ code-block {
   }
 
   pre[class*=language-] { /* just to create stronger selector to override default */
-    background: #11111155;
+    background: var(--code-background);
     /* border: 1px solid #222; */
     margin: 0;
   }

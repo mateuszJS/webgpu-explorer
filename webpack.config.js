@@ -11,15 +11,15 @@ const pathToSSG = {
   '/projects/setup/steps/0': {title:'Project 1 - Steps'},
   '/': {title: 'Home'},
 }
-console.log('process.env.BASE_URI', process.env.BASE_URI)
+
 module.exports = {
   mode: process.env.NODE_ENV,
   entry: ["./src/index.ts"],
   devtool: isProd ? undefined : "eval-source-map",
   watch: !isProd,
   devServer: {
-    static: "./dist", // do we need it??
-    historyApiFallback: true // fallbakc to index.html while url not found
+    // static: "./dist", // do not use it. It's gonna serve last SSG pages while dev mode
+    historyApiFallback: true // fallback to index.html while 404
   },
   resolve: {
     extensions: [".ts", ".js"],

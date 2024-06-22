@@ -7,25 +7,48 @@ function getClass() {
 }
 
 const regexUppercaseLetter = /[A-Z]/
+const regexDynamic = /[_a-z]+/
 const regexOnlyOneDynamic= /^\{[_a-z]+\}$/
 const reAllDynamics = /\{[_a-z]+\}/g
 
 function getSourceAttr(text, useComplexStorage) {
   if (text.includes('{') && text.includes('}')) {
     // might be issue when "}{"
-    const cbFnAttrsInput = Array.from(
-      text.matchAll(reAllDynamics)
-    ).map(match => `'${match[0].slice(1, -1)}'`)
 
-
-    let callbackFn;
+    let callbackFn, cbFnAttrsInput = [];
     if (useComplexStorage) {
-      callbackFn = `(el) => store(el.state.${text.slice(1, -1)})`
+      // store will return #id of the stored item
+      const withoutParantess = text.slice(1, -1)
+      callbackFn = `(el) => store(el.state.${withoutParantess})`
+      cbFnAttrsInput.push(`'${withoutParantess}'`)
     } else {
-      // whenever we use other type than string, we need to use #
-      const templateString = text
-        .replaceAll('{', "${el.state.")
-        .replaceAll('}', ' || ""}')
+      let isJsAllowed = false
+      const templateString = text.split('').map((char, index) => {
+        switch (char) {
+          case '{': {
+            isJsAllowed = true
+            return "${(" // additional parenties to handle || "" when closing {}
+          }
+          case '}': {
+            isJsAllowed = false
+            return ') || ""}'
+          }
+          default: {
+            if (isJsAllowed && regexDynamic.test(char)) {
+              /* it's not the first letter of variable IF
+                - there is a letter before
+                - there is a dot before
+              */
+              const prevChar = text[index - 1] // index always is at least 1, because isJsAllowed was set to true already
+              if (regexDynamic.test(prevChar) || ['.', '\''].includes(prevChar)) return char // it's not a new read from state
+              cbFnAttrsInput.push(`'${text.slice(index).match(regexDynamic)[0]}'`)
+              return 'el.state.' + char
+            }
+            return char
+          }
+        }
+      }).join('')
+
       callbackFn = `(el) => \`${templateString}\``
     }
 
@@ -108,7 +131,7 @@ module.exports = function loader(source) {
       dependencies.add(node.tagName.toLowerCase())
     }
     
-    // check if any fo attributes has any dynamics
+    // check if any of attributes has any dynamics
     Object.entries(node.attributes).forEach(([attrName, attrValue]) => {
       handleDynamic(node, className, attrValue, attrName)
       handleListeners(node, className, attrValue, attrName)

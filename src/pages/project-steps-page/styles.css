@@ -6,10 +6,10 @@ project-steps-page {
   padding: 20px;
   display: grid;
   grid-gap: 30px;
-  grid-template-areas: 
-    "top top"
-    "left right";
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template: 
+    "top top" auto
+    "left right" 1fr / minmax(0, 1fr) minmax(0, 1fr);
+  /* 1fr works "kinda" like flex-grow, but with minmax it's set to exactly same width for both */
   box-sizing: border-box;
 
   h1 {

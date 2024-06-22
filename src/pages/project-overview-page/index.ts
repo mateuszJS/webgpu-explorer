@@ -17,10 +17,10 @@ class ProjectOverviewPage extends BaseElement {
     fetch(require(`content/${projectSlug}/base.json5`))
       .then(res => res.json())
       .then((json: Nav) => {
-      this.state.title = json.title
-      this.state.description = json.descriptionLong
-      this.state.nav_items = json.nav
-    })
+        this.state.title = json.title
+        this.state.description = json.descriptionLong
+        this.state.nav_items = json.nav
+      })
   }
 }
 

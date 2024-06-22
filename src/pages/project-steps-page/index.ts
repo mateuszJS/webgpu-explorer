@@ -6,7 +6,6 @@ import type { Nav, Base5Json } from 'content/types'
 BaseElement.attachCSS(CSS)
 
 class ProjectStepsPage extends BaseElement {
-  private files: Record<string, string> = {}
   static observedUrlParams = ['project_slug', 'step_index', 'file']
   // Page should somehow dubscribe to all dynamic params!!!!
   // Shoudl be automatically attach to the state!
@@ -33,13 +32,15 @@ class ProjectStepsPage extends BaseElement {
         this.state.title = json.title
         this.state.nav_items = json.nav
         this.state.tabs = json.files
-        // console.log('json.files', json.files)
-
+        this.state.selected_file = this.state.tabs[0]
         json.files.forEach(fileName => {
           fetch(require(`content/${projectSlug}/files/${fileName}.txt`))
             .then(res => res.text())
             .then(fileContent => {
-              this.files[fileName] = fileContent
+              this.state.files = {
+                ...this.state.files,
+                [fileName]: fileContent,
+              }
             })
         })
       })

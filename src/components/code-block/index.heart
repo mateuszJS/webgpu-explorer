@@ -1,5 +1,5 @@
 <pre id="pre">
-  <code id="code"><slot></slot></code>
+  <slot></slot>
   <span class="overlay overlay-before"></span>
   <span class="overlay overlay-after"></span>
 </pre>

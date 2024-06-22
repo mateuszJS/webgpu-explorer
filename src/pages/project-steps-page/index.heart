@@ -18,6 +18,6 @@
 <section class="project-steps-page__code-panel">
   <code-tabs tabs="{tabs}"></code-tabs>
   <code-block code_lang="language-javascript" highlight_lines="{code_highlight}">
-  @code-placeholder@
+    <code id="code">{!!files ? files[file] : undefined}</code>
   </code-block>
 </section>

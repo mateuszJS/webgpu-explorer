@@ -1,0 +1,32 @@
+[
+  {
+    "icon": "play",
+    "project_slug": "setup",
+    "headline": "Setup, Set, Go!",
+    "text": "Skip the struggle. Build strong knowledge about WebGPU fundation quickly!"
+  },
+  {
+    "icon": "triangle",
+    "project_slug": "project-2",
+    "headline": "Triangle",
+    "text": "The fundamental element of modern rendering - triangle."
+  },
+  {
+    "icon": "play",
+    "project_slug": "project-1",
+    "headline": "Setup, Set, Go!",
+    "text": "Base for WebGPU renderings."
+  },
+  {
+    "icon": "triangle",
+    "project_slug": "project-2",
+    "headline": "Triangle",
+    "text": "The fundamental element of modern rendering - triangle."
+  },
+  {
+    "icon": "triangle",
+    "project_slug": "project-2",
+    "headline": "Triangle",
+    "text": "The fundamental element of modern rendering - triangle."
+  }
+]

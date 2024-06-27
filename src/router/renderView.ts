@@ -10,8 +10,9 @@ export interface PageDetails {
   query?: Record<string, string | null>
 }
 
-export function getPageDetails(pathanmeWithQuery: string): PageDetails {
-  const [pathname, query] = pathanmeWithQuery.split('?')
+// url = pathname + search query
+export function getPageDetails(url: string): PageDetails {
+  const [pathname, query] = url.split('?')
   const searchParams = new URLSearchParams(query)
   const [_, page, firstParam, subPage, secondParam] = pathname.split('/')
 
@@ -41,7 +42,7 @@ export function getPageDetails(pathanmeWithQuery: string): PageDetails {
 
 let isDuringTransition = false
 
-export default function renderView(tagName: PageTagName) {
+export default function renderView(tagName: PageTagName, doneCallback: VoidFunction) {
   const content = `<${tagName}></${tagName}>`
 
   if (isDuringTransition) return
@@ -68,7 +69,6 @@ export default function renderView(tagName: PageTagName) {
   function removeArtifacts(event: TransitionEvent) {
     // event is called for any transition within the element
     if (event.target !== newView) return
-    // TODO: check if current view is correct for the current url
     newView.classList.remove('delay')
 
     currView?.remove()
@@ -77,6 +77,7 @@ export default function renderView(tagName: PageTagName) {
 
     newView.removeEventListener("transitionend", removeArtifacts);
     isDuringTransition = false
+    doneCallback()
   }
 
   newView.addEventListener("transitionend", removeArtifacts);

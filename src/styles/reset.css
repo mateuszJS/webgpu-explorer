@@ -49,3 +49,11 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+button {
+  background: transparent;
+  padding: 0;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}

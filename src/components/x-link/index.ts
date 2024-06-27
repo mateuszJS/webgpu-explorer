@@ -22,7 +22,7 @@ class XLink extends BaseElement {
     const to = this.state.to
 
     window.history.pushState({}, to, window.location.origin + to);
-    navigate(to)
+    navigate(getPageDetails(to))
 
     return false
   }

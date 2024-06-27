@@ -6,6 +6,8 @@ import { PageDetails } from "router/renderView"
 type State = Record<string, any>
 
 export default class BaseElement extends HTMLElement {
+  public slotParentNode?: HTMLElement // used only in mountHTML
+  public onChangeText?: VoidFunction // used only in mountHTML
   private unsubscribeUrl?: VoidFunction
 
   protected state: State
@@ -90,18 +92,67 @@ export default class BaseElement extends HTMLElement {
     ;(this[callbackName] as Function)?.(this.state[propName])
   }
 
+  updateDynamicLoop = (dynamicLoop: Dynamic) => {
+    const list = this.state[dynamicLoop.inputs[0]] as any[]
+  }
 
-  updateDynamic = (dynamic: Dynamic) => {
-    const sourceAttrValue = dynamic.sourceAttr(this)
+  updateDynamic = (
+    dynamic: Dynamic,
+    nodeQueryScope: BaseElement | HTMLElement = this,
+    additionalSource?: unknown,
+  ) => {
+    // TODO: doesn't work if x-for is on the same node as dynamics!
+    // TODO: would be great to move it to just x-for case, not for every dynamic
+    const node = (
+      nodeQueryScope.matches(dynamic.selector)
+        ? nodeQueryScope // only useful for loops
+        : nodeQueryScope.querySelector<BaseElement | HTMLElement>(dynamic.selector)!
+    ) as BaseElement | HTMLElement // WTF?
+
+    if (dynamic.loop) {
+      console.log(dynamic)
+// loop: {
+//   usedProps: [${Array.from(loopPropsUsedInTemplate).join(',')}],
+//   dynamics: [${dynamics.join(',')}],
+//   listeners: [${listeners.join(',')}],
+//   html: \`${node.toString()}\`
+// }
+      const list = this.state[dynamic.inputs[0]] as any[]
+      if (!list) return
+      const html = list.reduce((acc, item) => {
+        return acc + dynamic.loop!.html
+        // Now we need to create a list with all dynamics, and just update them?
+      }, '')
+      node.innerHTML = html
+
+      const allItems = Array.from(
+        this.querySelector(dynamic.selector)!.children
+      ) as HTMLElement[] // not sure if it's the right assuption
+      allItems.forEach((el, index) => {
+        dynamic.loop!.dynamics.forEach(loopDynamic => this.updateDynamic(loopDynamic, el, list[index]))
+        this.attachListeners(dynamic.loop!.listeners, el, list[index])
+      })
+      // TODO: remove them also!!!!
+      return
+    }
+
+    const sourceAttrValue = dynamic.sourceAttr(this, additionalSource)
     
     // split sourceAttr to dynamic and static part
-    const node = this.querySelector<HTMLElement>(dynamic.selector)!
+    
     if (dynamic.destAttr) {
       // attribute
       node.setAttribute(dynamic.destAttr, sourceAttrValue)
     } else {
       //innerText
-      node.innerText = sourceAttrValue
+      if ('slotParentNode' in node) {
+        node.slotParentNode!.innerText = sourceAttrValue
+        if ('onChangeText' in node) {
+          node.onChangeText?.()
+        }
+      } else {
+        node.innerText = sourceAttrValue
+      }
     }
   }
 
@@ -136,7 +187,7 @@ export default class BaseElement extends HTMLElement {
   connectedCallback() {
     if (this.state.hydration) {
       this.state.hydration = false
-      this.attachListeners()
+      this.attachListeners(this.heart.listeners, this)
       this.afterRender(true) // sometimes we depend on stuff from afterRender in reacting to attribute changes
       this.updateAllAttrs()
       this.runUrlParamsCallbacks()
@@ -152,19 +203,25 @@ export default class BaseElement extends HTMLElement {
 
     this.state.mounted = true
 
-    dynamics.forEach(this.updateDynamic)
-    this.attachListeners()
+    dynamics.forEach(dynamic => this.updateDynamic(dynamic))
+    this.attachListeners(this.heart.listeners, this)
     this.afterRender(false) // sometimes we depend on stuff from afterRender in reacting to attribute changes
     this.updateAllAttrs()
     this.runUrlParamsCallbacks()
   }
 
-  private attachListeners() {
-    this.heart.listeners.forEach(listener => {
-      const node = this.querySelector<HTMLElement>(listener.selector)!
+  private attachListeners(listeners: Listener[], querySelectScope: HTMLElement, additionalSource?: unknown,) {
+    const baseElemCtx = this
+    listeners.forEach(listener => {
+      const node = querySelectScope.querySelector<HTMLElement>(listener.selector)!
+
+      function eventHandler(this: HTMLElement, event: Event) {
+        (baseElemCtx[listener.callback as keyof typeof baseElemCtx] as unknown as (e: Event, elWithListener: HTMLElement, additionalSource?: unknown) => void)(event, this, additionalSource)
+      }
+
       node.addEventListener(
         listener.event,
-        this[listener.callback as keyof typeof this] as unknown as (this: HTMLElement, ev: Event) => void
+        eventHandler
       )
     })
   }

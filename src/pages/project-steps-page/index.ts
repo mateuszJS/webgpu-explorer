@@ -10,9 +10,13 @@ class ProjectStepsPage extends BaseElement {
   // Page should somehow dubscribe to all dynamic params!!!!
   // Shoudl be automatically attach to the state!
 
+  constructor() {
+    super()
+    this.state.on_tabs_change = (tab: string) => this.state.selected_file = tab
+  }
+
   get heart() {
     return HEART
-    // return { ...HEART, html: HEART.html.replace('@code-placeholder@', code)}
   }
 
   onChange_file(fileName: string) {

@@ -1,3 +1,5 @@
+import { PageTagName, getPageDetails } from "./renderView"
+
 const IMPORTS_TREE: Record<string, string[]> = {/*IMPORTS-TREE-PLACEHOLDER*/}
 
   /* webpackInclude: /\.json$/ */
@@ -12,7 +14,7 @@ function collectAllImports(moduleName: string): string[] {
     .flatMap(dependency => [dependency, ...collectAllImports(dependency)])
 }
 
-export default function importPage(pageName: string) {
+export default function importPage(pageName: PageTagName) {
   import(`pages/${pageName}/index.ts`)
   
   collectAllImports(pageName).forEach(dependencyName => {

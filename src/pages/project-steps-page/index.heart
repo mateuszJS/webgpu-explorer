@@ -16,8 +16,8 @@
 </section>
 <!-- <flash-effect><span><h1>PROJECT</h1></span></flash-effect> -->
 <section class="project-steps-page__code-panel">
-  <code-tabs tabs="{tabs}"></code-tabs>
+  <code-tabs tabs="{tabs}" on_change="{on_tabs_change}"></code-tabs>
   <code-block code_lang="language-javascript" highlight_lines="{code_highlight}">
-    <code id="code">{!!files ? files[file] : undefined}</code>
+    {!!files ? files[selected_file] : undefined}
   </code-block>
 </section>

@@ -12,6 +12,7 @@ class ProjectOverviewPage extends BaseElement {
   }
 
   afterRender(hydration: boolean): void {
+    // TODO: get params from state, not read directly from url
     const [_, _page, projectSlug] = window.location.pathname.split('/')
 
     fetch(require(`content/${projectSlug}/base.json5`))

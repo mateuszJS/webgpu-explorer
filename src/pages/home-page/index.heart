@@ -2,38 +2,11 @@
 <h2 class="hero-subtitle">Choose project to explore</h2>
 <section class="panels-list">
   <project-panel
+    x-for="project in project_list"
     class="panel"
-    icon="play"
-    project_slug="setup"
-    headline="Setup, Set, Go!"
-    text="Skip the struggle. Build strong knowledge about WebGPU fundation quickly!"
+    icon="{project.icon}"
+    project_slug="{project.project_slug}"
+    headline="{project.headline}"
+    text="{project.text}"
   ></project-panel>
-  <project-panel
-    class="panel"
-    icon="triangle"
-    project_slug="project-2"
-    headline="Triangle"
-    text="The fundamental element of modern rendering - triangle."
-  ></project-panel>
-  <project-panel
-  class="panel"
-  icon="play"
-  project_slug="project-1"
-  headline="Setup, Set, Go!"
-  text="Base for WebGPU renderings."
-></project-panel>
-<project-panel
-  class="panel"
-  icon="triangle"
-  project_slug="project-2"
-  headline="Triangle"
-  text="The fundamental element of modern rendering - triangle."
-></project-panel>
-<project-panel
-  class="panel"
-  icon="triangle"
-  project_slug="project-2"
-  headline="Triangle"
-  text="The fundamental element of modern rendering - triangle."
-></project-panel>
 </section>

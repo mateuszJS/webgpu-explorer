@@ -9,7 +9,7 @@ import HEART, {propsUsedInTemplate} from './index.heart'
 
 BaseElement.attachCSS(prismCSS)
 BaseElement.attachCSS(ourCSS)
-let x = false
+
 class CodeBlock extends BaseElement {
   private overlayStartNode?: HTMLElement
   private overlayEndNode?: HTMLElement

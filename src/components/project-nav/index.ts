@@ -12,7 +12,6 @@ export default class ProjectNav extends BaseElement {
   static observedAttributes = propsUsedInTemplate
 
   get heart() {
-    console.log('ProjectNav', HEART, this.state)
     return HEART
   }
 

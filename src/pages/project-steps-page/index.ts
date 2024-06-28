@@ -1,26 +1,25 @@
 import BaseElement from 'BaseElement'
-import HEART from './index.heart'
+import HEART, {propsUsedInTemplate} from './index.heart'
 import CSS from './styles.css'
 import type { Nav, Base5Json } from 'content/types'
 
 BaseElement.attachCSS(CSS)
 
 class ProjectStepsPage extends BaseElement {
-  static observedUrlParams = ['project_slug', 'step_index', 'file']
+  static observedUrlParams = ['project_slug', 'step_index']
+  static observedAttributes = propsUsedInTemplate
   // Page should somehow dubscribe to all dynamic params!!!!
   // Shoudl be automatically attach to the state!
 
   constructor() {
     super()
-    this.state.on_tabs_change = (tab: string) => this.state.selected_file = tab
+    this.state.on_tabs_change = (tab: string) => {
+      this.state.selected_file = tab
+    }
   }
 
   get heart() {
     return HEART
-  }
-
-  onChange_file(fileName: string) {
-    // console.log(fileName)
   }
 
   onChange_step_index(stepIndex: string) {
@@ -52,6 +51,8 @@ class ProjectStepsPage extends BaseElement {
       const contentNode = this.querySelector('.project-steps-page__content')!
       contentNode.innerHTML = module.default.html
       this.state.code_highlight = module.default.code_highlight// maybe exists
+      this.state.default_file = module.default.file
+      this.state.selected_file = module.default.file
     })
 
     

@@ -14,7 +14,9 @@ class CodeBlock extends BaseElement {
   private overlayStartNode?: HTMLElement
   private overlayEndNode?: HTMLElement
 
-  static observedAttributes = ["highlight_lines", 'code_lang', 'code', ...propsUsedInTemplate];
+  // We cannot use code_lang because content of PRE is treated as text node,
+  // so no way to assign attribute to <code> which is inside <pre>
+  static observedAttributes = ["highlight_lines", 'code_lang', ...propsUsedInTemplate];
 
   get heart() {
     return HEART
@@ -25,28 +27,15 @@ class CodeBlock extends BaseElement {
 
     this.overlayStartNode = this.querySelector('.overlay-before')!
     this.overlayEndNode = this.querySelector('.overlay-after')!
-    this.querySelector('code')!.classList.add(this.state.code_lang)
-    // we cannot do it in template because our DOM parser treats all content of "pre" as text node
-    
-
-    // Prism.highlightAllUnder(this);
-
-    // const copyButton = shadowRoot.querySelector('#copy-button')!; 
-    // copyButton.addEventListener("click", () => {
-    //     this.copyCode();                   
-    // });
   }
 
   onChangeText = () => {
-    // if (x) return
-
-    console.log(this.querySelector('code')?.innerText)
+    this.querySelector('code')!.classList.add(this.state.code_lang)
     Prism.highlightAllUnder(this);
-    x = true
   }
 
   onChange_highlight_lines(value: string) {
-    if (value === undefined) {
+    if (!value) {
       this.overlayStartNode!.style.height = 'auto'
       this.overlayEndNode!.style.marginTop = 'auto'
     } else {

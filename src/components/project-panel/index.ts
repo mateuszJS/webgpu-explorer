@@ -27,7 +27,6 @@ class ProjectPanel extends BaseElement {
 
   onChange_icon(icon: keyof typeof MAP_IMG_SRC) {
     const iconNode = MAP_IMG_SRC[icon].content.cloneNode(true)
-    console.log(iconNode)
     const svgNode = this.querySelector('svg')!
     svgNode.parentNode!.replaceChild(iconNode, svgNode)
   }

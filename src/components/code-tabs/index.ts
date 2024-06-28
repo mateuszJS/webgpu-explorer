@@ -13,9 +13,7 @@ class CodeTabs extends BaseElement {
   }
 
   onTabClick = (e: Event, elWithListener: HTMLElement, additionalSource?: unknown) => {
-    console.log(this.state)
     this.state.on_change(additionalSource)
-    console.log('onTabClick', elWithListener, e, additionalSource)
   }
 
   onChange_tabs(tabs?: string[]) {

@@ -1,4 +1,4 @@
-<home-link></home-link>
+<home-link text="Projects"></home-link>
 <div class="project-overview-page__wrapper">
   <h1 class="project-overview-page__title">{title}</h1>
   <p class="project-overview-page__description">{description}</p>

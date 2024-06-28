@@ -100,7 +100,7 @@ function handleDynamic(node, className, attrValue, attrName, resourcePath, addit
     `)
   }
   const useComplexStorage =
-    node.tagName.includes('-') && /* the receiver of attribute/innerText is a custom element */
+    node.tagName.includes('-') && /* the receiver of attribute/textContent is a custom element */
     !!attrName && /* it has to be attribute, we cannot render complex data in DOM */
     regexOnlyOneDynamic.test(attrValue) /* there is only one value used in dynamic, like "{title}", not like "This is{title}."*/
   /* TODO: improve recognizing strings only */
@@ -210,10 +210,10 @@ module.exports = function loader(source) {
       }
     })
 
-    // check if innerText has any dynamics
+    // check if textContent has any dynamics
     if (node.childNodes.length === 1 && node.firstChild.nodeType === 3) {
       // TextNode
-      const { dynamic, usedProps } = handleDynamic(node, className, node.firstChild.innerText.trim(), undefined, resourcePath, additionalSourceName)
+      const { dynamic, usedProps } = handleDynamic(node, className, node.firstChild.textContent.trim(), undefined, resourcePath, additionalSourceName)
       if (dynamic) {
         usedProps.forEach(input => propsUsedInTemplate.add(input))
         dynamics.push(dynamic)

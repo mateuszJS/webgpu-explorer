@@ -7,8 +7,8 @@
       <rect fill="currentColor" y="315" width="255" height="255" rx="27.75" ry="27.75" />
     </svg>
     <div class="home-link__label-container">
-      <span class="home-link__text-placeholder" aria-hidden="true">Projects</span>
-      <span class="home-link__real-text">Projects</span>
+      <span class="home-link__text-placeholder" aria-hidden="true">{text}</span>
+      <span class="home-link__real-text">{text}</span>
     </div>
   </x-button>
 </x-link>

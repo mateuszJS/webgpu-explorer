@@ -4,6 +4,7 @@ import {restore} from 'complex-storage'
 import { PageDetails } from "router/renderView"
 
 type State = Record<string, any>
+type EventHandler = (e: Event, elWithListener: HTMLElement, additionalSource?: unknown) => void
 
 export default class BaseElement extends HTMLElement {
   public slotParentNode?: HTMLElement // used only in mountHTML
@@ -51,6 +52,10 @@ export default class BaseElement extends HTMLElement {
   private onChangeUrlParams = (pageDetails: PageDetails) => {
     const observedUrlParams = (this.constructor as unknown as { observedUrlParams?: string[] }).observedUrlParams
     if (!observedUrlParams) return
+
+    /*
+      So this.state updates, 
+    */
     observedUrlParams.forEach(paramName => {
       const value = pageDetails.params[paramName] || pageDetails.query?.[paramName]
       if (this.state[paramName] !== value) { // TODO: check if needed
@@ -110,7 +115,7 @@ export default class BaseElement extends HTMLElement {
     ) as BaseElement | HTMLElement // WTF?
 
     if (dynamic.loop) {
-      console.log(dynamic)
+
 // loop: {
 //   usedProps: [${Array.from(loopPropsUsedInTemplate).join(',')}],
 //   dynamics: [${dynamics.join(',')}],
@@ -130,6 +135,7 @@ export default class BaseElement extends HTMLElement {
       ) as HTMLElement[] // not sure if it's the right assuption
       allItems.forEach((el, index) => {
         dynamic.loop!.dynamics.forEach(loopDynamic => this.updateDynamic(loopDynamic, el, list[index]))
+        // TODO: unsubscribe event
         this.attachListeners(dynamic.loop!.listeners, el, list[index])
       })
       // TODO: remove them also!!!!
@@ -144,14 +150,14 @@ export default class BaseElement extends HTMLElement {
       // attribute
       node.setAttribute(dynamic.destAttr, sourceAttrValue)
     } else {
-      //innerText
+      // textContent
       if ('slotParentNode' in node) {
-        node.slotParentNode!.innerText = sourceAttrValue
+        node.slotParentNode!.textContent = sourceAttrValue
         if ('onChangeText' in node) {
           node.onChangeText?.()
         }
       } else {
-        node.innerText = sourceAttrValue
+        node.textContent = sourceAttrValue
       }
     }
   }
@@ -187,7 +193,7 @@ export default class BaseElement extends HTMLElement {
   connectedCallback() {
     if (this.state.hydration) {
       this.state.hydration = false
-      this.attachListeners(this.heart.listeners, this)
+      this.attachListeners(this.heart.listeners)
       this.afterRender(true) // sometimes we depend on stuff from afterRender in reacting to attribute changes
       this.updateAllAttrs()
       this.runUrlParamsCallbacks()
@@ -204,37 +210,35 @@ export default class BaseElement extends HTMLElement {
     this.state.mounted = true
 
     dynamics.forEach(dynamic => this.updateDynamic(dynamic))
-    this.attachListeners(this.heart.listeners, this)
+    this.attachListeners(this.heart.listeners)
     this.afterRender(false) // sometimes we depend on stuff from afterRender in reacting to attribute changes
     this.updateAllAttrs()
     this.runUrlParamsCallbacks()
   }
 
-  private attachListeners(listeners: Listener[], querySelectScope: HTMLElement, additionalSource?: unknown,) {
-    const baseElemCtx = this
+  /**
+   * @param querySelectScope useful only for x-for to limit search for paritcular item
+   * @param additionalSource useful only for x-for to provide specific item data
+   */
+  private attachListeners(
+    listeners: Listener[],
+    querySelectScope: HTMLElement = this,
+    additionalSource?: unknown
+  ) {
+    // 99% of the complication of this fuction comes from x-for directive
+    const baseElementContext = this
     listeners.forEach(listener => {
       const node = querySelectScope.querySelector<HTMLElement>(listener.selector)!
 
       function eventHandler(this: HTMLElement, event: Event) {
-        (baseElemCtx[listener.callback as keyof typeof baseElemCtx] as unknown as (e: Event, elWithListener: HTMLElement, additionalSource?: unknown) => void)(event, this, additionalSource)
+        (baseElementContext[listener.callback as keyof typeof baseElementContext] as unknown as EventHandler)(event, this, additionalSource)
       }
 
-      node.addEventListener(
-        listener.event,
-        eventHandler
-      )
+      node.addEventListener(listener.event, eventHandler)
     })
   }
 
   disconnectedCallback() {
     this.unsubscribeUrl?.()
-
-    this.heart.listeners.forEach(listener => {
-      const node = this.querySelector<HTMLElement>(listener.selector)!
-      node.removeEventListener(
-        listener.event,
-        this[listener.callback as keyof typeof this] as unknown as (this: HTMLElement, ev: Event) => void
-      )
-    })
   }
 }

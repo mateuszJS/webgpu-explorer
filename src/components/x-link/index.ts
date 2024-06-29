@@ -12,7 +12,7 @@ class XLink extends BaseElement {
   }
 
   onChange_to(value: string): void {
-    if (!value) return // attribute 'to' can be set in dynamic way also
+    if (!value || window.isSSG) return // attribute 'to' can be set in dynamic way also
     const page = getPageDetails(value).tagName
     importPage(page)
   }

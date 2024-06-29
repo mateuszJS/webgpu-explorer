@@ -110,6 +110,7 @@ module.exports = {
         entryDir: path.join(__dirname, 'dist'),
         outputDir: path.join(__dirname, 'dist'),
         renderAfterTime: 5000, // * 10,
+        injections: [{ key: 'isSSG', value: true }],
         postProcess: (result) => {
           result.html = result.html
             .replace(

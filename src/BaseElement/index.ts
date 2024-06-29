@@ -198,30 +198,54 @@ export default class BaseElement extends HTMLElement {
   }
 
   connectedCallback() {
-    if (this.state.hydration) {
-      this.state.hydration = false
+    if (!this.state.mounted) {
+      const {dynamics, html} = this.heart
+      mountHTML(this, html)
+      dynamics.forEach(dynamic => this.updateDynamic(dynamic))
+      // do we need this dynamic.forEach if we do "this.updateAllAttrs()" below?
+
+      // when we call "appendChild" with a custom-element inside,
+      // then that custom element calles connectedCallback again!
+    }
+
+    // TODO: why is mounted and hydration part of state??? I think it should be private property
+
+    if (!this.state.mounted || this.state.hydration) {
+      // How about complex storage while hydrating?
+      this.state.mounted = true
       this.attachListeners(this.heart.listeners)
-      this.afterRender(true) // sometimes we depend on stuff from afterRender in reacting to attribute changes
+      this.afterRender(!!this.state.hydration) // sometimes we depend on stuff from afterRender in reacting to attribute changes
+      this.state.hydration = false
       this.updateAllAttrs()
       this.runUrlParamsCallbacks()
     }
-
-    if (this.state.mounted) return // component content alreayd mounted
-    // when we call "appendChild" with a custom-element inside,
-    // then that custom element calles connectedCallback again!
-
-    const {dynamics, html} = this.heart
-
-    mountHTML(this, html)
-
-    this.state.mounted = true
-
-    dynamics.forEach(dynamic => this.updateDynamic(dynamic))
-    this.attachListeners(this.heart.listeners)
-    this.afterRender(false) // sometimes we depend on stuff from afterRender in reacting to attribute changes
-    this.updateAllAttrs()
-    this.runUrlParamsCallbacks()
   }
+
+  // connectedCallback() {
+  //   if (this.state.hydration) {
+  //     this.state.hydration = false
+  //     this.attachListeners(this.heart.listeners)
+  //     this.afterRender(true) // sometimes we depend on stuff from afterRender in reacting to attribute changes
+  //     this.updateAllAttrs()
+  //     this.runUrlParamsCallbacks()
+  //   }
+
+  //   if (this.state.mounted) return // component content alreayd mounted
+  //   // when we call "appendChild" with a custom-element inside,
+  //   // then that custom element calles connectedCallback again!
+
+  //   const {dynamics, html} = this.heart
+
+  //   mountHTML(this, html)
+
+  //   this.state.mounted = true
+
+  //   dynamics.forEach(dynamic => this.updateDynamic(dynamic))
+  //   this.attachListeners(this.heart.listeners)
+  //   this.afterRender(false) // sometimes we depend on stuff from afterRender in reacting to attribute changes
+  //   this.updateAllAttrs()
+  //   this.runUrlParamsCallbacks()
+  // }
 
   /**
    * @param querySelectScope useful only for x-for to limit search for paritcular item
@@ -237,11 +261,9 @@ export default class BaseElement extends HTMLElement {
     listeners.forEach(listener => {
       const node = querySelectScope.querySelector<HTMLElement>(listener.selector)!
 
-      function eventHandler(this: HTMLElement, event: Event) {
+      node.addEventListener(listener.event, function(this: HTMLElement, event) {
         (baseElementContext[listener.callback as keyof typeof baseElementContext] as unknown as EventHandler)(event, this, additionalSource)
-      }
-
-      node.addEventListener(listener.event, eventHandler)
+      })
     })
   }
 

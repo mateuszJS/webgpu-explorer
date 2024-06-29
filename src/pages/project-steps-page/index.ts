@@ -14,7 +14,6 @@ class ProjectStepsPage extends BaseElement {
   constructor() {
     super()
     this.state.onTabsChange = (tab: string) => {
-      console.log('this.state.selectedFile = tab', tab)
       this.state.selectedFile = tab
     }
   }
@@ -23,12 +22,8 @@ class ProjectStepsPage extends BaseElement {
     return HEART
   }
 
-  onChange_stepIndex(stepIndex: string) {
+  afterRender() {
     const projectSlug = this.state.projectSlug
-
-    const stepIndexInt = Number.parseInt(stepIndex, 10)
-    this.state.nextStep = `${stepIndexInt + 1}`
-    this.state.prevStep = `${stepIndexInt - 1}`
 
     fetch(require(`content/${projectSlug}/base.json5`))
       .then(res => res.json())
@@ -36,7 +31,8 @@ class ProjectStepsPage extends BaseElement {
         this.state.title = json.title
         this.state.navItems = json.nav
         this.state.tabs = json.files
-        this.state.selectedFile = this.state.tabs[0]
+        this.state.selectedFile ??= this.state.tabs[0]
+
         json.files.forEach(fileName => {
           fetch(require(`content/${projectSlug}/files/${fileName}.txt`))
             .then(res => res.text())
@@ -48,19 +44,27 @@ class ProjectStepsPage extends BaseElement {
             })
         })
       })
+  }
+
+  onChange_stepIndex(stepIndex: string | null) {
+    if (!stepIndex) throw Error("stepIndex is mandatory attribute! Cannot be falsy")
+    const projectSlug = this.state.projectSlug
+
+    const stepIndexInt = Number.parseInt(stepIndex, 10)
+    this.state.nextStep = `${stepIndexInt + 1}`
+    this.state.prevStep = `${stepIndexInt - 1}`
+
     import(`content/${projectSlug}/steps/${stepIndex}/index.ts`).then(module => {
       const contentNode = this.querySelector('.project-steps-page__content')!
       contentNode.innerHTML = module.default.html
-      this.state.codeHighlight = module.default.codeHighlight// maybe exists
+      this.state.codeHighlight = module.default.codeHighlight || null// maybe exists
       this.state.defaultFile = module.default.file
       this.state.selectedFile = module.default.file
     })
-
-    
   }
 
   // get debug() {
-  //   return 'project-nav-page'
+  //   return 'project-steps-page'
   // }
 }
 

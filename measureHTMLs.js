@@ -23,7 +23,6 @@ function measureHTMLs() {
     const filePathAbsolute = path.resolve(__dirname, 'dist', filePath)
     const stats = fs.statSync(filePathAbsolute)
     const fileSizeInBytes = stats.size;
-    console.log(filePath, prettyBytes(fileSizeInBytes))
     results[filePath] = fileSizeInBytes
   })
 

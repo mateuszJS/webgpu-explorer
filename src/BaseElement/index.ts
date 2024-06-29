@@ -77,15 +77,17 @@ export default class BaseElement extends HTMLElement {
 
   afterRender(hydration: boolean){} // abstract
 
-  attributeChangedCallback(kebabCaseName: string, _oldVal: string | null, newVal: string) {
+  attributeChangedCallback(kebabCaseName: string, _oldVal: string | null, newVal: string | null) {
     const name = kebabToCamelCase(kebabCaseName)
-    this.state[name] = newVal[0] === '#'
+    this.state[name] = newVal?.[0] === '#'
       ? getStorage(newVal)
       : newVal
   }
 
   onStateChange(name: string) {
     if (!this.state.mounted) return
+    // TODO, if we change multiple props, we call same dynamic multiple time
+    // the following part should be called when JS stack is empty
 
     this.heart.dynamics.forEach(dynamic => {
       if (dynamic.inputs.includes(name)) {
@@ -121,7 +123,7 @@ export default class BaseElement extends HTMLElement {
     if (dynamic.loop) {
       const list = this.state[dynamic.inputs[0]] as any[]
       // TODO: How do we recognize if list of other prop has changes???
-      console.log('if (dynamic.loop) {', dynamic)
+
       if (node.children.length > 0) {
         // TODO: supprot removing, replacing, adding
         const allItems = Array.from(node.children) as HTMLElement[] // not sure if it's the right assuption
@@ -152,48 +154,40 @@ export default class BaseElement extends HTMLElement {
     
     if (dynamic.destAttr) {
       // attribute
+      if (sourceAttrValue === null || sourceAttrValue === undefined) {
+        node.removeAttribute(dynamic.destAttr)
+        return
+      }
+
       const value = typeof sourceAttrValue === 'string'
         ? sourceAttrValue
         : setStorage(sourceAttrValue)
       node.setAttribute(dynamic.destAttr, value)
     } else {
+      if(this.debug) {
+        console.log(dynamic)
+      }
+
+      // if we assign textContent before node is mounted, then we override slotParentNode?
+
       // textContent
-      if ('slotParentNode' in node) {
+      // TODO: check if that component is even mounted yet!
+      if ('slotParentNode' in node) { // gives false
         node.slotParentNode!.textContent = sourceAttrValue
-        if ('onChangeText' in node) {
+        if ('onChangeText' in node) { // gives false
           node.onChangeText?.()
         }
       } else {
+        // it also works great becayse if node's component were not yet initialized
+        // it's read innerHTML later and reattach
         node.textContent = sourceAttrValue
       }
     }
   }
 
-  private runUrlParamsCallbacks() { // called after mount/hydration
-    // not sure if we need here a change to make it go thoug hwhole this.state? or just
-    // as it is right now, obervedAttributes?
-    const observedParams = (this.constructor as unknown as { observedUrlParams?: string[] }).observedUrlParams
-
-    if (!observedParams) return
-
-    observedParams.forEach(param => {
-      if (this.state[param] !== undefined) {
-        this.callOnChangeCallback(param)
-      }
-    })
-  }
-
-  private updateAllAttrs() { // called after mount/hydration
-    // not sure if we need here a change to make it go thoug hwhole this.state? or just
-    // as it is right now, obervedAttributes?
-    const observedAttrs = (this.constructor as unknown as { observedAttributes?: string[] }).observedAttributes
-
-    if (!observedAttrs) return
-
-    observedAttrs.forEach(attr => {
-      if (this.state[attr] !== undefined) {
-        this.callOnChangeCallback(attr)
-      }
+  private callAllOnChangeCallbacks() {
+    Object.keys(this.state).forEach(name => {
+      this.callOnChangeCallback(name)
     })
   }
 
@@ -216,36 +210,9 @@ export default class BaseElement extends HTMLElement {
       this.attachListeners(this.heart.listeners)
       this.afterRender(!!this.state.hydration) // sometimes we depend on stuff from afterRender in reacting to attribute changes
       this.state.hydration = false
-      this.updateAllAttrs()
-      this.runUrlParamsCallbacks()
+      this.callAllOnChangeCallbacks()
     }
   }
-
-  // connectedCallback() {
-  //   if (this.state.hydration) {
-  //     this.state.hydration = false
-  //     this.attachListeners(this.heart.listeners)
-  //     this.afterRender(true) // sometimes we depend on stuff from afterRender in reacting to attribute changes
-  //     this.updateAllAttrs()
-  //     this.runUrlParamsCallbacks()
-  //   }
-
-  //   if (this.state.mounted) return // component content alreayd mounted
-  //   // when we call "appendChild" with a custom-element inside,
-  //   // then that custom element calles connectedCallback again!
-
-  //   const {dynamics, html} = this.heart
-
-  //   mountHTML(this, html)
-
-  //   this.state.mounted = true
-
-  //   dynamics.forEach(dynamic => this.updateDynamic(dynamic))
-  //   this.attachListeners(this.heart.listeners)
-  //   this.afterRender(false) // sometimes we depend on stuff from afterRender in reacting to attribute changes
-  //   this.updateAllAttrs()
-  //   this.runUrlParamsCallbacks()
-  // }
 
   /**
    * @param querySelectScope useful only for x-for to limit search for paritcular item
@@ -259,7 +226,13 @@ export default class BaseElement extends HTMLElement {
     // 99% of the complication of this fuction comes from x-for directive
     const baseElementContext = this
     listeners.forEach(listener => {
-      const node = querySelectScope.querySelector<HTMLElement>(listener.selector)!
+      const node = (
+        querySelectScope.matches(listener.selector)
+          ? querySelectScope // only useful for loops
+          : querySelectScope.querySelector<BaseElement | HTMLElement>(listener.selector)!
+      ) as BaseElement | HTMLElement // WTF?
+
+      // const node = querySelectScope.querySelector<HTMLElement>(listener.selector)!
 
       node.addEventListener(listener.event, function(this: HTMLElement, event) {
         (baseElementContext[listener.callback as keyof typeof baseElementContext] as unknown as EventHandler)(event, this, additionalSource)

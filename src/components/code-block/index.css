@@ -1,6 +1,7 @@
 code-block {
   font-size: 14px;
   line-height: 1.5;
+  --code-padding: 0.7lh;
 
   pre {
     max-height: 100%;
@@ -11,25 +12,21 @@ code-block {
     }
   }
 
+  code {
+    padding: var(--code-padding);
+  }
+
   pre[class*=language-] { /* just to create stronger selector to override default */
     background: var(--code-background);
     /* border: 1px solid #222; */
     margin: 0;
+    padding: 0;
   }
 
   .overlay {
     background: #000000;
     opacity: 0.35;
     pointer-events: none;
-    margin-inline: -1em;
-
-    &:first-of-type {
-      margin-block-start: -1lh;
-    }
-
-    &:last-of-type {
-      margin-block-end: -1lh;
-    }
   }
 
   &:hover .overlay {
@@ -37,10 +34,16 @@ code-block {
   }
 
   .overlay-before {
-    bottom: 100%;
+    height: calc((var(--first-line) - 1) * 1lh + var(--code-padding));
   }
 
   .overlay-after {
-    top: 100%;
+    margin-block-start: calc(var(--last-line) * 1lh + var(--code-padding));
+  }
+}
+
+code-block:not([highlight-lines]) {
+  .overlay {
+    display: none;
   }
 }

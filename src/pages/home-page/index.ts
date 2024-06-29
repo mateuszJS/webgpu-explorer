@@ -12,7 +12,6 @@ class HomePage extends BaseElement {
   }
 
   get heart() {
-    console.log(this.state.projectList)
     return HEART
   }
 }

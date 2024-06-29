@@ -25,11 +25,11 @@ class ProjectPanel extends BaseElement {
     return HEART
   }
 
-  onChange_icon(icon: keyof typeof MAP_IMG_SRC) {
+  onChange_icon(icon: keyof typeof MAP_IMG_SRC | null) {
+    if (!icon) throw Error('icon is mandary attribute! Cannot be falsy')
     const iconNode = MAP_IMG_SRC[icon].content.cloneNode(true)
     const svgNode = this.querySelector('svg')!
     svgNode.parentNode!.replaceChild(iconNode, svgNode)
-    console.log(this.state)
   }
 }
 

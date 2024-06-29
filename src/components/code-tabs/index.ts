@@ -9,16 +9,14 @@ class CodeTabs extends BaseElement {
   static observedAttributes = ["tabs", "on-change", ...propsUsedInTemplate]
 
   get heart() {
-    console.log('HEART', HEART)
     return HEART
   }
 
   onTabClick = (e: Event, elWithListener: HTMLElement, additionalSource?: unknown) => {
-    console.log('?   ', this.state, additionalSource)
     this.state.onChange(additionalSource)
   }
 
-  onChange_tabs(tabs?: string[]) {
+  onChange_tabs(tabs: string[] | null) {
     if (!tabs) return
     // const ulNode = this.querySelector('ul')!
 

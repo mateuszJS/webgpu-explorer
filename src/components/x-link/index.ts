@@ -11,7 +11,7 @@ class XLink extends BaseElement {
     return HEART
   }
 
-  onChange_to(value: string): void {
+  onChange_to(value: string | null): void {
     if (!value || window.isSSG) return // attribute 'to' can be set in dynamic way also
     const page = getPageDetails(value).tagName
     importPage(page)

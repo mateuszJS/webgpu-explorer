@@ -11,9 +11,6 @@ BaseElement.attachCSS(prismCSS)
 BaseElement.attachCSS(ourCSS)
 
 class CodeBlock extends BaseElement {
-  private overlayStartNode?: HTMLElement
-  private overlayEndNode?: HTMLElement
-
   // We cannot use codeLang because content of PRE is treated as text node,
   // so no way to assign attribute to <code> which is inside <pre>
   static observedAttributes = ["highlight-lines", 'code-lang', ...propsUsedInTemplate];
@@ -22,29 +19,15 @@ class CodeBlock extends BaseElement {
     return HEART
   }
 
-  afterRender(hydration: boolean) {
-    if (hydration) return
-
-    this.overlayStartNode = this.querySelector('.overlay-before')!
-    this.overlayEndNode = this.querySelector('.overlay-after')!
-  }
-
   onChangeText = () => {
-    console.log('++++++++++++++++')
-    console.log(this.state)
     this.querySelector('code')!.classList.add(this.state.codeLang)
     Prism.highlightAllUnder(this);
   }
 
-  onChange_highlightLines(value: string) {
-    if (!value) {
-      this.overlayStartNode!.style.height = 'auto'
-      this.overlayEndNode!.style.marginTop = 'auto'
-    } else {
-      const [start, end] = value.split('-').map(v => parseInt(v, 10))
-      this.overlayStartNode!.style.height = `calc(${start}lh)`
-      this.overlayEndNode!.style.marginTop = `calc(${end}lh)`
-    }
+  onChange_highlightLines(value: string | null) {
+    const [start, end] = value ? value.split('-') : [null, null]
+    this.style.setProperty('--first-line', start);
+    this.style.setProperty('--last-line', end);
   }
   
   // copyCode() {

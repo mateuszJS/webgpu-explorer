@@ -6,10 +6,10 @@
   <h2 class="project-steps-page__title">{title}</h2>
   <div class="project-steps-page__content"></div>
   <div class="project-steps-page__actions-bar">
-    <x-link to="/projects/{projectSlug}/steps/{prevStep}">
+    <x-link x-if="{prevStep >= 0}" to="/projects/{projectSlug}/steps/{prevStep}">
       <x-button>Previous Step</x-button>
     </x-link>
-    <x-link to="/projects/{projectSlug}/steps/{nextStep}">
+    <x-link x-if="{nextStep <= 2}" to="/projects/{projectSlug}/steps/{nextStep}">
       <x-button>Next Step</x-button>
     </x-link>
   </div>

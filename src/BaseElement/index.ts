@@ -119,14 +119,19 @@ export default class BaseElement extends HTMLElement {
     ) as BaseElement | HTMLElement // WTF?
 
     if (dynamic.loop) {
-
-// loop: {
-//   usedProps: [${Array.from(loopPropsUsedInTemplate).join(',')}],
-//   dynamics: [${dynamics.join(',')}],
-//   listeners: [${listeners.join(',')}],
-//   html: \`${node.toString()}\`
-// }
       const list = this.state[dynamic.inputs[0]] as any[]
+      // TODO: How do we recognize if list of other prop has changes???
+      console.log('if (dynamic.loop) {', dynamic)
+      if (node.children.length > 0) {
+        // TODO: supprot removing, replacing, adding
+        const allItems = Array.from(node.children) as HTMLElement[] // not sure if it's the right assuption
+        allItems.forEach((el, index) => {
+          dynamic.loop!.dynamics.forEach(loopDynamic => this.updateDynamic(loopDynamic, el, list[index]))
+        })
+        // TODO: remove them also!!!!
+        return
+      }
+      
       if (!list) return
       const html = list.reduce((acc, item) => {
         return acc + dynamic.loop!.html
@@ -134,12 +139,9 @@ export default class BaseElement extends HTMLElement {
       }, '')
       node.innerHTML = html
 
-      const allItems = Array.from(
-        this.querySelector(dynamic.selector)!.children
-      ) as HTMLElement[] // not sure if it's the right assuption
+      const allItems = Array.from(node.children) as HTMLElement[] // not sure if it's the right assuption
       allItems.forEach((el, index) => {
         dynamic.loop!.dynamics.forEach(loopDynamic => this.updateDynamic(loopDynamic, el, list[index]))
-        // TODO: unsubscribe event
         this.attachListeners(dynamic.loop!.listeners, el, list[index])
       })
       // TODO: remove them also!!!!
@@ -148,11 +150,8 @@ export default class BaseElement extends HTMLElement {
 
     const sourceAttrValue = dynamic.sourceAttr(this, additionalSource)
     
-    // split sourceAttr to dynamic and static part
-    
     if (dynamic.destAttr) {
       // attribute
-      // const kebabCaseDestAttr = camelToKebabCase(dynamic.destAttr)
       const value = typeof sourceAttrValue === 'string'
         ? sourceAttrValue
         : setStorage(sourceAttrValue)

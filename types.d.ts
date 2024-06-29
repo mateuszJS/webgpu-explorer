@@ -34,13 +34,7 @@ declare module "*.inline.html" {
   export default content;
 }
 
-// declare module "*.inline.html" {
-//   const content: string;
-//   export default content;
-// }
-
 interface LoopDynamic {
-  usedProps: string[]
   dynamics: Dynamic[]
   listeners: Listener[]
   html: string

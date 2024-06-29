@@ -20,7 +20,7 @@ class ProjectOverviewPage extends BaseElement {
       .then((json: Nav) => {
         this.state.title = json.title
         this.state.description = json.descriptionLong
-        this.state.nav_items = json.nav
+        this.state.navItems = json.nav
       })
   }
 }

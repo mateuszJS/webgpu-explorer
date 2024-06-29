@@ -1,3 +1,3 @@
 <ol>
-  <project-nav-item x-for="item in items" headline="{item.title}" details="{with_details ? item.description : ''}"></project-nav-item>
+  <project-nav-item x-for="item in items" headline="{item.title}" details="{withDetails ? item.description : ''}"></project-nav-item>
 </ol>

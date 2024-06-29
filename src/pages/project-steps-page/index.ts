@@ -6,15 +6,16 @@ import type { Nav, Base5Json } from 'content/types'
 BaseElement.attachCSS(CSS)
 
 class ProjectStepsPage extends BaseElement {
-  static observedUrlParams = ['project_slug', 'step_index']
+  static observedUrlParams = ['projectSlug', 'stepIndex']
   static observedAttributes = propsUsedInTemplate
   // Page should somehow dubscribe to all dynamic params!!!!
   // Shoudl be automatically attach to the state!
 
   constructor() {
     super()
-    this.state.on_tabs_change = (tab: string) => {
-      this.state.selected_file = tab
+    this.state.onTabsChange = (tab: string) => {
+      console.log('this.state.selectedFile = tab', tab)
+      this.state.selectedFile = tab
     }
   }
 
@@ -22,20 +23,20 @@ class ProjectStepsPage extends BaseElement {
     return HEART
   }
 
-  onChange_step_index(stepIndex: string) {
-    const projectSlug = this.state.project_slug
+  onChange_stepIndex(stepIndex: string) {
+    const projectSlug = this.state.projectSlug
 
     const stepIndexInt = Number.parseInt(stepIndex, 10)
-    this.state.next_step = `${stepIndexInt + 1}`
-    this.state.prev_step = `${stepIndexInt - 1}`
+    this.state.nextStep = `${stepIndexInt + 1}`
+    this.state.prevStep = `${stepIndexInt - 1}`
 
     fetch(require(`content/${projectSlug}/base.json5`))
       .then(res => res.json())
       .then((json: Nav) => {
         this.state.title = json.title
-        this.state.nav_items = json.nav
+        this.state.navItems = json.nav
         this.state.tabs = json.files
-        this.state.selected_file = this.state.tabs[0]
+        this.state.selectedFile = this.state.tabs[0]
         json.files.forEach(fileName => {
           fetch(require(`content/${projectSlug}/files/${fileName}.txt`))
             .then(res => res.text())
@@ -50,9 +51,9 @@ class ProjectStepsPage extends BaseElement {
     import(`content/${projectSlug}/steps/${stepIndex}/index.ts`).then(module => {
       const contentNode = this.querySelector('.project-steps-page__content')!
       contentNode.innerHTML = module.default.html
-      this.state.code_highlight = module.default.code_highlight// maybe exists
-      this.state.default_file = module.default.file
-      this.state.selected_file = module.default.file
+      this.state.codeHighlight = module.default.codeHighlight// maybe exists
+      this.state.defaultFile = module.default.file
+      this.state.selectedFile = module.default.file
     })
 
     

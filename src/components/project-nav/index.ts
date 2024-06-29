@@ -9,10 +9,18 @@ import CSS from './styles.css'
 BaseElement.attachCSS(CSS)
 
 export default class ProjectNav extends BaseElement {
-  static observedAttributes = propsUsedInTemplate
+  static observedAttributes = [...propsUsedInTemplate, 'with-details']
 
   get heart() {
     return HEART
+  }
+
+  onChange_details(value: string) {
+    console.log('details', value)
+  }
+
+  onChange_withDetails(value: string) {
+    console.log('withDetails', value)
   }
 
   // onChange_items(items?: NavItem[]) {

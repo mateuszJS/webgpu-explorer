@@ -1,10 +1,13 @@
 import { subscribeUrl } from "router"
 import mountHTML from "./mountHTML"
-import {restore} from 'complex-storage'
+import {getStorage, setStorage} from 'complex-storage'
 import { PageDetails } from "router/renderView"
 
 type State = Record<string, any>
 type EventHandler = (e: Event, elWithListener: HTMLElement, additionalSource?: unknown) => void
+
+// all camelCaseToKebab is used in loader only
+const kebabToCamelCase = (str: string) => str.replace(/-[a-z]/g, chars => chars[1].toUpperCase());
 
 export default class BaseElement extends HTMLElement {
   public slotParentNode?: HTMLElement // used only in mountHTML
@@ -31,11 +34,11 @@ export default class BaseElement extends HTMLElement {
     };
 
     const observedAttrs = (this.constructor as unknown as { observedAttributes?: string[] }).observedAttributes || []
-    const attributesWeObserve = [...observedAttrs, 'mounted', 'hydration']
+    const attrsToSave = [...observedAttrs, 'mounted', 'hydration']
 
     this.state = new Proxy({}, handler)
     Array.from(this.attributes).forEach(attr => {
-      if (attributesWeObserve.includes(attr.nodeName)) { // we don;t want to call callback when "class" is changign for example
+      if (attrsToSave.includes(attr.nodeName)) { // we don;t want to call callback when "class" is changign for example
         this.attributeChangedCallback(attr.nodeName, null, attr.nodeValue as string)
       }
       // how is it even posssible that this.attribute(NamedNodeMap) can have value null??
@@ -74,9 +77,10 @@ export default class BaseElement extends HTMLElement {
 
   afterRender(hydration: boolean){} // abstract
 
-  attributeChangedCallback(name: string, _oldVal: string | null, newVal: string) {
+  attributeChangedCallback(kebabCaseName: string, _oldVal: string | null, newVal: string) {
+    const name = kebabToCamelCase(kebabCaseName)
     this.state[name] = newVal[0] === '#'
-      ? restore(newVal)
+      ? getStorage(newVal)
       : newVal
   }
 
@@ -148,7 +152,11 @@ export default class BaseElement extends HTMLElement {
     
     if (dynamic.destAttr) {
       // attribute
-      node.setAttribute(dynamic.destAttr, sourceAttrValue)
+      // const kebabCaseDestAttr = camelToKebabCase(dynamic.destAttr)
+      const value = typeof sourceAttrValue === 'string'
+        ? sourceAttrValue
+        : setStorage(sourceAttrValue)
+      node.setAttribute(dynamic.destAttr, value)
     } else {
       // textContent
       if ('slotParentNode' in node) {

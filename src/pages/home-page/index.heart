@@ -2,10 +2,10 @@
 <h2 class="hero-subtitle">Choose project to explore</h2>
 <section class="panels-list">
   <project-panel
-    x-for="project in project_list"
+    x-for="project in projectList"
     class="panel"
     icon="{project.icon}"
-    project_slug="{project.project_slug}"
+    projectSlug="{project.projectSlug}"
     headline="{project.headline}"
     text="{project.text}"
   ></project-panel>

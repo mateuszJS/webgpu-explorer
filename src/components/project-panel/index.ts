@@ -19,7 +19,7 @@ convert CSS backgroudn gradient to SVG https://www.kmhcreative.com/downloads/CSS
 BaseElement.attachCSS(CSS)
 
 class ProjectPanel extends BaseElement {
-  static observedAttributes = [...propsUsedInTemplate, 'icon']
+  static observedAttributes = [...propsUsedInTemplate, 'icon', 'project-slug']
 
   get heart(): Heart {
     return HEART
@@ -29,6 +29,7 @@ class ProjectPanel extends BaseElement {
     const iconNode = MAP_IMG_SRC[icon].content.cloneNode(true)
     const svgNode = this.querySelector('svg')!
     svgNode.parentNode!.replaceChild(iconNode, svgNode)
+    console.log(this.state)
   }
 }
 

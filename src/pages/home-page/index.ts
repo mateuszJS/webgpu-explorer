@@ -8,10 +8,11 @@ BaseElement.attachCSS(CSS)
 class HomePage extends BaseElement {
   constructor() {
     super()
-    this.state.project_list = projectsList
+    this.state.projectList = projectsList
   }
 
   get heart() {
+    console.log(this.state.projectList)
     return HEART
   }
 }

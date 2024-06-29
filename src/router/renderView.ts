@@ -22,7 +22,7 @@ export function getPageDetails(url: string): PageDetails {
       // redirect if stepIndex is invalid
       return {
         tagName: PageTagName.ProjectSteps,
-        params: { project_slug: firstParam, step_index: secondParam },
+        params: { projectSlug: firstParam, stepIndex: secondParam },
         query: { file: searchParams.get('file') }
       }
     }
@@ -30,7 +30,7 @@ export function getPageDetails(url: string): PageDetails {
     // redirect if projectSlug cannot be resolved
     return {
       tagName: PageTagName.ProjectOverview,
-      params: { project_slug: firstParam }
+      params: { projectSlug: firstParam }
     }
   }
 

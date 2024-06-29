@@ -14,12 +14,17 @@ code-tabs {
     margin-inline-end: -1lh;
     filter: drop-shadow(0px 0px 8px var(--background));
 
-    &:not(:target) {
+    /* &:not(:target) {
       --tabs-background: color-mix(in srgb, #000 20%, var(--code-background)); 
-    }
+    } */
     &:hover {
-      --tabs-background: color-mix(in srgb, #fff 10%, var(--code-background)); 
+      --tabs-background: color-mix(in srgb, #fff 20%, var(--code-background)); 
     }
+  }
+
+  [highlight='true'] {
+    z-index: 1;
+    --tabs-background: color-mix(in srgb, #fff 20%, var(--code-background)); 
   }
 
   button {

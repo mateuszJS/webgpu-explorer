@@ -14,9 +14,9 @@ class CodeBlock extends BaseElement {
   private overlayStartNode?: HTMLElement
   private overlayEndNode?: HTMLElement
 
-  // We cannot use code_lang because content of PRE is treated as text node,
+  // We cannot use codeLang because content of PRE is treated as text node,
   // so no way to assign attribute to <code> which is inside <pre>
-  static observedAttributes = ["highlight_lines", 'code_lang', ...propsUsedInTemplate];
+  static observedAttributes = ["highlight-lines", 'code-lang', ...propsUsedInTemplate];
 
   get heart() {
     return HEART
@@ -30,11 +30,13 @@ class CodeBlock extends BaseElement {
   }
 
   onChangeText = () => {
-    this.querySelector('code')!.classList.add(this.state.code_lang)
+    console.log('++++++++++++++++')
+    console.log(this.state)
+    this.querySelector('code')!.classList.add(this.state.codeLang)
     Prism.highlightAllUnder(this);
   }
 
-  onChange_highlight_lines(value: string) {
+  onChange_highlightLines(value: string) {
     if (!value) {
       this.overlayStartNode!.style.height = 'auto'
       this.overlayEndNode!.style.marginTop = 'auto'

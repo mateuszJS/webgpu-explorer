@@ -5,7 +5,7 @@ import CSS from './styles.css'
 BaseElement.attachCSS(CSS)
 
 export default class ProjectNavItem extends BaseElement {
-  static observedAttributes = propsUsedInTemplate
+  static observedAttributes = [...propsUsedInTemplate, 'with-details']
 
   get heart() {
     return HEART

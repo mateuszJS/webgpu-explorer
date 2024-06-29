@@ -48,7 +48,7 @@ interface LoopDynamic {
 
 interface Dynamic {
   selector: string
-  sourceAttr: (el: BaseElement, item?: any) => string // item is onlh then loop = true
+  sourceAttr: (el: BaseElement, item?: any) => any // item is onlh then loop = true
   inputs: string[]
   destAttr?: string
   loop?: LoopDynamic

@@ -2,7 +2,7 @@
 <div class="project-overview-page__wrapper">
   <h1 class="project-overview-page__title">{title}</h1>
   <p class="project-overview-page__description">{description}</p>
-  <project-nav items="{nav_items}" with_details="true"></project-nav>
+  <project-nav items="{navItems}" withDetails="true"></project-nav>
   <x-link to="/projects/setup/steps/0" class="project-overview-page__start-btn">
     <x-button>start</x-button>
   </x-link>

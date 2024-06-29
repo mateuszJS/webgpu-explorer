@@ -1,6 +1,6 @@
 <ul>
-  <li x-for="tab in tabs">
-    <button x-tab={tab} @click="onTabClick">
+  <li x-for="tab in tabs" highlight="{selected === tab ? 'true' : 'false'}">
+    <button x-tab={tab} @click="onTabClick"  selected="{selected}" tab="{tab}">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 384">
         <path fill="currentColor" d="M340.18,384H-.18c93.99,0,170.18-76.19,170.18-170.18v-43.64C170,76.19,246.19,0,340.18,0v384Z"/>
       </svg>

@@ -1,11 +1,11 @@
 let lastStorageIndex = 0
 const storage = new Map<string, any>()
 
-export function restore(key: string): any {
+export function getStorage(key: string): any {
     return storage.get(key)
 }
 
-export function store(value: any): string {
+export function setStorage(value: any): string {
   const storageKey = '#' + lastStorageIndex
   lastStorageIndex++
   storage.set(storageKey, value)
@@ -59,7 +59,7 @@ export function store(value: any): string {
 
 
 
-// <component complex_prop="#3cr" />
+// <component complex-prop="#3cr" />
 
 
 

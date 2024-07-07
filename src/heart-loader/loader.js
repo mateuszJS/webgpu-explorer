@@ -11,7 +11,8 @@ function getSelector() {
 const camelToKebabCase = (str) => str.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
 
 function getSourceAttr(text, nameOfAdditionalSource) {
-  const isStringInterpolation = text[0] !== '{' || text[text.length - 1] !== '}'
+  const isStringInterpolation = text[0] !== '{' || text.at(-1) !== '}'
+  // const isStringInterpolation = text[0] !== '{' || text[text.length - 1] !== '}'
   // if whole attribute value is wrapper with brackets, then it's not a string interpolation
 
   if (text.includes('{') && text.includes('}')) {

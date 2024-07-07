@@ -14,16 +14,25 @@ function prettyBytes(bytes) {
   return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
 };
 
+function getFileId(fileName) {
+  if (fileName.startsWith('main.') || fileName.startsWith('runtime.')) return fileName.match(/^([a-z]+)\./)?.[1]
+  return fileName
+}
+
 function measureHTMLs() {
   const dirPath = path.resolve(__dirname, 'dist')
-  const filePaths = fs.readdirSync(dirPath, {recursive: true}).filter(fn => fn.endsWith('.html') && !fn.endsWith('report.html'));
+  const filePaths = fs.readdirSync(dirPath, {recursive: true}).filter(fileName => {
+    if (fileName.endsWith('.html') && !fileName.endsWith('report.html')) return true
+    if (fileName.startsWith('main.') || fileName.startsWith('runtime.')) return true
+  });
 
   const results = {}
   filePaths.forEach(filePath => {
     const filePathAbsolute = path.resolve(__dirname, 'dist', filePath)
     const stats = fs.statSync(filePathAbsolute)
     const fileSizeInBytes = stats.size;
-    results[filePath] = fileSizeInBytes
+    const fileId = getFileId(filePath)
+    results[fileId] = fileSizeInBytes
   })
 
   const lastResultsJson = path.resolve(__dirname, 'htmlOutputSize.json')

@@ -8,7 +8,11 @@
   nav: [
     {
       title: "Pre-work",
-      description: "Let's setup environment before we start.",
+      description: "Let's setup environment before we start",
+    },
+    {
+      title: "Components",
+      description: "Overview of the needed achitecture",
     },
     {
       title: "Device & Canvas",
@@ -23,7 +27,7 @@
       description: "",
     },
     {
-      title: "Handle Resize",
+      title: "Resizing",
       description: "",
     },
   ],

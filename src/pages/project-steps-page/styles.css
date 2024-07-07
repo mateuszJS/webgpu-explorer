@@ -36,6 +36,18 @@ project-steps-page {
   .project-steps-page__description-panel {
     overflow: auto;
     grid-area: left;
+
+    p {
+      margin-top: 20px;
+      font-family: source-serif-pro, Georgia, Cambria, "Times New Roman", Times, serif;
+      font-size: 20px;
+      letter-spacing: -0.06px;
+      line-height: 32px;
+
+      text-rendering: optimizelegibility;
+      text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+    }
   }
 
   .project-steps-page__code-panel {

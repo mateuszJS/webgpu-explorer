@@ -2,11 +2,13 @@
   "compilerOptions": {
     "outDir": "./dist",
     "sourceMap": true,
-    "module": "esnext",
+    "module": "ESNext",
     "target": "es6",
     "allowJs": true,
     "moduleResolution": "bundler",
     "baseUrl": "./src",
+
+    "lib": ["DOM", "esnext", "ES2023"], // ESNext doesn't support ES2023 features like Array.toReversed(), so needed to add it manually
 
     // everything below is just suggested by https://www.npmjs.com/package/@tsconfig/recommended
     "strict": true,

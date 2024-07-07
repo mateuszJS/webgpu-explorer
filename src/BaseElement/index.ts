@@ -153,6 +153,19 @@ export default class BaseElement extends HTMLElement {
     const sourceAttrValue = dynamic.sourceAttr(this, additionalSource)
     
     if (dynamic.destAttr) {
+      if (dynamic.destAttr === 'x-if') {
+        // we can remove but then we lose ability to reattach
+        // maybe we should just replace it with <template> with h3t-selector???
+
+        // And similar could be done with <slot> and x-for
+
+        // or maybe just smart way ot locating those positions depending on paren and order level?
+        // but that might be really difficuly
+
+        // also what about x-if inside x-if??????
+      }
+
+
       // attribute
       if (sourceAttrValue === null || sourceAttrValue === undefined) {
         node.removeAttribute(dynamic.destAttr)

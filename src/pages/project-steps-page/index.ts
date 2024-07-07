@@ -30,7 +30,7 @@ class ProjectStepsPage extends BaseElement {
       .then((json: Nav) => {
         this.state.title = json.title
         this.state.navItems = json.nav
-        this.state.tabs = json.files
+        this.state.tabs = json.files.toReversed() // we use reverse flex direction
         this.state.selectedFile ??= this.state.tabs[0]
 
         json.files.forEach(fileName => {

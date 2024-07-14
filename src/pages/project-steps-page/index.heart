@@ -1,23 +1,174 @@
 <nav>
   <home-link text="Projects"></home-link>
-  <project-nav items="{navItems}"></project-nav>
+  <!-- <project-nav items="{navItems}"></project-nav> -->
 </nav>
-<section class="project-steps-page__description-panel">
-  <h2 class="project-steps-page__title">{title}</h2>
-  <div class="project-steps-page__content"></div>
-  <div class="project-steps-page__actions-bar">
-    <x-link x-if="{prevStep >= 0}" to="/projects/{projectSlug}/steps/{prevStep}">
-      <x-button>Previous Step</x-button>
-    </x-link>
-    <x-link x-if="{nextStep <= 2}" to="/projects/{projectSlug}/steps/{nextStep}">
-      <x-button>Next Step</x-button>
-    </x-link>
-  </div>
-</section>
+<article class="content-grid">
+  <h1>WebGPU Setup</h1>
+
+  <p>Getting started with WebGPU can be daunting. This post cuts through the complexity, guiding you through the essential setup to render your first (admittedly empty) WebGPU scene. It's the foundation for building incredible visuals - let's dive in!</p>
+
+  <accordion-panel title="What is WebGPU?">
+    <p>WebGPU is used for blazing fast, complex graphics rendering as well as performing high number of computation. It's an API which allows access to user's GPU within browser window.</p>
+    <p>You might also heared about <a target="_blank" href="https://registry.khronos.org/webgl/specs/latest/1.0/">WebGL</a>, API used before WebGPU arrived. WebGL was build using OpenGL API. Since the WebGL creation, the GPUs around the world have evolved their native API a lot, so to meet and make best usage of new faster APIs, WebGPU was created.</p>
+  </accordion-panel>
+
+  <h2>You are also encourage to clone the project to run it locally!</h2>
+  <code-block lang="language-ts">
+# 🐑 Clone the repo
+git clone https://github.com/alaingalvan/webgpu-seed
+
+# 💿 go inside the folder
+cd webgpu-seed
+
+# 🔨 Start building the project
+npm start
+  </code-block>
+  
+  <h2>Today's Plan</h2>
+  <p>To make things easier for you, here is an ✨<em>interactive</em>✨ diagram representing structure of our program.</p>
+
+  <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 810 487">
+    <defs>
+      <style>
+        .cls-1 {
+          opacity: .7;
+        }
+  
+        .cls-1, .cls-2 {
+          font-size: 21px;
+        }
+  
+        .cls-1, .cls-2, .cls-3, .cls-4 {
+          fill: #fff;
+        }
+  
+        .cls-1, .cls-2, .cls-4 {
+          font-family: MyriadPro-Regular, 'Myriad Pro';
+        }
+  
+        .cls-5 {
+          fill: none;
+          stroke: #fff;
+          stroke-miterlimit: 10;
+          stroke-width: 3px;
+        }
+  
+        .cls-3 {
+          stroke-width: 0px;
+        }
+  
+        .cls-4 {
+          font-size: 36px;
+        }
+      </style>
+    </defs>
+    <text class="cls-4" transform="translate(358.82 51.33)"><tspan x="0" y="0">Adapter</tspan></text>
+    <text class="cls-4" transform="translate(358.82 169.33)"><tspan x="0" y="0">Device</tspan></text>
+    <text class="cls-4" transform="translate(331.49 431.33)"><tspan x="0" y="0">Command</tspan><tspan x="34.09" y="43.2">Buffer</tspan></text>
+    <text class="cls-4" transform="translate(337.66 297.33)"><tspan x="0" y="0">Command</tspan><tspan x="-87.46" y="43.2">Encoder&amp; Render Pass</tspan></text>
+    <text class="cls-4" transform="translate(662.82 169.33)"><tspan x="0" y="0">Queue</tspan></text>
+    <text class="cls-4" transform="translate(30.82 51.33)"><tspan x="0" y="0">Canvas</tspan></text>
+    <text class="cls-4" transform="translate(30.82 169.33)"><tspan x="0" y="0">Context</tspan></text>
+    <text class="cls-4" transform="translate(30.82 290.33)"><tspan x="0" y="0">Texture</tspan></text>
+    <g>
+      <line class="cls-5" x1="411" y1="82.1" x2="411" y2="112.15"/>
+      <polygon class="cls-3" points="403.37 109.92 411 123.13 418.63 109.92 403.37 109.92"/>
+    </g>
+    <g>
+      <line class="cls-5" x1="85" y1="82.1" x2="85" y2="112.15"/>
+      <polygon class="cls-3" points="77.37 109.92 85 123.13 92.63 109.92 77.37 109.92"/>
+    </g>
+    <g>
+      <line class="cls-5" x1="205.98" y1="159.62" x2="310" y2="159.62"/>
+      <polygon class="cls-3" points="208.21 167.24 195 159.62 208.21 151.99 208.21 167.24"/>
+    </g>
+    <g>
+      <line class="cls-5" x1="514" y1="159.5" x2="618.02" y2="159.5"/>
+      <polygon class="cls-3" points="615.79 167.13 629 159.5 615.79 151.87 615.79 167.13"/>
+    </g>
+    <g>
+      <line class="cls-5" x1="195" y1="284.5" x2="299.02" y2="284.5"/>
+      <polygon class="cls-3" points="296.79 292.13 310 284.5 296.79 276.87 296.79 292.13"/>
+    </g>
+    <g>
+      <line class="cls-5" x1="411" y1="208.1" x2="411" y2="238.15"/>
+      <polygon class="cls-3" points="403.37 235.92 411 249.13 418.63 235.92 403.37 235.92"/>
+    </g>
+    <g>
+      <line class="cls-5" x1="85" y1="208.1" x2="85" y2="238.15"/>
+      <polygon class="cls-3" points="77.37 235.92 85 249.13 92.63 235.92 77.37 235.92"/>
+    </g>
+    <g>
+      <line class="cls-5" x1="411" y1="364.1" x2="411" y2="394.15"/>
+      <polygon class="cls-3" points="403.37 391.92 411 405.13 418.63 391.92 403.37 391.92"/>
+    </g>
+    <g>
+      <polyline class="cls-5" points="501 421.13 722.5 421.13 722.5 232.48"/>
+      <polygon class="cls-3" points="730.13 234.71 722.5 221.5 714.87 234.71 730.13 234.71"/>
+    </g>
+    <text class="cls-1" transform="translate(531.82 144.72)"><tspan x="0" y="0">provides</tspan></text>
+    <text class="cls-1" transform="translate(431.82 102.72)"><tspan x="0" y="0">creates</tspan></text>
+    <text class="cls-1" transform="translate(100.82 102.72)"><tspan x="0" y="0">creates</tspan></text>
+    <text class="cls-1" transform="translate(101.82 234.72)"><tspan x="0" y="0">provides</tspan></text>
+    <text class="cls-1" transform="translate(431.82 234.72)"><tspan x="0" y="0">creates</tspan></text>
+    <text class="cls-1" transform="translate(431.82 390.72)"><tspan x="0" y="0">creates</tspan></text>
+    <text class="cls-1" transform="translate(564.82 446.72)"><tspan x="0" y="0">used by</tspan></text>
+    <text class="cls-1" transform="translate(219.82 312.72)"><tspan x="0" y="0">used by</tspan></text>
+    <text class="cls-1" transform="translate(208.82 144.72)"><tspan x="0" y="0">connets to</tspan></text>
+    <text class="cls-2" transform="translate(657.82 195.72)"><tspan x="0" y="0">of executions</tspan></text>
+  </svg>
+
+  <p>Don't worry! It might looks like a lot but we are going to endup with less than just a hunder lines of code!</p>
+
+  <section class="info breakout">
+    <p>Learning a new API, specially as complex as WebGPU can be overwhelming, what might lead to discouragement and quitting, even though the reward might be is just behind the corner.</p>
+    <p>Remember to take things slow. Once you master the basics, it take little time & efford to create stunning visual effects.</p>
+    <p>To give you the essence of learning WebGPU, you can compare learning curves of CSS vs WebGPU.</p>
+    <img />
+  </section>
+
+  <h2>Adapter & Device</h2>
+
+  <p>Let's start from the palce where all access to WebGPU begins, the adapter. Adapter & device, both are the representation of GPU but provides different set of APIs with diffrent level of isolation</p>
+
+  <p>DIAGRAM GRAP~HICSD</p>
+
+  <h3>Adapter</h3>
+  <p>For us the most interesting part is a method called <code>requestDevice</code> which returns a device. Additionaly adapter can provide information about GPU or request what kind of adapter do we want, low or high performance(user's device might have more than one GPU).</p>
+
+  <h3>Device</h3>
+  <p>Can spawn various types of WebGPU Object. It's an exclusive owner of everything you will create in WebGPU, buffers, textures, render passes.</p>
+
+  <p>Let's firstly look at the method which returns a device.</p>
+
+  <code-block lang="ts">{files.getDevice}</code-block>
+
+  <h2>Canvas</h2>
+  <p>The next step is to connect canvas. If you are not familiar yet, canvas is a way to render complex graphics in the browser. In our case it's going to server as a way of displaying the output from our programs.</p>
+
+  <p>Like canvas itself is just an HTML element, the main API related to its graphic properties is provided via <em>canvas context</em></p>
+
+  <code-block lang="ts">{files.getContext}</code-block>
+
+  <p>Once we got the device and canvas conntected to it, we can start coding our main part of the program.</p>
+
+  <code-block lang="ts">{files.indexSimplified}</code-block>
+
+  <h2>Render function</h2>
+  <p>Process of rendering starts creating a <em>Command Encoder</em> and <em>Render Pass</em>.
+  <p>Command Encoder encodes all the commands we are going to send to GPU. It spawns render and calculation passes to provide configuration for group of commands(you might have multiple rendering as well as multiple calculation within one command encoder). In our case we are going to use render pass which contains configuration regarding load phase, drawing calls and storing the results of drawings.</p>
+  <p>Before obtaining the encoded commands(via <code>finish()</code> method) you have to end all the render and computation passes created by the encoder.</p>
+
+  <code-block lang="ts" highlightLines="6-23" >{files.index}</code-block>
+
+
+  <p>and the end put some meme that 90% of WebGPU is configuration, 10% is exeuction</p>
+
+</article>
 <!-- <flash-effect><span><h1>PROJECT</h1></span></flash-effect> -->
-<section class="project-steps-page__code-panel">
+<!-- <section class="project-steps-page__code-panel">
   <code-tabs tabs="{tabs}" onChange="{onTabsChange}" selected="{selectedFile}"></code-tabs>
-  <code-block codeLang="language-javascript" highlightLines="{selectedFile === defaultFile ? codeHighlight : undefined}">
+  <code-block lang="javascript" highlightLines="{selectedFile === defaultFile ? codeHighlight : undefined}">
     {!!files ? files[selectedFile] : undefined}
   </code-block>
-</section>
+</section> -->

@@ -1,0 +1,8 @@
+<details @click="toggle" @transitionend="endTransition">
+  <summary>{title}</summary>
+  <div class="content">
+    <div>
+      <slot></slot>
+    </div>
+  </div>
+</details>

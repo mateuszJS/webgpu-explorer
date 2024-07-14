@@ -1,11 +1,6 @@
 home-page {
-  .hero-title {
-    text-align: center;
-    font-size: 70px;
-    font-weight: 200;
-    margin-block-start: 70px;
-    margin-block-end: 30px;
-    text-shadow: 0 0 15px #fff;
+  h1 {
+
   }
 
   .hero-subtitle {

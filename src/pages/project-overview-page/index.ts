@@ -11,7 +11,7 @@ class ProjectOverviewPage extends BaseElement {
     return HEART
   }
 
-  afterRender(hydration: boolean): void {
+  afterMount(hydration: boolean): void {
     // TODO: get params from state, not read directly from url
     const [_, _page, projectSlug] = window.location.pathname.split('/')
 

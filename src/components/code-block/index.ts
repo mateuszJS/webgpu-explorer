@@ -11,16 +11,16 @@ BaseElement.attachCSS(prismCSS)
 BaseElement.attachCSS(ourCSS)
 
 class CodeBlock extends BaseElement {
-  // We cannot use codeLang because content of PRE is treated as text node,
+  // We cannot use lang because content of PRE is treated as text node,
   // so no way to assign attribute to <code> which is inside <pre>
-  static observedAttributes = ["highlight-lines", 'code-lang', ...propsUsedInTemplate];
+  static observedAttributes = ["highlight-lines", 'lang', ...propsUsedInTemplate];
 
   get heart() {
     return HEART
   }
 
   onChangeText = () => {
-    this.querySelector('code')!.classList.add(this.state.codeLang)
+    this.querySelector('code')!.classList.add(`language-${this.state.lang}`)
     Prism.highlightAllUnder(this);
   }
 

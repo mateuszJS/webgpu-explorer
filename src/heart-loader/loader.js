@@ -81,6 +81,7 @@ module.exports = function loader(source) {
 
   function updateNodes(node, dynamics, listeners, propsUsedInTemplate, additionalSourceName) {
     if (node.nodeType !== 1) return // it's not HTMLElement
+    if (node.tagName === 'STYLE') return // inside this tag we use {}
 
     const selector = getSelector()
 

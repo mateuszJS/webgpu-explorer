@@ -23,7 +23,6 @@ export function getPageDetails(url: string): PageDetails {
       return {
         tagName: PageTagName.ProjectSteps,
         params: { projectSlug: firstParam, stepIndex: secondParam },
-        query: { file: searchParams.get('file') }
       }
     }
 

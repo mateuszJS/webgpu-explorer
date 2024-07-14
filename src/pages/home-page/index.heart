@@ -1,4 +1,4 @@
-<h1 class="hero-title">WebGPU Explorer</h1>
+<h1>WebGPU Explorer</h1>
 <h2 class="hero-subtitle">Choose project to explore</h2>
 <section class="panels-list">
   <project-panel

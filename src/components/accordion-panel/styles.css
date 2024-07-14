@@ -1,0 +1,15 @@
+accordion-panel {
+  .content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 500ms;
+  }
+
+  .content > div {
+    overflow: hidden;
+  }
+
+  .is-open .content {
+    grid-template-rows: 1fr;
+  }
+}

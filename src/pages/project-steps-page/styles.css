@@ -1,63 +1,72 @@
 project-steps-page {
   --code-background: #272822;
-
-  display: block;
-  height: 100%;
-  padding: 20px;
-  display: grid;
-  grid-gap: 30px;
-  grid-template: 
-    "top top" auto
-    "left right" 1fr / minmax(0, 1fr) minmax(0, 1fr);
-  /* 1fr works "kinda" like flex-grow, but with minmax it's set to exactly same width for both */
-  box-sizing: border-box;
-
-  h1 {
-    grid-area: left;
-  }
+  
 
   project-nav {
     --size-factor: .75;
   }
 
   nav {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    grid-area: top;
+    padding: 20px;
   }
 
-  .project-steps-page__actions-bar {
-    margin-top: 50px;
-    display: flex;
-    justify-content: space-between;
+  .content-grid {
+    --padding-inline: 2rem;
+    --content-max-width: 70ch;
+    --breakout-max-width: 85ch;
+
+    --breakout-size: calc((var(--breakout-max-width) - var(--content-max-width)) / 2);
+
+    display: grid;
+    grid-template-columns: [full-width-start] minmax(var(--padding-inline), 1fr) [breakout-start] minmax(0, var(--breakout-size)) [content-start] min(100% - var(--padding-inline) * 2, var(--content-max-width)) [content-end] minmax(0, var(--breakout-size)) [breakout-end] minmax(var(--padding-inline), 1fr) [full-width-end];
   }
 
-  .project-steps-page__description-panel {
-    overflow: auto;
-    grid-area: left;
-
-    p {
-      margin-top: 20px;
-      font-family: source-serif-pro, Georgia, Cambria, "Times New Roman", Times, serif;
-      font-size: 20px;
-      letter-spacing: -0.06px;
-      line-height: 32px;
-
-      text-rendering: optimizelegibility;
-      text-size-adjust: 100%;
-      -webkit-font-smoothing: antialiased;
-    }
+  .content-grid > :not(.breakout, .full-width),
+  .full-width > :not(.breakout, .full-width) {
+    grid-column: content;
   }
 
-  .project-steps-page__code-panel {
+  .breakout {
+    grid-column: breakout;
+  }
+
+  .full-width {
+    grid-column: full-width;
+  }
+
+  h2 {
+    font-size: 32px;
+    font-weight: 700;
+  }
+
+  p {
+    margin-top: 18px;
+    
+
+    /* -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol' */
+    /* font-family: source-serif-pro, Georgia, Cambria, "Times New Roman", Times, serif; */
+    font-size: 18px;
+    /* letter-spacing: -0.06px; */
+    line-height: 30px;
+
+    text-rendering: optimizelegibility;
+    text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .info {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  /* .project-steps-page__code-panel {
     min-height: 0;
-    grid-area: right;
     display: flex;
     flex-direction: column;
-  }
+  } */
 
-  code-block {
+  /* code-block {
     min-height: 0;
-  }
+  } */
 }

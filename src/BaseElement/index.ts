@@ -75,7 +75,7 @@ export default class BaseElement extends HTMLElement {
     return ''
   }
 
-  afterRender(hydration: boolean){} // abstract
+  afterMount(hydration: boolean){} // abstract
 
   attributeChangedCallback(kebabCaseName: string, _oldVal: string | null, newVal: string | null) {
     const name = kebabToCamelCase(kebabCaseName)
@@ -221,7 +221,7 @@ export default class BaseElement extends HTMLElement {
       // How about complex storage while hydrating?
       this.state.mounted = true
       this.attachListeners(this.heart.listeners)
-      this.afterRender(!!this.state.hydration) // sometimes we depend on stuff from afterRender in reacting to attribute changes
+      this.afterMount(!!this.state.hydration) // sometimes we depend on stuff from afterMount in reacting to attribute changes
       this.state.hydration = false
       this.callAllOnChangeCallbacks()
     }

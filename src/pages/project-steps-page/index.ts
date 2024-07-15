@@ -5,17 +5,9 @@ import type { Nav, Base5Json } from 'content/types'
 
 BaseElement.attachCSS(CSS)
 
-class ProjectStepsPage extends BaseElement {
-  static observedUrlParams = ['projectSlug']
-  static observedAttributes = propsUsedInTemplate
-  // Page should somehow dubscribe to all dynamic params!!!!
-  // Shoudl be automatically attach to the state!
-
-  constructor() {
-    super()
-    this.state.files = {
-      getDevice:
-      `export default async function getDevice() {
+const files = {
+  getDevice:
+  `export default async function getDevice() {
   if (!navigator.gpu) {
     throw Error("this browser does not support WebGPU");
   }
@@ -38,7 +30,7 @@ class ProjectStepsPage extends BaseElement {
 
   return device
 }`,
-    getContext:
+getContext:
 `export default function getContext(device: GPUDevice) {
   const canvas = document.querySelector<HTMLCanvasElement>("canvas")
   if (!canvas) throw Error("Canvas has to be always provided")
@@ -54,7 +46,7 @@ class ProjectStepsPage extends BaseElement {
 
   return {canvas, context}
 }`,
-  indexSimplified:
+indexSimplified:
 `export default async function init() {
   const device = await getDevice()
   const {canvas, context} = getContext(device)
@@ -67,7 +59,7 @@ class ProjectStepsPage extends BaseElement {
 }
 
 init()`,
-  index:
+index:
 `export default async function init() {
   const device = await getDevice()
   const {canvas, context} = getContext(device)
@@ -96,14 +88,17 @@ init()`,
 
   setCanvasSizeObserver(canvas, device, render)
 }`
-    }
-  }
+}
 
-  get heart() {
-    return HEART
-  }
+class ProjectStepsPage extends BaseElement {
+  static observedUrlParams = ['projectSlug']
+  static observedAttributes = propsUsedInTemplate
+  // Page should somehow dubscribe to all dynamic params!!!!
+  // Shoudl be automatically attach to the state!
 
-  afterMount() {
+  constructor() {
+    super({ files })
+
     const projectSlug = this.state.projectSlug
 
     fetch(require(`content/${projectSlug}/base.json5`))
@@ -125,6 +120,10 @@ init()`,
             })
         })
       })
+  }
+
+  get heart() {
+    return HEART
   }
 
   // get debug() {

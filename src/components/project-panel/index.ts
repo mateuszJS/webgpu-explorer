@@ -21,6 +21,11 @@ BaseElement.attachCSS(CSS)
 class ProjectPanel extends BaseElement {
   static observedAttributes = [...propsUsedInTemplate, 'icon', 'project-slug']
 
+  constructor() {
+    super()
+    this.classList.add('glass')
+  }
+
   get heart(): Heart {
     return HEART
   }

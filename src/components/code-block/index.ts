@@ -19,7 +19,7 @@ class CodeBlock extends BaseElement {
     return HEART
   }
 
-  onChangeText = () => {
+  onChangeText() {
     this.querySelector('code')!.classList.add(`language-${this.state.lang}`)
     Prism.highlightAllUnder(this);
   }
@@ -42,6 +42,10 @@ class CodeBlock extends BaseElement {
   //     console.warn('Oops, unable to copy');  
   //   } 
   // }
+
+  get debug() {
+    return 'code-block'
+  }
 
 
 }

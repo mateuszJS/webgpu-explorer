@@ -11,7 +11,6 @@ const kebabToCamelCase = (str: string) => str.replace(/-[a-z]/g, chars => chars[
 
 export default class BaseElement extends HTMLElement {
   public slotParentNode?: HTMLElement // used only in mountHTML
-  public onChangeText?: VoidFunction // used only in mountHTML
   private unsubscribeUrl?: VoidFunction
 
   protected state: State
@@ -23,22 +22,15 @@ export default class BaseElement extends HTMLElement {
     document.head.appendChild(style)
   }
 
-  constructor() {
+  constructor(initialState: State = {}) {
     super()
-    const handler = {
-      set: (obj: State, prop: string, value: any) => {
-        obj[prop] = value
-        this.onStateChange(prop)
-        return true
-      }
-    };
 
     const observedAttrs = (this.constructor as unknown as { observedAttributes?: string[] }).observedAttributes || []
-    const attrsToSave = [...observedAttrs, 'mounted', 'hydration']
 
-    this.state = new Proxy({}, handler)
+    /* ========= PHASE 1: initialize state ==========*/
+    this.state = initialState
     Array.from(this.attributes).forEach(attr => {
-      if (attrsToSave.includes(attr.nodeName)) { // we don;t want to call callback when "class" is changign for example
+      if (observedAttrs.includes(attr.nodeName)) { // call callback only for tracked attributes
         this.attributeChangedCallback(attr.nodeName, null, attr.nodeValue as string)
       }
       // how is it even posssible that this.attribute(NamedNodeMap) can have value null??
@@ -48,6 +40,36 @@ export default class BaseElement extends HTMLElement {
     if (observedUrlParams) {
       this.unsubscribeUrl = subscribeUrl(this.onChangeUrlParams)
     }
+
+    /* ========= PHASE 2: perform mounting of HTML ==========*/
+
+    if (!this.getAttribute('hydration')) {
+      const {dynamics, html} = this.heart
+      mountHTML(this, html)
+      dynamics.forEach(dynamic => this.updateDynamic(dynamic))
+    } else {
+      this.removeAttribute('hydration')
+    }
+
+    // How about complex storage while hydrating?
+    this.attachListeners(this.heart.listeners)
+    this.callAllOnChangeCallbacks()
+
+    // now attach proxy which will reatc to alll updates!
+    // don't do it before, because it would reatc to all initialization of State and
+    // try to refresh not mounted HTML
+
+    /* ========= PHASE 3: make state reacting to all changes ==========*/
+
+    const handler = {
+      set: (obj: State, prop: string, value: any) => {
+        obj[prop] = value
+        this.onStateChange(prop)
+        return true
+      }
+    };
+
+    this.state = new Proxy(this.state, handler)
   }
 
 
@@ -75,7 +97,7 @@ export default class BaseElement extends HTMLElement {
     return ''
   }
 
-  afterMount(hydration: boolean){} // abstract
+  public onChangeText() {}
 
   attributeChangedCallback(kebabCaseName: string, _oldVal: string | null, newVal: string | null) {
     const name = kebabToCamelCase(kebabCaseName)
@@ -85,7 +107,6 @@ export default class BaseElement extends HTMLElement {
   }
 
   onStateChange(name: string) {
-    if (!this.state.mounted) return
     // TODO, if we change multiple props, we call same dynamic multiple time
     // the following part should be called when JS stack is empty
 
@@ -202,29 +223,6 @@ export default class BaseElement extends HTMLElement {
     Object.keys(this.state).forEach(name => {
       this.callOnChangeCallback(name)
     })
-  }
-
-  connectedCallback() {
-    if (!this.state.mounted) {
-      const {dynamics, html} = this.heart
-      mountHTML(this, html)
-      dynamics.forEach(dynamic => this.updateDynamic(dynamic))
-      // do we need this dynamic.forEach if we do "this.updateAllAttrs()" below?
-
-      // when we call "appendChild" with a custom-element inside,
-      // then that custom element calles connectedCallback again!
-    }
-
-    // TODO: why is mounted and hydration part of state??? I think it should be private property
-
-    if (!this.state.mounted || this.state.hydration) {
-      // How about complex storage while hydrating?
-      this.state.mounted = true
-      this.attachListeners(this.heart.listeners)
-      this.afterMount(!!this.state.hydration) // sometimes we depend on stuff from afterMount in reacting to attribute changes
-      this.state.hydration = false
-      this.callAllOnChangeCallbacks()
-    }
   }
 
   /**

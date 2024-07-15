@@ -8,19 +8,14 @@
   <p>Getting started with WebGPU can be daunting. This post cuts through the complexity, guiding you through the essential setup to render your first (admittedly empty) WebGPU scene. It's the foundation for building incredible visuals - let's dive in!</p>
 
   <accordion-panel title="What is WebGPU?">
-    <p>WebGPU is used for blazing fast, complex graphics rendering as well as performing high number of computation. It's an API which allows access to user's GPU within browser window.</p>
-    <p>You might also heared about <a target="_blank" href="https://registry.khronos.org/webgl/specs/latest/1.0/">WebGL</a>, API used before WebGPU arrived. WebGL was build using OpenGL API. Since the WebGL creation, the GPUs around the world have evolved their native API a lot, so to meet and make best usage of new faster APIs, WebGPU was created.</p>
+    <p>WebGPU is used for blazing fast, complex graphics rendering as well as performing high number of computation in a fraction of a second. It's an API which allows access to user's GPU within browser.</p>
+    <p>You might also heared about <a target="_blank" href="https://registry.khronos.org/webgl/specs/latest/1.0/">WebGL</a>, API used before WebGPU arrived. WebGL was build base on OpenGL API. Since the WebGL creation, the GPUs around the world have evolved their native API a lot. So WebGPU was created to make better usage of newer GPU's API what in the result provided better speed along with more funcionalities like dedicated tools to perform calculations on GPU.</p>
   </accordion-panel>
 
-  <h2>You are also encourage to clone the project to run it locally!</h2>
-  <code-block lang="language-ts">
-# 🐑 Clone the repo
+  <p>You are also encourage to clone the project to run it locally!</p>
+  <code-block lang="sh">
 git clone https://github.com/alaingalvan/webgpu-seed
-
-# 💿 go inside the folder
 cd webgpu-seed
-
-# 🔨 Start building the project
 npm start
   </code-block>
   
@@ -139,12 +134,12 @@ npm start
   <h3>Device</h3>
   <p>Can spawn various types of WebGPU Object. It's an exclusive owner of everything you will create in WebGPU, buffers, textures, render passes.</p>
 
-  <p>Let's firstly look at the method which returns a device.</p>
+  <p>Let's firstly look at the function which returns a device.</p>
 
   <code-block lang="ts">{files.getDevice}</code-block>
 
   <h2>Canvas</h2>
-  <p>The next step is to connect canvas. If you are not familiar yet, canvas is a way to render complex graphics in the browser. In our case it's going to server as a way of displaying the output from our programs.</p>
+  <p>The next step is to connect canvas. If you are not familiar yet, canvas is a way to render complex graphics in the browser. In our case it's going to serve as a way of displaying the output from our programs.</p>
 
   <p>Like canvas itself is just an HTML element, the main API related to its graphic properties is provided via <em>canvas context</em></p>
 

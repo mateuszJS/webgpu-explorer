@@ -124,10 +124,6 @@ export default class BaseElement extends HTMLElement {
     ;(this[callbackName] as Function)?.(this.state[propName])
   }
 
-  updateDynamicLoop = (dynamicLoop: Dynamic) => {
-    const list = this.state[dynamicLoop.inputs[0]] as any[]
-  }
-
   updateDynamic = (
     dynamic: Dynamic,
     nodeQueryScope: BaseElement | HTMLElement = this,

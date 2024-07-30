@@ -37,13 +37,15 @@ project-steps-page {
   h2 {
     font-size: 32px;
     font-weight: 700;
+    margin-block-start: 70px;
   }
 
-  p:not(:first-child) {
-    margin-top: 18px;
+  h3 {
+    margin-block-start: 30px;
   }
 
   p {
+    margin-block: 18px;
     /* -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol' */

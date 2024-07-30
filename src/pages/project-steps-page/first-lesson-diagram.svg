@@ -1,90 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 810 487">
   <defs>
     <style>
       .cls-1 {
-        opacity: .7;
+        font-size: 36px;
       }
 
-      .cls-1, .cls-2 {
-        font-size: 21px;
-      }
-
-      .cls-1, .cls-2, .cls-3, .cls-4 {
-        fill: #fff;
-      }
-
-      .cls-1, .cls-2, .cls-4 {
+      .cls-1, .cls-2, .cls-3 {
         font-family: MyriadPro-Regular, 'Myriad Pro';
       }
 
-      .cls-5 {
+      .cls-1, .cls-2, .cls-4 {
+        isolation: isolate;
+      }
+
+      .cls-1, .cls-2, .cls-5 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        font-size: 21px;
+      }
+
+      .cls-6 {
         fill: none;
         stroke: #fff;
-        stroke-miterlimit: 10;
         stroke-width: 3px;
       }
 
-      .cls-3 {
-        stroke-width: 0px;
+      .cls-6, .cls-7 {
+        stroke-miterlimit: 10;
       }
 
-      .cls-4 {
-        font-size: 36px;
+      .cls-7 {
+        fill-opacity: .1;
+        stroke: #90ff9f;
+        stroke-opacity: .4;
+        stroke-width: 4px;
+      }
+
+      .cls-7, .cls-3 {
+        fill: #90ff9f;
+      }
+
+      .cls-3 {
+        font-size: 24px;
+      }
+
+      .cls-5 {
+        stroke-width: 0px;
       }
     </style>
   </defs>
-  <text class="cls-4" transform="translate(358.82 51.33)"><tspan x="0" y="0">Adapter</tspan></text>
-  <text class="cls-4" transform="translate(358.82 169.33)"><tspan x="0" y="0">Device</tspan></text>
-  <text class="cls-4" transform="translate(331.49 431.33)"><tspan x="0" y="0">Command</tspan><tspan x="34.09" y="43.2">Buffer</tspan></text>
-  <text class="cls-4" transform="translate(337.66 297.33)"><tspan x="0" y="0">Command</tspan><tspan x="-87.46" y="43.2">Encoder&amp; Render Pass</tspan></text>
-  <text class="cls-4" transform="translate(662.82 169.33)"><tspan x="0" y="0">Queue</tspan></text>
-  <text class="cls-4" transform="translate(30.82 51.33)"><tspan x="0" y="0">Canvas</tspan></text>
-  <text class="cls-4" transform="translate(30.82 169.33)"><tspan x="0" y="0">Context</tspan></text>
-  <text class="cls-4" transform="translate(30.82 290.33)"><tspan x="0" y="0">Texture</tspan></text>
-  <g>
-    <line class="cls-5" x1="411" y1="82.1" x2="411" y2="112.15"/>
-    <polygon class="cls-3" points="403.37 109.92 411 123.13 418.63 109.92 403.37 109.92"/>
+  <g class="cls-4">
+    <text class="cls-1" transform="translate(358.8 51.3)"><tspan x="0" y="0">Adapter</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-1" transform="translate(358.8 169.3)"><tspan x="0" y="0">Device</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-1" transform="translate(331.5 431.3)"><tspan x="0" y="0">Command</tspan></text>
+    <text class="cls-1" transform="translate(365.6 474.5)"><tspan x="0" y="0">Buffer</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-1" transform="translate(337.7 297.3)"><tspan x="0" y="0">Command</tspan></text>
+    <text class="cls-1" transform="translate(250.2 340.5)"><tspan x="0" y="0">Encoder&amp; Render Pass</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-1" transform="translate(662.8 169.3)"><tspan x="0" y="0">Queue</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-1" transform="translate(30.8 51.3)"><tspan x="0" y="0">Canvas</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-1" transform="translate(30.8 169.3)"><tspan x="0" y="0">Context</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-1" transform="translate(30.8 290.3)"><tspan x="0" y="0">Texture</tspan></text>
   </g>
   <g>
-    <line class="cls-5" x1="85" y1="82.1" x2="85" y2="112.15"/>
-    <polygon class="cls-3" points="77.37 109.92 85 123.13 92.63 109.92 77.37 109.92"/>
+    <line class="cls-6" x1="411" y1="82.1" x2="411" y2="112.2"/>
+    <polygon class="cls-5" points="403.4 109.9 411 123.1 418.6 109.9 403.4 109.9"/>
   </g>
   <g>
-    <line class="cls-5" x1="205.98" y1="159.62" x2="310" y2="159.62"/>
-    <polygon class="cls-3" points="208.21 167.24 195 159.62 208.21 151.99 208.21 167.24"/>
+    <line class="cls-6" x1="85" y1="82.1" x2="85" y2="112.2"/>
+    <polygon class="cls-5" points="77.4 109.9 85 123.1 92.6 109.9 77.4 109.9"/>
   </g>
   <g>
-    <line class="cls-5" x1="514" y1="159.5" x2="618.02" y2="159.5"/>
-    <polygon class="cls-3" points="615.79 167.13 629 159.5 615.79 151.87 615.79 167.13"/>
+    <line class="cls-6" x1="206" y1="159.6" x2="310" y2="159.6"/>
+    <polygon class="cls-5" points="208.2 167.2 195 159.6 208.2 152 208.2 167.2"/>
   </g>
   <g>
-    <line class="cls-5" x1="195" y1="284.5" x2="299.02" y2="284.5"/>
-    <polygon class="cls-3" points="296.79 292.13 310 284.5 296.79 276.87 296.79 292.13"/>
+    <line class="cls-6" x1="514" y1="159.5" x2="618" y2="159.5"/>
+    <polygon class="cls-5" points="615.8 167.1 629 159.5 615.8 151.9 615.8 167.1"/>
   </g>
   <g>
-    <line class="cls-5" x1="411" y1="208.1" x2="411" y2="238.15"/>
-    <polygon class="cls-3" points="403.37 235.92 411 249.13 418.63 235.92 403.37 235.92"/>
+    <line class="cls-6" x1="195" y1="284.5" x2="299" y2="284.5"/>
+    <polygon class="cls-5" points="296.8 292.1 310 284.5 296.8 276.9 296.8 292.1"/>
   </g>
   <g>
-    <line class="cls-5" x1="85" y1="208.1" x2="85" y2="238.15"/>
-    <polygon class="cls-3" points="77.37 235.92 85 249.13 92.63 235.92 77.37 235.92"/>
+    <line class="cls-6" x1="411" y1="208.1" x2="411" y2="238.1"/>
+    <polygon class="cls-5" points="403.4 235.9 411 249.1 418.6 235.9 403.4 235.9"/>
   </g>
   <g>
-    <line class="cls-5" x1="411" y1="364.1" x2="411" y2="394.15"/>
-    <polygon class="cls-3" points="403.37 391.92 411 405.13 418.63 391.92 403.37 391.92"/>
+    <line class="cls-6" x1="85" y1="208.1" x2="85" y2="238.1"/>
+    <polygon class="cls-5" points="77.4 235.9 85 249.1 92.6 235.9 77.4 235.9"/>
   </g>
   <g>
-    <polyline class="cls-5" points="501 421.13 722.5 421.13 722.5 232.48"/>
-    <polygon class="cls-3" points="730.13 234.71 722.5 221.5 714.87 234.71 730.13 234.71"/>
+    <line class="cls-6" x1="411" y1="364.1" x2="411" y2="394.1"/>
+    <polygon class="cls-5" points="403.4 391.9 411 405.1 418.6 391.9 403.4 391.9"/>
   </g>
-  <text class="cls-1" transform="translate(531.82 144.72)"><tspan x="0" y="0">provides</tspan></text>
-  <text class="cls-1" transform="translate(431.82 102.72)"><tspan x="0" y="0">creates</tspan></text>
-  <text class="cls-1" transform="translate(100.82 102.72)"><tspan x="0" y="0">creates</tspan></text>
-  <text class="cls-1" transform="translate(101.82 234.72)"><tspan x="0" y="0">provides</tspan></text>
-  <text class="cls-1" transform="translate(431.82 234.72)"><tspan x="0" y="0">creates</tspan></text>
-  <text class="cls-1" transform="translate(431.82 390.72)"><tspan x="0" y="0">creates</tspan></text>
-  <text class="cls-1" transform="translate(564.82 446.72)"><tspan x="0" y="0">used by</tspan></text>
-  <text class="cls-1" transform="translate(219.82 312.72)"><tspan x="0" y="0">used by</tspan></text>
-  <text class="cls-1" transform="translate(208.82 144.72)"><tspan x="0" y="0">connets to</tspan></text>
-  <text class="cls-2" transform="translate(657.82 195.72)"><tspan x="0" y="0">of executions</tspan></text>
+  <g>
+    <polyline class="cls-6" points="501 421.1 722.5 421.1 722.5 232.5"/>
+    <polygon class="cls-5" points="730.1 234.7 722.5 221.5 714.9 234.7 730.1 234.7"/>
+  </g>
+  <g class="cls-4">
+    <text class="cls-2" transform="translate(531.8 144.7)"><tspan x="0" y="0">provides</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-2" transform="translate(431.8 102.7)"><tspan x="0" y="0">creates</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-2" transform="translate(100.8 102.7)"><tspan x="0" y="0">creates</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-2" transform="translate(101.8 234.7)"><tspan x="0" y="0">provides</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-2" transform="translate(431.8 234.7)"><tspan x="0" y="0">creates</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-2" transform="translate(431.8 390.7)"><tspan x="0" y="0">creates</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-2" transform="translate(564.8 446.7)"><tspan x="0" y="0">is used by</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-2" transform="translate(206.8 312.7)"><tspan x="0" y="0">is used by</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-2" transform="translate(208.8 144.7)"><tspan x="0" y="0">connets to</tspan></text>
+  </g>
+  <g class="cls-4">
+    <text class="cls-2" transform="translate(657.8 195.7)"><tspan x="0" y="0">of executions</tspan></text>
+  </g>
+  <rect class="cls-7" x="5.3" y="7.8" width="333.6" height="188" rx="21.5" ry="21.5"/>
+  <path class="cls-7" d="M788.5,78.9h-231c-12.8,0-23.3,10.4-23.4,23.2l-.6,81.9c-.1,14.1-11.6,25.5-25.7,25.5H26.8c-11.9,0-21.5,9.6-21.5,21.5v234.5c0,11.9,9.6,21.5,21.5,21.5h761.7c11.9,0,21.5-9.6,21.5-21.5V100.4c0-11.9-9.6-21.5-21.5-21.5Z"/>
+  <rect class="cls-7" x="347.2" y="7.8" width="158.3" height="188" rx="21.5" ry="21.5"/>
+  <text class="cls-3" transform="translate(195 33.9)"><tspan x="0" y="0">getCanvas.ts</tspan></text>
+  <text class="cls-3" transform="translate(405 0)"><tspan x="0" y="0">getDevice.ts</tspan></text>
+  <text class="cls-3" transform="translate(696.2 109.9)"><tspan x="0" y="0">index.ts</tspan></text>
 </svg>

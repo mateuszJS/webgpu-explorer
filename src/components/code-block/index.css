@@ -21,28 +21,4 @@ code-block {
     margin: 0;
     padding: 0;
   }
-
-  .overlay {
-    background: #000000;
-    opacity: 0.35;
-    pointer-events: none;
-  }
-
-  &:hover .overlay {
-    opacity: 0
-  }
-
-  .overlay-before {
-    height: calc((var(--first-line) - 1) * 1lh + var(--code-padding));
-  }
-
-  .overlay-after {
-    margin-block-start: calc(var(--last-line) * 1lh + var(--code-padding));
-  }
-}
-
-code-block:not([highlight-lines]) {
-  .overlay {
-    display: none;
-  }
 }

@@ -60,33 +60,25 @@ indexSimplified:
 
 init()`,
 index:
-`export default async function init() {
-  const device = await getDevice()
-  const {canvas, context} = getContext(device)
-  
-  function render() {
-    const encoder = device.createCommandEncoder()
-    const canvasTexture = context.getCurrentTexture()
-    const renderPassDescriptor = {
-      // describe which textures we want to raw to and how use them
-      label: "our render to canvas renderPass",
-      colorAttachments: [
-        {
-          view: canvasTexture.createView(),
-          clearValue: [0.2, 0, 0, 1],
-          loadOp: "clear", // before rendering clear the texture to value "clear". Other option is "load" to load existing content of the texture into GPU so we can draw over it
-          storeOp: "store", // to store the result of what we draw, other option is "discard"
-        } as const,
-      ],
-    }
-    const pass = encoder.beginRenderPass(renderPassDescriptor)
-    // do cool stuff
-    pass.end()
-    const commandBuffer = encoder.finish()
-    device.queue.submit([commandBuffer])
+`function render() {
+  const encoder = device.createCommandEncoder()
+  const canvasTexture = context.getCurrentTexture()
+  const renderPassDescriptor = {
+    // describe which textures we want to raw to and how use them
+    label: "our render to canvas renderPass",
+    colorAttachments: [
+      {
+        view: canvasTexture.createView(),
+        clearValue: [0.2, 0, 0, 1],
+        loadOp: "clear", // before rendering clear the texture to value "clear". Other option is "load" to load existing content of the texture into GPU so we can draw over it
+        storeOp: "store", // to store the result of what we draw, other option is "discard"
+      } as const,
+    ],
   }
-
-  setCanvasSizeObserver(canvas, device, render)
+  const pass = encoder.beginRenderPass(renderPassDescriptor)
+  // do cool stuff
+  pass.end()
+  const commandBuffer = encoder.finish()
 }`
 }
 

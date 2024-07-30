@@ -118,7 +118,7 @@ module.exports = {
               `<base href="${process.env.BASE_URI}">`,
             )
             .replace(
-              /<link rel="stylesheet" href=(.*?)>/,
+              /<link rel="stylesheet" href=(.*?)>/g,
               `<link rel="preload" href=$1 as="style" onload="this.onload=null;this.rel='stylesheet'">`
               // idea from https://web.dev/articles/defer-non-critical-css
             )

@@ -82,6 +82,8 @@ module.exports = function loader(source) {
   function updateNodes(node, dynamics, listeners, propsUsedInTemplate, additionalSourceName) {
     if (node.nodeType !== 1) return // it's not HTMLElement
     if (node.tagName === 'STYLE') return // inside this tag we use {}
+    if (node.tagName === 'SVG') return // we don't want to mess up with SVG nodes
+
 
     const selector = getSelector()
 
@@ -128,12 +130,10 @@ module.exports = function loader(source) {
     }
 
     Object.entries(node.attributes).forEach(([attrName, attrValue]) => {
-      if (node.tagName !== 'SVG') {
-        // statis attributes need to be kebab case as well!
-        // expect svg attributes, those has allowed camel case attributes
-        node.removeAttribute(attrName)
-        node.setAttribute(camelToKebabCase(attrName), attrValue)
-      }
+      // statis attributes need to be kebab case as well!
+      // expect svg attributes, those has allowed camel case attributes
+      node.removeAttribute(attrName)
+      node.setAttribute(camelToKebabCase(attrName), attrValue)
     })
     
     // check if any of attributes has any dynamics

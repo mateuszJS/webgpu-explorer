@@ -1,11 +1,6 @@
 <x-link to="/" class="home-link">
   <x-button>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 570 570">
-      <rect fill="currentColor" x="315" width="255" height="255" rx="27.75" ry="27.75" />
-      <rect fill="currentColor" width="255" height="255" rx="27.75" ry="27.75" />
-      <rect fill="currentColor" x="315" y="315" width="255" height="255" rx="27.75" ry="27.75" />
-      <rect fill="currentColor" y="315" width="255" height="255" rx="27.75" ry="27.75" />
-    </svg>
+    <import-svg path="/window.svg" inline></import-svg>
     <div class="home-link__label-container">
       <span class="home-link__text-placeholder" aria-hidden="true">{text}</span>
       <span class="home-link__real-text">{text}</span>

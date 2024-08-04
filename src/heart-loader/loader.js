@@ -89,7 +89,6 @@ module.exports = function loader(source, map, meta) {
     if (node.tagName === 'SVG') return // we don't want to mess up with SVG nodes
 
     if (node.tagName === 'IMPORT-SVG') {
-      console.log('================================')
       const pathToSVG = node.getAttribute('path')
 
       if (!pathToSVG) throw Error(`No path on <import-svg> in ${this.resourcePath}.`)
@@ -102,10 +101,15 @@ module.exports = function loader(source, map, meta) {
         console.error(err)
         this.addMissingDependency(absolutePathToSvg)
       }
-      console.log(svgContent)
       
       if (svgContent) {
         this.addDependency(absolutePathToSvg)
+
+        if (node.hasAttribute('inline')) {
+          const svgElement = parse(svgContent)
+          node.replaceWith(svgElement)
+          return
+        }
 
         const mainHash = this.utils.createHash(
           this._compilation.outputOptions.hashFunction

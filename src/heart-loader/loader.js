@@ -2,15 +2,16 @@ const parse = require('node-html-parser').parse
 const storage = require('./deps-storage')
 const addSourcesToExpresion = require('./addSourcesToExpresion')
 const getStrInterpolationExpression = require('./getStrInterpolationExpression')
+const path = require("path");
 
 let selectorCounter = 0
-function getSelector() {
+const getSelector = () => {
   return `h3t-${selectorCounter++}`
 }
 
 const camelToKebabCase = (str) => str.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
 
-function getSourceAttr(text, nameOfAdditionalSource) {
+const getSourceAttr = (text, nameOfAdditionalSource) => {
   const isStringInterpolation = text[0] !== '{' || text.at(-1) !== '}'
   // const isStringInterpolation = text[0] !== '{' || text[text.length - 1] !== '}'
   // if whole attribute value is wrapper with brackets, then it's not a string interpolation
@@ -38,7 +39,7 @@ function getSourceAttr(text, nameOfAdditionalSource) {
 }
 
 // returns stirng or undefined, depending if there is a listener or not
-function handleListeners(node, selector, attrValue, attrName) {
+const handleListeners = (node, selector, attrValue, attrName) => {
   if (attrName[0] === '@') {
     node.setAttribute(selector, '')
     node.removeAttribute(attrName)
@@ -51,7 +52,7 @@ function handleListeners(node, selector, attrValue, attrName) {
 }
 
 
-function handleDynamic(node, selector, attrValue, attrName, additionalSourceName) {
+const handleDynamic = (node, selector, attrValue, attrName, additionalSourceName) => {
   const [callbackFn, cbFnAttrsInput] = getSourceAttr(attrValue, additionalSourceName)
   if (!callbackFn) return {}
 
@@ -72,17 +73,73 @@ function handleDynamic(node, selector, attrValue, attrName, additionalSourceName
   return { dynamic, usedProps: cbFnAttrsInput }
 }
 
-module.exports = function loader(source) {
-  const resourcePath = this.resourcePath
+module.exports = function loader(source, map, meta) {
+  // https://webpack.js.org/api/loaders/#synchronous-loaders
+  
+  // console.log(this.context, this.fs)
+
   const root = parse(source)
   root.removeWhitespace()
 
   const dependencies = new Set()
 
-  function updateNodes(node, dynamics, listeners, propsUsedInTemplate, additionalSourceName) {
+  const updateNodes = (node, dynamics, listeners, propsUsedInTemplate, additionalSourceName) => {
     if (node.nodeType !== 1) return // it's not HTMLElement
     if (node.tagName === 'STYLE') return // inside this tag we use {}
     if (node.tagName === 'SVG') return // we don't want to mess up with SVG nodes
+
+    if (node.tagName === 'IMPORT-SVG') {
+      console.log('================================')
+      const pathToSVG = node.getAttribute('path')
+
+      if (!pathToSVG) throw Error(`No path on <import-svg> in ${this.resourcePath}.`)
+
+      const absolutePathToSvg = this.context + pathToSVG
+      let svgContent
+      try {
+        svgContent = this.fs.readFileSync(absolutePathToSvg, 'utf8')
+      } catch(err) {
+        console.error(err)
+        this.addMissingDependency(absolutePathToSvg)
+      }
+      console.log(svgContent)
+      
+      if (svgContent) {
+        this.addDependency(absolutePathToSvg)
+
+        const mainHash = this.utils.createHash(
+          this._compilation.outputOptions.hashFunction
+        );
+        mainHash.update(svgContent);
+        const hashStr = mainHash.digest('hex');
+        const hashedName = `${hashStr}.svg`
+
+        this.emitFile(hashedName, svgContent)
+
+        node.setAttribute('path', '/' + hashedName)
+      }
+
+      // return
+      /*
+        const mainHash = this.utils.createHash(
+          this._compilation.outputOptions.hashFunction
+        );
+        mainHash.update(content);
+        mainHash.digest('hex');
+      */
+
+
+      // this.fs.
+      // this.fs
+
+      /*
+        this.addDependency(file: string)
+        so whenever dependency changes, this laoder also changes
+
+        addMissingDependency(file: string)
+        watched files that are nto created yet also
+      */
+    }
 
 
     const selector = getSelector()
@@ -170,9 +227,9 @@ module.exports = function loader(source) {
 
   updateNodes(root, dynamics, listeners, propsUsedInTemplate, undefined)
 
-  const componentName = resourcePath.match(/.+\/([-a-z]+)\/index.heart$/)?.[1]
+  const componentName = this.resourcePath.match(/.+\/([-a-z]+)\/index.heart$/)?.[1]
   if (!componentName) {
-    throw Error(`Not a valid custom element name for path ${resourcePath}`)
+    throw Error(`Not a valid custom element name for path ${this.resourcePath}`)
   }
 
   storage.add(componentName, Array.from(dependencies))

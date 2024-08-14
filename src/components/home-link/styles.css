@@ -3,42 +3,35 @@ home-link {
   flex: 0 0 auto;
   --anim-delay: .15s;
 
-  x-button .btn_content {
+  .btn-content.btn-content {
     padding: 7px 8px;
     svg {
       transition: .3s ease margin-inline-end;
     }
   }
 
-  .home-link__label-container {
-    position: relative;
-    overflow: hidden;
+  .label-container {
+    display: grid;
+    grid-template-columns: 0fr;
+    transition: grid-template-columns .3s;
   }
 
-  .home-link__real-text {
-    position: absolute;
+  .label {
+    overflow: hidden;
     transition: .3s ease opacity var(--anim-delay);
     opacity: 1;
-    left: 0;
   }
 
-  .home-link__text-placeholder {
-    visibility: hidden;
-    pointer-events: none;
-    user-select: none;
-    transition: 0.3s ease font-size;
+  &:hover .label-container {
+    grid-template-columns: 1fr;
   }
 
   &:not(:hover) {
-    .home-link__real-text {
+    .label {
       opacity: 0;
       transition-delay: 0s;
     }
-    .home-link__text-placeholder {
-      transition-delay: var(--anim-delay);
-      font-size: 0;
-    }
-    x-button .btn_content svg {
+    .btn-content svg {
       transition-delay: var(--anim-delay);
       margin-inline-end: 0;
     }

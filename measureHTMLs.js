@@ -54,7 +54,7 @@ function measureHTMLs() {
     const prevSize = lastResultsObj[fileName] || 0
     const currSize = results[fileName] || 0
     const diff = prevSize - currSize
-    const percentageDiff = ((diff / prevSize) * 100).toFixed(2)
+    const percentageDiff = (Math.abs(diff / prevSize) * 100).toFixed(2)
     
     let prefix = ''
 
@@ -66,7 +66,7 @@ function measureHTMLs() {
       fontColor = redFont
       prefix = '+'
     }
-    console.log(`${fontColor}%s${resetColor}`, fileName + ': ' + prefix + prettyBytes(Math.abs(diff)) + ' ' + percentageDiff + '%')
+    console.log(`${fontColor}%s${resetColor}`, fileName + ': ' + prefix + prettyBytes(Math.abs(diff)) + ' ' + prefix + percentageDiff + '%')
   })
       
   const resultsJson = JSON.stringify(results)

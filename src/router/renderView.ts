@@ -1,6 +1,5 @@
 export enum PageTagName {
-  ProjectSteps = 'project-steps-page',
-  ProjectOverview = 'project-overview-page',
+  BlogPost = 'blog-post-page',
   Home = 'home-page',
 }
 
@@ -16,19 +15,10 @@ export function getPageDetails(url: string): PageDetails {
   const searchParams = new URLSearchParams(query)
   const [_, page, firstParam, subPage, secondParam] = pathname.split('/')
 
-  if (page === 'projects' && firstParam) {
-
-    if (subPage === 'steps' && secondParam) {
-      // redirect if stepIndex is invalid
-      return {
-        tagName: PageTagName.ProjectSteps,
-        params: { projectSlug: firstParam, stepIndex: secondParam },
-      }
-    }
-
+  if (page === 'posts' && firstParam) {
     // redirect if projectSlug cannot be resolved
     return {
-      tagName: PageTagName.ProjectOverview,
+      tagName: PageTagName.BlogPost,
       params: { projectSlug: firstParam }
     }
   }

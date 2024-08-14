@@ -34,18 +34,20 @@ class AccordionPanel extends BaseElement {
   toggle(e: MouseEvent) {
     // Stop default behaviour from the browser
     e.preventDefault();
-    console.log('toggle', this.duringTransition)
+    
     if (this.duringTransition) return
+
+    const isOpen = !this.details.open
+    if (isOpen) {
+      this.details.open = true
+    }
 
     this.details.offsetLeft // just triggerring submit changes, reflow & repaint
     this.details.querySelector<HTMLElement>('.content')!.offsetLeft // reading from details was not always working....
 
     this.duringTransition = true
 
-    const isOpen = !this.details.open
-
     if (isOpen) {
-      this.details.open = true
       this.details.classList.add('is-open')
     } else {
       this.details.classList.remove('is-open')
@@ -54,6 +56,7 @@ class AccordionPanel extends BaseElement {
 
   endTransition(e: TransitionEvent) {
     const targetParentNode = (e.target! as TransitionEventTarget).parentNode
+
     if (targetParentNode !== this.details) return
     this.duringTransition = false
 

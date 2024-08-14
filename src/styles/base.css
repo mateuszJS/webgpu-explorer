@@ -31,10 +31,6 @@ main {
   overflow: auto;
 }
 
-:host {
-  background: blue!important
-}
-
 body {
   color: var(--text-primary);
 

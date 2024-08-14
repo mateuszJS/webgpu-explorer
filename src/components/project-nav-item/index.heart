@@ -1,9 +1,0 @@
-<li>
-  <div class="header">
-    <span class="number"></span>
-    <h6>{headline}</h6>
-  </div>
-  <div class="details">
-    <p>{details}</p>
-  </div>
-</li>

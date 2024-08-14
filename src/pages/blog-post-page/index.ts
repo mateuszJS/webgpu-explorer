@@ -82,7 +82,7 @@ index:
 }`
 }
 
-class ProjectStepsPage extends BaseElement {
+class BlogPostPage extends BaseElement {
   static observedUrlParams = ['projectSlug']
   static observedAttributes = propsUsedInTemplate
   // Page should somehow dubscribe to all dynamic params!!!!
@@ -123,4 +123,4 @@ class ProjectStepsPage extends BaseElement {
   // }
 }
 
-window.customElements.define('project-steps-page', ProjectStepsPage);
+window.customElements.define('blog-post-page', BlogPostPage);

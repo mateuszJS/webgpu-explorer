@@ -1,9 +1,8 @@
 <x-link to="/" class="home-link">
   <x-button>
     <import-svg path="/window.svg" inline></import-svg>
-    <div class="home-link__label-container">
-      <span class="home-link__text-placeholder" aria-hidden="true">{text}</span>
-      <span class="home-link__real-text">{text}</span>
+    <div class="label-container">
+      <span class="label">{text}</span>
     </div>
   </x-button>
 </x-link>

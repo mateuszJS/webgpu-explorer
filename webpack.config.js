@@ -7,8 +7,7 @@ const { HeartPlugin } = require('./src/heart-loader/plugin.js');
 const isProd = process.env.NODE_ENV === 'production'
 
 const pathToSSG = {
-  '/projects/setup': {title:'Project 1 Overview'},
-  '/projects/setup/steps/0': {title:'Project 1 - Steps'},
+  '/posts/setup': {title: 'WebGPU Setup'},
   '/': {title: 'Home'},
 }
 

@@ -13,8 +13,8 @@ class XButton extends BaseElement {
       */
 
       const html = this.parentElement!.tagName === 'A'
-        ? `<div class="btn_content">${HEART.html}</div>`
-        : `<button class="btn_content">${HEART.html}</button>`
+        ? `<div class="btn-content">${HEART.html}</div>`
+        : `<button class="btn-content">${HEART.html}</button>`
       this.dynamicHeart = { ...HEART, html }
     }
 

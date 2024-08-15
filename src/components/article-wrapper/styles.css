@@ -1,10 +1,5 @@
-blog-post-page {
+article-wrapper {
   --code-background: #272822;
-  
-
-  project-nav {
-    --size-factor: .75;
-  }
 
   nav {
     padding: 20px;

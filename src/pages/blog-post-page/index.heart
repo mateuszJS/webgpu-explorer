@@ -1,8 +1,4 @@
-<nav>
-  <home-link text="Projects"></home-link>
-  <!-- <project-nav items="{navItems}"></project-nav> -->
-</nav>
-<article class="content-grid">
+<article-wrapper>
   <h1>WebGPU Setup</h1>
 
   <p>Getting started with WebGPU can be daunting. This post cuts through the complexity, guiding you through the essential setup to render your first (admittedly empty) WebGPU scene. It's the foundation for building incredible visuals - let's dive in!</p>
@@ -18,7 +14,7 @@ git clone https://github.com/alaingalvan/webgpu-seed
 cd webgpu-seed
 npm start
   </code-block>
-  
+
   <h2>Today's Plan</h2>
   <p>To make things easier for you, here is an ✨<em>interactive</em>✨ diagram representing structure of our program.</p>
 
@@ -36,11 +32,11 @@ npm start
 
   <p>Let's start from the palce where all access to WebGPU begins, the adapter.</p>
 
-  
+
   <import-svg path="/flow-diagram.svg"></import-svg>
 
   <h3>Adapter</h3>
-  <p>Representation of the physical GPU and API layer exposed by the operating system. To obtain an adapter we need to call <code>navigator.gpu.requestAdapter()</code>. Additionaly this method accepts a parameter to describe what kind of adapter do we want, low or high performance(user's device might have more than one GPU!).</p>
+  <p>Representation of the physical GPU and API layer exposed by the operating system. To obtain an adapter we need to call <code>navigator.gpu.requestAdapter()</code>. Additionaly you can pass a parameter to describe what kind of adapter do we want, low or high performance(user's device might have more than one GPU!).</p>
   <p>The interface is super simple, it provides:</p>
   <ul>
     <li>a bunch of read only information about GPU</li>
@@ -50,28 +46,28 @@ npm start
 
   <h3>Device</h3>
   <p>Object which represents abstraction of GPU. Provides isolation between web apps, so you don't need to worry about other apps accessing your textures, buffers, anything you do on GPU. Can spawn various types of WebGPU Objects. It's a pretty rich API, so let's stop here for now, we will slowly discover its API piece by piece.</p>
-  
+
   <p>The device is useful throughout the program's runtime, while the adapter is most useful during the early setup. Let's look at the function which uses an adapter to return a device.</p>
 
-  <code-block lang="ts">{files.getDevice}</code-block>
+  <code-block lang="ts"><import-code path="/getDeviceFile.txt"></import-code></code-block>
 
   <h2>Section 2: Canvas & Context</h2>
   <p>The next step is to connect canvas. If you are not familiar yet, canvas is a way to render complex graphics in the browser. In our case it's going to serve as a way of displaying the output from our programs.</p>
 
   <p>Like canvas itself is just an HTML element, the main API related to its graphic properties is provided via <em>canvas context</em></p>
 
-  <code-block lang="ts">{files.getContext}</code-block>
+  <code-block lang="ts"><import-code path="/getContextFile.txt"></import-code></code-block>
 
   <p>Once we got the device and canvas conntected to it, we can start coding our main part of the program.</p>
 
-  <code-block lang="ts">{files.indexSimplified}</code-block>
+  <code-block lang="ts"><import-code path="/indexSimplifiedFile.txt"></import-code></code-block>
 
   <h2>Section 3: Render function!</h2>
   <p>Finally! It's the step where we are going to use all the utils we've created! Process of rendering starts creating a <em>Command Encoder</em> and <em>Render Pass</em>.
   <p>Command Encoder encodes all the commands we are going to send to GPU. It spawns render and calculation passes to provide configuration for group of commands(you might have multiple rendering as well as multiple calculation within one command encoder). In our case we are going to use render pass which contains configuration regarding loading phase, drawing calls and storing the results of our drawings.</p>
   <p>Before obtaining the encoded commands(via <code>finish()</code> method) you have to end all the render and computation passes created by the encoder.</p>
 
-  <code-block lang="ts" highlightLines="6-23" >{files.index}</code-block>
+  <code-block lang="ts" highlightLines="6-23"><import-code path="/indexFile.txt"></import-code></code-block>
 
   <p>If you would stop work here, you could noticed the canvas turned into black, what seems to be incorrect since we specified red color. It happens because we haven't finished with our render function yet. The last piece is to send our command buffer to device.queue!</p>
   <p>Alright, but still, if we haven't sent any intructions to be executed yet, why did canvas turned into black instead of being transparent by default? It happens because call of <code>canvasTexture.createView()</code> attaches new texture to canvas if there is no texture yet attached. Any new texture is blakc by default, so in the result we got black canvas!</p>
@@ -83,12 +79,4 @@ npm start
   <p>At this point our canvas would have it's default size (300x150px), but in most cases we want to stretch the canvas on full width of our window and adjust it each time window size changes.</p>
 
   <p>and the end put some meme that 90% of WebGPU is configuration, 10% is exeuction</p>
-
-</article>
-<!-- <flash-effect><span><h1>PROJECT</h1></span></flash-effect> -->
-<!-- <section class="project-steps-page__code-panel">
-  <code-tabs tabs="{tabs}" onChange="{onTabsChange}" selected="{selectedFile}"></code-tabs>
-  <code-block lang="javascript" highlightLines="{selectedFile === defaultFile ? codeHighlight : undefined}">
-    {!!files ? files[selectedFile] : undefined}
-  </code-block>
-</section> -->
+</article-wrapper>

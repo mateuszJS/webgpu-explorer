@@ -1,0 +1,7 @@
+<nav>
+  <home-link text="Projects"></home-link>
+</nav>
+<article class="content-grid">
+  <slot></slot>
+</article>
+

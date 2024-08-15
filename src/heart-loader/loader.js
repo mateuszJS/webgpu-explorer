@@ -145,6 +145,28 @@ module.exports = function loader(source, map, meta) {
       */
     }
 
+    if (node.tagName === 'IMPORT-CODE') {
+      const pathToCode = node.getAttribute('path')
+
+      if (!pathToCode) throw Error(`No path on <import-code> in ${this.resourcePath}.`)
+
+      const absolutePathToCode = this.context + pathToCode
+      let codeContent
+      try {
+        codeContent = this.fs.readFileSync(absolutePathToCode, 'utf8')
+      } catch(err) {
+        console.error(err)
+        this.addMissingDependency(absolutePathToCode)
+      }
+      
+      if (codeContent) {
+        this.addDependency(absolutePathToCode)
+
+        node.replaceWith(codeContent)
+      }
+        return
+    }
+
 
     const selector = getSelector()
 

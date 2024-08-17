@@ -31,10 +31,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.txt$/,
-        type: "asset/resource",
-      },
-      {
         test: /\.ts$/,
         use: "ts-loader",
         exclude: /node_modules/,
@@ -72,11 +68,12 @@ module.exports = {
                 },
               },
             },
+            path.resolve('src/heart-loader/css-safari-fix.js'),
           ],
           type: "asset/source",
         } : {
           test: /\.css$/,
-          use: ['style-loader', "css-loader"]
+          use: ['style-loader', "css-loader", path.resolve('src/heart-loader/css-safari-fix.mjs'),]
         },
       {
         test: /\.(png|jpg|jpeg|gif)$/,

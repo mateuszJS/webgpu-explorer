@@ -2,12 +2,13 @@ const parse = require('node-html-parser').parse
 const storage = require('./deps-storage')
 const addSourcesToExpresion = require('./addSourcesToExpresion')
 const getStrInterpolationExpression = require('./getStrInterpolationExpression')
-const path = require("path");
 
 let selectorCounter = 0
 const getSelector = () => {
   return `h3t-${selectorCounter++}`
 }
+
+const componentNameFromFileRe = /.+\/([-a-z]+)\/index.heart$/
 
 const camelToKebabCase = (str) => str.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
 
@@ -253,7 +254,7 @@ module.exports = function loader(source, map, meta) {
 
   updateNodes(root, dynamics, listeners, propsUsedInTemplate, undefined)
 
-  const componentName = this.resourcePath.match(/.+\/([-a-z]+)\/index.heart$/)?.[1]
+  const componentName = this.resourcePath.match(componentNameFromFileRe)?.[1]
   if (!componentName) {
     throw Error(`Not a valid custom element name for path ${this.resourcePath}`)
   }

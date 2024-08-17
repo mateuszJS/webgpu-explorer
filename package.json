@@ -15,6 +15,7 @@
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",
     "css-loader": "^7.1.2",
+    "css-simple-parser": "^3.0.0",
     "cssnano": "^7.0.1",
     "html-webpack-plugin": "^5.5.0",
     "http-server": "^14.1.1",
@@ -24,6 +25,7 @@
     "postcss-loader": "^8.1.1",
     "puppeteer": "^22.9.0",
     "puppeteer-prerender-plugin": "^3.0.15",
+    "strip-css-comments": "^5.0.0",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.2",

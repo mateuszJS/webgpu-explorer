@@ -49,34 +49,36 @@ npm start
 
   <p>The device is useful throughout the program's runtime, while the adapter is most useful during the early setup. Let's look at the function which uses an adapter to return a device.</p>
 
-  <code-block lang="ts"><import-code path="/getDeviceFile.txt"></import-code></code-block>
+  <code-block lang="ts"><import-code path="/snippets/getDeviceFile.txt"></import-code></code-block>
 
   <h2>Section 2: Canvas & Context</h2>
   <p>The next step is to connect canvas. If you are not familiar yet, canvas is a way to render complex graphics in the browser. In our case it's going to serve as a way of displaying the output from our programs.</p>
 
   <p>Like canvas itself is just an HTML element, the main API related to its graphic properties is provided via <em>canvas context</em></p>
 
-  <code-block lang="ts"><import-code path="/getContextFile.txt"></import-code></code-block>
+  <code-block lang="ts"><import-code path="/snippets/getContextFile.txt"></import-code></code-block>
 
   <p>Once we got the device and canvas conntected to it, we can start coding our main part of the program.</p>
 
-  <code-block lang="ts"><import-code path="/indexSimplifiedFile.txt"></import-code></code-block>
+  <code-block lang="ts"><import-code path="/snippets/indexSimplifiedFile.txt"></import-code></code-block>
 
   <h2>Section 3: Render function!</h2>
   <p>Finally! It's the step where we are going to use all the utils we've created! Process of rendering starts creating a <em>Command Encoder</em> and <em>Render Pass</em>.
   <p>Command Encoder encodes all the commands we are going to send to GPU. It spawns render and calculation passes to provide configuration for group of commands(you might have multiple rendering as well as multiple calculation within one command encoder). In our case we are going to use render pass which contains configuration regarding loading phase, drawing calls and storing the results of our drawings.</p>
   <p>Before obtaining the encoded commands(via <code>finish()</code> method) you have to end all the render and computation passes created by the encoder.</p>
 
-  <code-block lang="ts" highlightLines="6-23"><import-code path="/indexFile.txt"></import-code></code-block>
+  <code-block lang="ts" highlightLines="6-23"><import-code path="/snippets/indexFile.txt"></import-code></code-block>
 
   <p>If you would stop work here, you could noticed the canvas turned into black, what seems to be incorrect since we specified red color. It happens because we haven't finished with our render function yet. The last piece is to send our command buffer to device.queue!</p>
   <p>Alright, but still, if we haven't sent any intructions to be executed yet, why did canvas turned into black instead of being transparent by default? It happens because call of <code>canvasTexture.createView()</code> attaches new texture to canvas if there is no texture yet attached. Any new texture is blakc by default, so in the result we got black canvas!</p>
 
-  <h3>Sneding command buffer to execution queue</h3>
+  <h3>Sending command buffer to execution queue</h3>
   <p>The last piece is to add <code>device.queue.submit([commandBuffer])</code> to the very end of <code>render</code> function.</p>
 
   <h2>Polishing</h2>
   <p>At this point our canvas would have it's default size (300x150px), but in most cases we want to stretch the canvas on full width of our window and adjust it each time window size changes.</p>
+
+  <code-block lang="ts" highlightLines="6-23"><import-code path="/snippets/setCanvasSizeObserverFile.txt"></import-code></code-block>
 
   <p>and the end put some meme that 90% of WebGPU is configuration, 10% is exeuction</p>
 </article-wrapper>

@@ -2,7 +2,6 @@ import BaseElement from 'BaseElement';
 import HEART, {propsUsedInTemplate} from './index.heart'
 import CSS from "./styles.css";
 
-
 BaseElement.attachCSS(CSS)
 
 interface TransitionEventTarget extends EventTarget {

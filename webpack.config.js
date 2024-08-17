@@ -68,7 +68,7 @@ module.exports = {
                 },
               },
             },
-            path.resolve('src/heart-loader/css-safari-fix.js'),
+            path.resolve('src/heart-loader/css-safari-fix.mjs'),
           ],
           type: "asset/source",
         } : {

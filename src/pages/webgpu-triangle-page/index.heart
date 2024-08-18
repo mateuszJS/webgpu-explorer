@@ -1,3 +1,21 @@
 <article-wrapper>
-  <h1>WebGPU Setup</h1>
+  <h1>Rendering a triangle!</h1>
+  <p>Today we are going to learn about particle which is a fundament for almost every WebGPU render! A triangle △</p>
+  <p>If you seen yet the setup article, please go to <x-link to="/posts/webgpu-setup">WebGPU Setup Article</x-link>. We are going to built further on the top of that lesson.</p>
+  <p>You are also encourage to download already written code for this lesson, which can be found on <a href="#">github</a>.</p>
+
+  <h2>How WebGPU renders a triangle?</h2>
+  <p>The main characters in rendering a triangle play vertex shader and fragment shader. Shader is a name used to describe a program written in <a href="https://www.w3.org/TR/WGSL/">WGSL</a> which run on the graphic card to make calculations. In our case we have vertex shader, which calculates the points which together create a triangle, while fragment shader running later fills that triangle with texels.</p>
+
+  <accordion-panel title="What is a texel?">
+    <p>Just like images can be represented by pixels, textures are represented by texels, which are also called texture pixels!</p>
+  </accordion-panel>
+  <import-svg path="/shaders.svg"></import-svg>
+
+  <p>Firstly vertex shader runs specified number of times, in this case three times. Each time returns another point of triangle. GPU interpretes those points into a triangle, and runs fragment shader after that. Fragment shader runs for every single one texel within the triangle.</p>
+
+  <h2>Writing vertex shader</h2>
+  <p>As mentioned above, shaders are using they own C-like language, in case of WebGPU it's WGSL.</p>
+  <code-block lang="clike"><import-code path="/snippets/vertexShader.txt"></import-code></code-block>
+
 </article-wrapper>

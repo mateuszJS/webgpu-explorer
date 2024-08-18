@@ -16,7 +16,7 @@ npm start
   </code-block>
 
   <h2>Today's Plan</h2>
-  <p>To make things easier for you, here is an ✨<em>interactive</em>✨ diagram representing structure of our program.</p>
+  <p>To make things easier for you, here is a diagram representing structure of our program.</p>
 
   <import-svg path="/first-lesson-diagram.svg"></import-svg>
   <p>Don't worry! It might looks like a lot but we are going to endup with less than just a hunder lines of code! The diagram is splitted intro three section, we will go though them one by one.</p>
@@ -42,12 +42,12 @@ npm start
     <li>a bunch of read only information about GPU</li>
     <li>method <code>requestDevice</code> which returns a device.</li>
   </ul>
-  <p>We mentioned that Adapter has a method to return a Device, but what actually is the Device?</p>
+  <p>So Adapter has the method to return a Device, but what actually is the Device?</p>
 
   <h3>Device</h3>
-  <p>Object which represents abstraction of GPU. Provides isolation between web apps, so you don't need to worry about other apps accessing your textures, buffers, anything you do on GPU. Can spawn various types of WebGPU Objects. It's a pretty rich API, so let's stop here for now, we will slowly discover its API piece by piece.</p>
+  <p>WebGPU object which provides isolation between web apps, so you don't need to worry about other apps accessing your textures, buffers, anything you do on GPU. Can spawn various types of WebGPU Objects itself. It's a pretty rich API, so let's stop here for now, we will slowly discover its API piece by piece.</p>
 
-  <p>The device is useful throughout the program's runtime, while the adapter is most useful during the early setup. Let's look at the function which uses an adapter to return a device.</p>
+  <p>The device is useful throughout the program's runtime, while the adapter is mostly useful during the early setup. Let's look at the function which uses an adapter to return a device.</p>
 
   <code-block lang="ts"><import-code path="/snippets/getDeviceFile.txt"></import-code></code-block>
 
@@ -70,13 +70,13 @@ npm start
   <code-block lang="ts" highlightLines="6-23"><import-code path="/snippets/indexFile.txt"></import-code></code-block>
 
   <p>If you would stop work here, you could noticed the canvas turned into black, what seems to be incorrect since we specified red color. It happens because we haven't finished with our render function yet. The last piece is to send our command buffer to device.queue!</p>
-  <p>Alright, but still, if we haven't sent any intructions to be executed yet, why did canvas turned into black instead of being transparent by default? It happens because call of <code>canvasTexture.createView()</code> attaches new texture to canvas if there is no texture yet attached. Any new texture is blakc by default, so in the result we got black canvas!</p>
+  <p>Alright, but still, if we haven't sent any intructions to be executed yet, why did canvas turned into black instead of being transparent by default? It happens because call of <code>canvasTexture.createView()</code> attaches new texture to canvas if there is no texture yet attached. Any new texture is black by default, so in the result we got black canvas!</p>
 
   <h3>Sending command buffer to execution queue</h3>
   <p>The last piece is to add <code>device.queue.submit([commandBuffer])</code> to the very end of <code>render</code> function.</p>
 
   <h2>Polishing</h2>
-  <p>At this point our canvas would have it's default size (300x150px), but in most cases we want to stretch the canvas on full width of our window and adjust it each time window size changes.</p>
+  <p>At this point our canvas has it's default size of 300x150px. In most cases we want to stretch the canvas on full width of our window and adjust it each time window size changes.</p>
 
   <code-block lang="ts" highlightLines="6-23"><import-code path="/snippets/setCanvasSizeObserverFile.txt"></import-code></code-block>
 

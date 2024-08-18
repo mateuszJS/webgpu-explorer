@@ -54,7 +54,7 @@ class AccordionPanel extends BaseElement {
   }
 
   endTransition(e: TransitionEvent) {
-    const targetParentNode = (e.target! as TransitionEventTarget).parentNode
+    const targetParentNode = (e.target as TransitionEventTarget).parentNode
 
     if (targetParentNode !== this.details) return
     this.duringTransition = false

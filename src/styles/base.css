@@ -21,6 +21,7 @@ html {
   /* font-family: -apple-system, "system-ui", "Segoe UI", Roboto, Helvetica; */
   font-weight: 400;
   font-style: normal;
+  color-scheme: dark;
 }
 
 html, body, main {

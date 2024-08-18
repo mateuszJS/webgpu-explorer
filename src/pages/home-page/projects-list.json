@@ -1,13 +1,13 @@
 [
   {
     "icon": "play",
-    "projectSlug": "setup",
+    "projectSlug": "webgpu-setup",
     "headline": "Setup, Set, Go!",
     "text": "Skip the struggle. Build strong knowledge about WebGPU fundation quickly!"
   },
   {
     "icon": "triangle",
-    "projectSlug": "project-2",
+    "projectSlug": "webgpu-triangle",
     "headline": "Triangle",
     "text": "The fundamental element of modern rendering - triangle."
   },

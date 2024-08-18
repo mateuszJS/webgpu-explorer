@@ -1,11 +1,17 @@
 export enum PageTagName {
-  BlogPost = 'blog-post-page',
+  PostWebGpuTriangle = 'webgpu-triangle-page',
+  PostWebGpuSetup = 'webgpu-setup-page',
   Home = 'home-page',
 }
 
+const MAP_POST_SLUG_TO_TAG = {
+  'webgpu-setup': PageTagName.PostWebGpuSetup,
+  'webgpu-triangle': PageTagName.PostWebGpuTriangle,
+} as const
+
 export interface PageDetails {
   tagName: PageTagName
-  params: Record<string, string> // snake_case because are connected to state/dynamics
+  params?: Record<string, string> // snake_case because are connected to state/dynamics
   query?: Record<string, string | null>
 }
 
@@ -15,17 +21,16 @@ export function getPageDetails(url: string): PageDetails {
   const searchParams = new URLSearchParams(query)
   const [_, page, firstParam, subPage, secondParam] = pathname.split('/')
 
-  if (page === 'posts' && firstParam) {
+  if (page === 'posts' && firstParam in MAP_POST_SLUG_TO_TAG) {
+    const pageTag = MAP_POST_SLUG_TO_TAG[firstParam as keyof typeof MAP_POST_SLUG_TO_TAG]
     // redirect if projectSlug cannot be resolved
     return {
-      tagName: PageTagName.BlogPost,
-      params: { projectSlug: firstParam }
+      tagName: pageTag,
     }
   }
 
   return {
     tagName: PageTagName.Home,
-    params: {}
   }
 }
 

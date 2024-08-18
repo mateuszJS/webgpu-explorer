@@ -82,7 +82,7 @@ export default class BaseElement extends HTMLElement {
       So this.state updates, 
     */
     observedUrlParams.forEach(paramName => {
-      const value = pageDetails.params[paramName] || pageDetails.query?.[paramName]
+      const value = pageDetails.params?.[paramName] || pageDetails.query?.[paramName]
       if (this.state[paramName] !== value) { // TODO: check if needed
         this.state[paramName] = value
       }

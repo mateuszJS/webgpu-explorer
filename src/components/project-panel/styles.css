@@ -15,19 +15,12 @@ project-panel {
     /* padding: 15px 25px; */
   }
 
-  &:hover {
-    /* transform: scale(1.05); */
-    /* background-color: rgba(255, 255, 255, 0.08);
-    transform: scale(1.05);
-    box-shadow: 0px 0px 11px 3px rgba(255, 255, 255, 0.2); */
-  }
+  /* transition: transform 0.3s ease; */
+  animation: .25s linear forwards --popout;
 
-  svg {
-    flex: 0 0 60px;
-    min-width: 0;
-    margin-inline-end: 20px;
-    color: var(--text-secondary);
-    filter: drop-shadow(0 0 5px #ffffff33);
+  &:hover {
+    /* animation: .25s linear forwards --popin; */
+    animation: .25s linear normal forwards --popin ;
   }
 
   h3 {
@@ -41,4 +34,109 @@ project-panel {
     font-weight: 300;
     font-size: 15px;
   }
+
+  .visual {
+    flex: 0 0 60px;
+    min-width: 0;
+    margin-inline-end: 20px;
+    position: relative;
+
+    svg {
+      color: var(--text-secondary);
+      filter: drop-shadow(0 0 5px #ffffff33);
+    }
+
+    .tag {
+      position: absolute;
+      /* position absolute on span makes background loook like display block,
+      not display inline when bakcgorudn is onl behidn word(not the whole element) */
+      transform: skew(0deg, -17deg);
+        --bg: rgb(113, 96, 115);
+        font-size: 20px;
+
+
+      &:where(.html-css, .webgpu, .web-components, .general) span {
+        
+        display: inline;
+        /* width: 40px; */
+
+        padding: 5px;
+        color: white;
+        font-family: 'Squada One', sans-serif;
+        font-variation-settings: "wdth" 60;
+        font-variation-settings: "wght" 900;
+        font-variation-settings: 'GRAD' 150;
+        /* white-space: nowrap; */
+        line-height: 1;
+
+        background: var(--bg) none repeat scroll 0 0;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+      }
+
+      &.html-css {
+        --bg: magenta;
+      }
+
+      &.webgpu {
+        --bg: rgb(255, 136, 0);
+        bottom: -5px;
+        left: -2px;
+      }
+
+      &.web-components {
+        --bg: rgb(0, 180, 230);
+        bottom: -10px;
+        left: -10px;
+        font-size: 18px;
+      }
+    }
+
+  }
 }
+
+
+@keyframes --popin {
+  0% {
+    transform: perspective(100px) rotateX(0deg);
+  }
+
+  40% {
+    transform: perspective(100px) rotateX(4deg) scale(1.04);
+  }
+
+  70% {
+    transform: perspective(100px) rotateX(-2deg) scale(1.11);
+  }
+
+  100% {
+    transform: perspective(100px) rotateX(0deg) scale(1.075);
+  }
+} 
+
+@keyframes --popout {
+  100% {
+    transform: perspective(100px) rotateX(0deg);
+  }
+
+  70% {
+    transform: perspective(100px) rotateX(4deg) scale(1.04);
+  }
+
+  40% {
+    transform: perspective(100px) rotateX(-2deg) scale(1.11);
+  }
+
+  0% {
+    transform: perspective(100px) rotateX(0deg) scale(1.075);
+  }
+} 
+
+
+
+
+
+
+
+
+

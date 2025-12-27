@@ -3,30 +3,35 @@
     "icon": "play",
     "projectSlug": "webgpu-setup",
     "headline": "Setup, Set, Go!",
+    "tagId": "webgpu",
     "text": "Skip the struggle. Build strong knowledge about WebGPU fundation quickly!"
   },
   {
     "icon": "triangle",
     "projectSlug": "webgpu-triangle",
     "headline": "Triangle",
-    "text": "The fundamental element of modern rendering - triangle."
+    "tagId": "html-css",
+    "text": "The Triangle - fundamental element of modern rendering."
   },
   {
-    "icon": "play",
-    "projectSlug": "project-1",
-    "headline": "Setup, Set, Go!",
-    "text": "Base for WebGPU renderings."
-  },
-  {
-    "icon": "triangle",
-    "projectSlug": "project-2",
-    "headline": "Triangle",
-    "text": "The fundamental element of modern rendering - triangle."
+    "icon": "tooltips",
+    "projectSlug": "ultimate-popover",
+    "headline": "Ultimate Popover",
+    "tagId": "html-css",
+    "text": "Pure HTML + CSS popover implementation! Finally no JS overhead!"
   },
   {
     "icon": "triangle",
     "projectSlug": "project-2",
     "headline": "Triangle",
+    "tagId": "general",
+    "text": "The fundamental element of modern rendering - triangle."
+  },
+  {
+    "icon": "triangle",
+    "projectSlug": "project-2",
+    "headline": "Triangle",
+    "tagId": "web-components",
     "text": "The fundamental element of modern rendering - triangle."
   }
 ]

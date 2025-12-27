@@ -1,0 +1,5 @@
+a-h2 {
+  &:has(:target) {
+    background: tomato;
+  }
+}

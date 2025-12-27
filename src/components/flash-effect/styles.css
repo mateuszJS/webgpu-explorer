@@ -67,4 +67,6 @@ flash-effect {
     100% 100%,
     100% 0%
   );
+  /* try use gradient border like here https://youtu.be/dsZ7RN9ItR4?si=WKYTl6Hc1heUTCMt&t=858 
+  and tis one can be valuable https://www.joshwcomeau.com/css/backdrop-filter/ */
 }

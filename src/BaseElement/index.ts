@@ -29,6 +29,7 @@ export default class BaseElement extends HTMLElement {
 
     /* ========= PHASE 1: initialize state ==========*/
     this.state = initialState
+
     Array.from(this.attributes).forEach(attr => {
       if (observedAttrs.includes(attr.nodeName)) { // call callback only for tracked attributes
         this.attributeChangedCallback(attr.nodeName, null, attr.nodeValue as string)
@@ -101,6 +102,7 @@ export default class BaseElement extends HTMLElement {
 
   attributeChangedCallback(kebabCaseName: string, _oldVal: string | null, newVal: string | null) {
     const name = kebabToCamelCase(kebabCaseName)
+
     this.state[name] = newVal?.[0] === '#'
       ? getStorage(newVal)
       : newVal

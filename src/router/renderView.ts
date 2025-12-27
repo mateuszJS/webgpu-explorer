@@ -1,12 +1,14 @@
 export enum PageTagName {
   PostWebGpuTriangle = 'webgpu-triangle-page',
   PostWebGpuSetup = 'webgpu-setup-page',
+  PostUltimatePopover = 'ultimate-popover-page',
   Home = 'home-page',
 }
 
 const MAP_POST_SLUG_TO_TAG = {
   'webgpu-setup': PageTagName.PostWebGpuSetup,
   'webgpu-triangle': PageTagName.PostWebGpuTriangle,
+  'ultimate-popover': PageTagName.PostUltimatePopover,
 } as const
 
 export interface PageDetails {

@@ -21,8 +21,8 @@ npm start
   <import-svg path="/first-lesson-diagram.svg"></import-svg>
   <p>Don't worry! It might looks like a lot but we are going to endup with less than just a hunder lines of code! The diagram is splitted intro three section, we will go though them one by one.</p>
 
-  <section class="info breakout">
-    <p>Learning a new API, specially as complex as WebGPU can be overwhelming, what might lead to discouragement and quitting, even though the reward might be is just behind the corner.</p>
+  <section class="info full-width">
+    <p class="breakout">Learning a new API, specially as complex as WebGPU can be overwhelming, what might lead to discouragement and quitting, even though the reward might be is just behind the corner.</p>
     <p>Remember to take things slow. Once you master the basics, it take little time & efford to create stunning visual effects.</p>
     <p>To give you the essence of learning WebGPU, you can compare learning curves of CSS vs WebGPU.</p>
     <img />

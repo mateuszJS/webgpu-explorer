@@ -8,9 +8,9 @@ const getSelector = () => {
   return `h3t-${selectorCounter++}`
 }
 
-const componentNameFromFileRe = /.+\/([-a-z]+)\/index.heart$/
+const componentNameFromFileRe = /.+\/([-a-z0-9]+)\/index.heart$/
 
-const camelToKebabCase = (str) => str.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+const camelToKebabCase = (str) => str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)
 
 const getSourceAttr = (text, nameOfAdditionalSource) => {
   const isStringInterpolation = text[0] !== '{' || text.at(-1) !== '}'
@@ -20,19 +20,22 @@ const getSourceAttr = (text, nameOfAdditionalSource) => {
   if (text.includes('{') && text.includes('}')) {
     // might be issue when "}{"
 
-    let callbackFn, cbFnAttrsInput = [];
+    let callbackFn,
+      cbFnAttrsInput = []
 
     if (isStringInterpolation) {
-      const {expression, inputs} = getStrInterpolationExpression(text, nameOfAdditionalSource)
+      const { expression, inputs } = getStrInterpolationExpression(text, nameOfAdditionalSource)
       cbFnAttrsInput = inputs
       callbackFn = expression
     } else {
-      const {callback, inputs} = addSourcesToExpresion(text.slice(1, -1), nameOfAdditionalSource)
+      const { callback, inputs } = addSourcesToExpresion(text.slice(1, -1), nameOfAdditionalSource)
       cbFnAttrsInput = inputs
       callbackFn = callback
     }
 
-    wrapperCallbackFn = `(el${nameOfAdditionalSource ? `,${nameOfAdditionalSource}` : ''}) => ${callbackFn}`
+    wrapperCallbackFn = `(el${
+      nameOfAdditionalSource ? `,${nameOfAdditionalSource}` : ''
+    }) => ${callbackFn}`
 
     return [wrapperCallbackFn, cbFnAttrsInput]
   }
@@ -51,7 +54,6 @@ const handleListeners = (node, selector, attrValue, attrName) => {
     }`
   }
 }
-
 
 const handleDynamic = (node, selector, attrValue, attrName, additionalSourceName) => {
   const [callbackFn, cbFnAttrsInput] = getSourceAttr(attrValue, additionalSourceName)
@@ -76,7 +78,7 @@ const handleDynamic = (node, selector, attrValue, attrName, additionalSourceName
 
 module.exports = function loader(source, map, meta) {
   // https://webpack.js.org/api/loaders/#synchronous-loaders
-  
+
   // console.log(this.context, this.fs)
 
   const root = parse(source)
@@ -98,11 +100,11 @@ module.exports = function loader(source, map, meta) {
       let svgContent
       try {
         svgContent = this.fs.readFileSync(absolutePathToSvg, 'utf8')
-      } catch(err) {
+      } catch (err) {
         console.error(err)
         this.addMissingDependency(absolutePathToSvg)
       }
-      
+
       if (svgContent) {
         this.addDependency(absolutePathToSvg)
 
@@ -112,11 +114,9 @@ module.exports = function loader(source, map, meta) {
           return
         }
 
-        const mainHash = this.utils.createHash(
-          this._compilation.outputOptions.hashFunction
-        );
-        mainHash.update(svgContent);
-        const hashStr = mainHash.digest('hex');
+        const mainHash = this.utils.createHash(this._compilation.outputOptions.hashFunction)
+        mainHash.update(svgContent)
+        const hashStr = mainHash.digest('hex')
         const hashedName = `${hashStr}.svg`
 
         this.emitFile(hashedName, svgContent)
@@ -132,7 +132,6 @@ module.exports = function loader(source, map, meta) {
         mainHash.update(content);
         mainHash.digest('hex');
       */
-
 
       // this.fs.
       // this.fs
@@ -155,19 +154,18 @@ module.exports = function loader(source, map, meta) {
       let codeContent
       try {
         codeContent = this.fs.readFileSync(absolutePathToCode, 'utf8')
-      } catch(err) {
+      } catch (err) {
         console.error(err)
         this.addMissingDependency(absolutePathToCode)
       }
-      
+
       if (codeContent) {
         this.addDependency(absolutePathToCode)
 
         node.replaceWith(codeContent)
       }
-        return
+      return
     }
-
 
     const selector = getSelector()
 
@@ -180,7 +178,7 @@ module.exports = function loader(source, map, meta) {
       node.removeAttribute('x-for')
       propsUsedInTemplate.add(`'${listName}'`)
       // We assume there is always a parent(like ul,ol)
-      node.parentNode.setAttribute(selector ,'')
+      node.parentNode.setAttribute(selector, '')
       // TODO: go though all dynamic, listeners related just to item
 
       const loopDynamics = []
@@ -194,7 +192,7 @@ module.exports = function loader(source, map, meta) {
       const loopUsedProps = Array.from(loopPropsUsedInTemplate)
 
       // we need those "state" props to refresh list when they change
-      loopUsedProps.forEach(prop => propsUsedInTemplate.add(prop))
+      loopUsedProps.forEach((prop) => propsUsedInTemplate.add(prop))
 
       // do we need sourceAttr?
       dynamics.push(`{
@@ -219,14 +217,20 @@ module.exports = function loader(source, map, meta) {
       node.removeAttribute(attrName)
       node.setAttribute(camelToKebabCase(attrName), attrValue)
     })
-    
+
     // check if any of attributes has any dynamics
     Object.entries(node.attributes).forEach(([attrName, attrValue]) => {
-      const { dynamic, usedProps } = handleDynamic(node, selector, attrValue, attrName, additionalSourceName)
+      const { dynamic, usedProps } = handleDynamic(
+        node,
+        selector,
+        attrValue,
+        attrName,
+        additionalSourceName
+      )
       const listener = handleListeners(node, selector, attrValue, attrName)
 
       if (dynamic) {
-        usedProps.forEach(input => propsUsedInTemplate.add(input))
+        usedProps.forEach((input) => propsUsedInTemplate.add(input))
         dynamics.push(dynamic)
       }
 
@@ -238,14 +242,22 @@ module.exports = function loader(source, map, meta) {
     // check if textContent has any dynamics
     if (node.childNodes.length === 1 && node.firstChild.nodeType === 3) {
       // TextNode
-      const { dynamic, usedProps } = handleDynamic(node, selector, node.firstChild.textContent.trim(), undefined, additionalSourceName)
+      const { dynamic, usedProps } = handleDynamic(
+        node,
+        selector,
+        node.firstChild.textContent.trim(),
+        undefined,
+        additionalSourceName
+      )
       if (dynamic) {
-        usedProps.forEach(input => propsUsedInTemplate.add(input))
+        usedProps.forEach((input) => propsUsedInTemplate.add(input))
         dynamics.push(dynamic)
       }
     }
 
-    node.childNodes.forEach(node => updateNodes(node, dynamics, listeners, propsUsedInTemplate, additionalSourceName))
+    node.childNodes.forEach((node) =>
+      updateNodes(node, dynamics, listeners, propsUsedInTemplate, additionalSourceName)
+    )
   }
 
   const dynamics = []
@@ -256,13 +268,17 @@ module.exports = function loader(source, map, meta) {
 
   const componentName = this.resourcePath.match(componentNameFromFileRe)?.[1]
   if (!componentName) {
-    throw Error(`Not a valid custom element name for path ${this.resourcePath}`)
+    throw Error(
+      `Not a valid custom element name for path ${this.resourcePath}. Component name: ${componentName}`
+    )
   }
 
   storage.add(componentName, Array.from(dependencies))
 
+  const kebabCaseProps = Array.from(propsUsedInTemplate).map((prop) => camelToKebabCase(prop))
+
   return `
-  export const propsUsedInTemplate = [${Array.from(propsUsedInTemplate).join(',')}]
+  export const propsUsedInTemplate = [${kebabCaseProps.join(',')}]
   export default {
     dynamics: [${dynamics.join(',')}],
     listeners: [${listeners.join(',')}],

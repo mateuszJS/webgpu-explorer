@@ -1,0 +1,14 @@
+<svg viewBox="0 0 706 706" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="tooltips-icon-grad-1" x1="100%" x2="0%" y1="100%" y2="0%">
+            <stop offset="0%" stop-color="currentColor" />
+            <stop offset="100%" stop-color="currentColor" stop-opacity="0.2" />
+        </linearGradient>
+        <linearGradient id="tooltips-icon-grad-2" x1="0%" x2="100%" y1="0%" y2="100%">
+            <stop offset="0%" stop-color="currentColor" />
+            <stop offset="100%" stop-color="currentColor" stop-opacity="0.2" />
+        </linearGradient>
+    </defs>
+    <path fill="url(#tooltips-icon-grad-1)" fill-opacity="0.5" d="M702.139,116.221L702.139,271.84C702.139,327.714 656.777,373.076 600.903,373.076L595.689,373.076L595.993,492.013L493.259,373.076L243.443,373.076C187.57,373.076 142.208,327.714 142.208,271.84L142.208,116.221C142.208,60.347 187.57,14.985 243.443,14.985L600.903,14.985C656.777,14.985 702.139,60.347 702.139,116.221Z"/>
+    <path fill="url(#tooltips-icon-grad-2)" fill-opacity="0.3" d="M435.008,275.303L435.008,451.67C435.008,504.222 392.343,546.887 339.791,546.887L259.151,546.887L117.96,694.471L115.693,546.887L97.403,546.887C44.851,546.887 2.186,504.222 2.186,451.67L2.186,275.303C2.186,222.751 44.851,180.086 97.403,180.086L339.791,180.086C392.343,180.086 435.008,222.751 435.008,275.303Z"/>
+</svg>

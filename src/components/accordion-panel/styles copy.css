@@ -1,25 +1,42 @@
+/* :root {
+  interpolate-size: allow-keywords;
+} */
+
 accordion-panel {
+  /* border-radius: 10px;
+  background: linear-gradient(136deg, rgba(255, 255, 255, 0.067) 0%, rgba(255, 255, 255, 0.12) 20%, rgba(255, 255, 255, 0.067) 40%, rgba(255, 255, 255, 0.067) 65%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.067) 85%);
+  border: 2px solid #ffffff11;
+  isolation: isolate; */
+  align-items: center;
+  /* padding: 15px 25px; */
+
+  /* box-shadow: 0px 0px 11px 3px rgba(255, 255, 255, 0.1);
+  transition: background-color 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease;
+
+   */
+
   details summary::-webkit-details-marker {
     display: none;
   }
 
   .overflow-hidden {
     overflow: hidden;
-  }
 
-  .content-wrapper {
-    padding: 0 25px 15px;
+    > * {
+      padding: 0 25px 15px;
+    }
   }
 
   details::details-content {
+    content-visibility: auto; /* without it in chrome the grid doens't aniamte on first open */
+    transition: content-visibility 500ms;
+    transition-behavior: allow-discrete;
+  }
+
+  .wrapper {
     display: grid;
     grid-template-rows: 0fr;
-    content-visibility: auto; /* dirty hack for MacOS/Chrome where gird doesn't animate on first render.
-    I have no clue how exactly it works, my suspecion is that it triggers additional reflow which refreshes CSS inside.
-    Similar result can be achived just by opening devtools and clicking on details shadow root.
-    It doesn't impact accessibility/semantic since it's getting instantly overridden by browser Shadow root inline styles: "content-visibility: hidden;" */
-    transition: grid-template-rows 500ms, content-visibility 500ms;
-    transition-behavior: allow-discrete;
+    transition: grid-template-rows 500ms;
   }
 
   summary {
@@ -66,12 +83,12 @@ accordion-panel {
   }
 
   details[open] {
-    &::details-content {
-      grid-template-rows: 1fr;
-    }
-
     .chevron {
       transform: rotate(-135deg);
+    }
+
+    .wrapper {
+      grid-template-rows: 1fr;
     }
   }
 }

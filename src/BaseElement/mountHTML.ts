@@ -1,9 +1,9 @@
-import BaseElement from "BaseElement"
+import BaseElement from 'BaseElement'
 
 export default function mountHTML(root: BaseElement, html: HTMLTemplateElement | string) {
   const children = Array.from(root.childNodes) // make safe copy of children, it copies element, text nodes and comment
   // children has just html elements!, childNodes has all types of nodes
-  
+
   if (typeof html === 'string') {
     root.innerHTML = html
   } else {
@@ -20,10 +20,10 @@ export default function mountHTML(root: BaseElement, html: HTMLTemplateElement |
   root.slotParentNode = slot.parentElement!
   // Remember, we assume you can only update TEXT! You cannot update HTML Elements!
   // and update of text updates also neighbours(removes them)
-  // it;s being said, updated text is hte only one child of its parent
+  // it;s being said, updated text is the only one child of its parent
 
   if (slot && children.length > 0) {
-    children.forEach(child => {
+    children.forEach((child) => {
       slot.parentNode!.insertBefore(child, slot)
     })
     root.onChangeText?.()

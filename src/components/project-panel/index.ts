@@ -1,25 +1,29 @@
-import BaseElement from 'BaseElement';
+import BaseElement from 'BaseElement'
 import startIcon from './icons/start-icon.inline.svg'
 import triangleIcon from './icons/triangle-icon.inline.svg'
-import HEART, {propsUsedInTemplate} from './index.heart'
-import CSS from "./styles.css";
-import getTemplate from 'utils/getTemplate';
+import tooltipsIcon from './icons/tooltips-2-icon.inline.svg'
+import HEART, { propsUsedInTemplate } from './index.heart'
+import CSS from './styles.css'
+import getTemplate from 'utils/getTemplate'
 
 const MAP_IMG_SRC = {
   play: getTemplate(startIcon),
-/*
-convert CSS backgroudn gradient to SVG https://www.kmhcreative.com/downloads/CSS2SVG.htm
- background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
-            linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
-            linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
-*/
   triangle: getTemplate(triangleIcon),
+  tooltips: getTemplate(tooltipsIcon),
 }
 
 BaseElement.attachCSS(CSS)
 
+const tags = {
+  webgpu: 'WebGPU',
+  'web-components': `Web
+  Components`,
+  'html-css': 'HTML+CSS',
+  general: 'General',
+}
+
 class ProjectPanel extends BaseElement {
-  static observedAttributes = [...propsUsedInTemplate, 'icon', 'project-slug']
+  static observedAttributes = [...propsUsedInTemplate, 'icon']
 
   constructor() {
     super()
@@ -30,12 +34,20 @@ class ProjectPanel extends BaseElement {
     return HEART
   }
 
+  get debug() {
+    return 'project-panel'
+  }
+
   onChange_icon(icon: keyof typeof MAP_IMG_SRC | null) {
     if (!icon) throw Error('icon is mandary attribute! Cannot be falsy')
     const iconNode = MAP_IMG_SRC[icon].content.cloneNode(true)
     const svgNode = this.querySelector('svg')!
     svgNode.parentNode!.replaceChild(iconNode, svgNode)
   }
+
+  onChange_tagId(tagId: string | null) {
+    this.state.tagName = tags[tagId as keyof typeof tags]
+  }
 }
 
-window.customElements.define('project-panel', ProjectPanel);
+window.customElements.define('project-panel', ProjectPanel)

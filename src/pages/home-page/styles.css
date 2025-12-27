@@ -1,12 +1,9 @@
 home-page {
-  h1 {
-
-  }
-
   .hero-subtitle {
     text-align: center;
     font-size: 20px;
-    font-weight: 200;
+    font-weight: 300;
+    opacity: 0.7;
   }
 
   .panels-list {

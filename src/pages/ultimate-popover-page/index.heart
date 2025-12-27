@@ -1,0 +1,52 @@
+<article-wrapper>
+  <h1>Ultimate Popover Solution</h1>
+
+  <p>Are you the fan of components plug & play? Those ones you just add and magically works. We gonna explroe one of the
+    msot popular today!</p>
+
+  <h2>What's wrong with currently used popovers?</h2>
+  <p>Isn't it crazy how much JavaScript a popover/tooltip implementaiton requires and yet still might fail when trigger
+    moves around or dissapears. In almost every applciaiton there is always a case where popvoer is cut by the
+    screen/parent.
+    On the top of that tooltip contributes in non-trivial way to web applictions speed. Don't elive such a tiny detai
+    lcan imapct performance? YOu can checkout react devtools to see how much time is spend on rendering just tooltips
+    and claculatign their position. I'm not even gonna elaborate on more ca;culatio nregarding that little arrow poting
+    at tooltip/popvoer trigger. Today we are about to put stop to this misery.</p>
+
+
+  <a-h2 content="Enter Ultimate Popover" />
+  <p>New popover API arrived, it's baseline 2024 newly available. It can be used for tooltips, popovers and modals as
+    well! It leverages the power of CSS and HTML to provide stunning user experience without the need for JavaScript
+    libraries. Lack of Javascript allows your business logic to do not compete with tooltip implementation for computing
+    power of single tthreaded JS.</p>
+
+  <p>That's all sound good but... creating a popover is not that trivial even with new API, you have to:</p>
+  <ul>
+    <li>Be aware of containging block & inset-modified containing block to know how to correctly position popover</li>
+    <li>Ensure the trigger can be used as popover anchor(or anchors!). They both have to live in same containg block and
+      same DOM tree</li>
+    <li>Handle variosu edges cases especially with styling the border.</li>
+  </ul>
+
+  <p>That's why today we gonna take a look at implementation that should work in (almost) all cases.</p>
+
+  <h2>tl;dr if you wanna just code, copy CSS below and take a look how html example looks like.</h2>
+
+
+  <p>You staying here means curiosity has won today! Let's dive!</p>
+
+  <h3>Firstly, browser popover API</h3>
+  <p>We have received plenty of new toys to play with.</p>
+  <ul>
+    <li><code>Popover</code>- an attribute on popover to indicate the behaviour. Three valeus allowed
+      <code>auto</code>(default), <code>hint</code> and <code>manual</code>. First two can dismisse popover by clicking
+      outside the popvoer area or pressing Esc. General difference is that openign popvoer with type auto closes other
+      popover with type auto and similar with type <code>hint</code> which closes other popvoer with type
+      <code>hint</code>, unless popvoers are nested!. <a
+        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover">Read more on
+        MDN.</a>
+    </li>
+  </ul>
+
+
+</article-wrapper>

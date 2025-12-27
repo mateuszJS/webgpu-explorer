@@ -12,7 +12,7 @@ module.exports = function getStrInterpolationExpression(text, nameOfAdditionalSo
       const length = restOfText.indexOf('}')
 
       const {callback, inputs} = addSourcesToExpresion(
-        restOfText.slice(1, length), // 1 because 0 is {
+        restOfText.slice(1, length), // index of 1 because 0 is "{"
         nameOfAdditionalSource
       )
       i += length + 1

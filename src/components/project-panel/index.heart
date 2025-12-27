@@ -1,5 +1,8 @@
 <x-link to="/posts/{projectSlug}">
-  <svg></svg>
+  <div class="visual">
+    <svg></svg>
+    <p class="{tagId} tag"><span>{tagName}</span></p>
+  </div>
   <div>
     <h3>{headline}</h3>
     <p>{text}</p>

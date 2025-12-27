@@ -1,23 +1,19 @@
 {
-  "editor.formatOnSave": true,
-  "[javascript]": {
-    "editor.formatOnSave": false,
-  },
-  "[typescript]": {
-    "editor.formatOnSave": false,
-  },
-  "[html]": {
-    "editor.formatOnSave": false,
-  },
-  "editor.rulers": [
-    100
-  ],
   "vsicons.customIconFolderPath": "./.vscode",
   "vsicons.associations.files": [
     { "icon": "heart", "extensions": ["heart"], "format": "svg" }
   ],
   "files.associations": {
     "*.heart": "html",
+    "*.svg": "xml"
   },
-
+  "workbench.editorAssociations": {
+    "*.svg": "default"
+  },
+  // ESLint configuration
+  "eslint.format.enable": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  }
 }

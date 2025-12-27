@@ -1,13 +1,11 @@
-<details @transitionend="endTransition">
-  <summary @click="toggle">
+<details>
+  <summary>
     <span>{title}</span>
     <span class="chevron"></span>
   </summary>
-  <div class="content">
-    <div class="overflow-hidden">
-      <div class="wrapper">
-        <slot></slot>
-      </div>
+  <div class="overflow-hidden">
+    <div class="content-wrapper">
+      <slot></slot>
     </div>
   </div>
 </details>

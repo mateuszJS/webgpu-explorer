@@ -1,0 +1,4 @@
+<h2 id="{generatedId}">
+  <span>{content}</span>
+  <a class="anchor" href="#{generatedId}">#</a>
+</h2>

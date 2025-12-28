@@ -1,7 +1,8 @@
 import BaseElement from 'BaseElement'
 import startIcon from './icons/start-icon.inline.svg'
 import triangleIcon from './icons/triangle-icon.inline.svg'
-import tooltipsIcon from './icons/tooltips-2-icon.inline.svg'
+import tooltipsIcon from './icons/tooltips-icon.inline.svg'
+import cloudRaceIcon from './icons/cloud-race.inline.svg'
 import HEART, { propsUsedInTemplate } from './index.heart'
 import CSS from './styles.css'
 import getTemplate from 'utils/getTemplate'
@@ -10,6 +11,7 @@ const MAP_IMG_SRC = {
   play: getTemplate(startIcon),
   triangle: getTemplate(triangleIcon),
   tooltips: getTemplate(tooltipsIcon),
+  'cloud-race': getTemplate(cloudRaceIcon),
 }
 
 BaseElement.attachCSS(CSS)
@@ -20,6 +22,7 @@ const tags = {
   Components`,
   'html-css': 'HTML+CSS',
   general: 'General',
+  wasm: 'WebAssembly',
 }
 
 class ProjectPanel extends BaseElement {

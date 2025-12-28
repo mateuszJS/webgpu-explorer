@@ -16,11 +16,11 @@ project-panel {
   }
 
   /* transition: transform 0.3s ease; */
-  animation: .25s linear forwards --popout;
+  animation: 0.25s linear forwards --popout;
 
   &:hover {
     /* animation: .25s linear forwards --popin; */
-    animation: .25s linear normal forwards --popin ;
+    animation: 0.25s linear normal forwards --popin;
   }
 
   h3 {
@@ -51,20 +51,18 @@ project-panel {
       /* position absolute on span makes background loook like display block,
       not display inline when bakcgorudn is onl behidn word(not the whole element) */
       transform: skew(0deg, -17deg);
-        --bg: rgb(113, 96, 115);
-        font-size: 20px;
+      --bg: rgb(113, 96, 115);
+      font-size: 20px;
 
-
-      &:where(.html-css, .webgpu, .web-components, .general) span {
-        
+      span:not(:empty) {
         display: inline;
         /* width: 40px; */
 
         padding: 5px;
         color: white;
         font-family: 'Squada One', sans-serif;
-        font-variation-settings: "wdth" 60;
-        font-variation-settings: "wght" 900;
+        font-variation-settings: 'wdth' 60;
+        font-variation-settings: 'wght' 900;
         font-variation-settings: 'GRAD' 150;
         /* white-space: nowrap; */
         line-height: 1;
@@ -90,11 +88,13 @@ project-panel {
         left: -10px;
         font-size: 18px;
       }
-    }
 
+      &.wasm {
+        --bg: rgb(119, 0, 255);
+      }
+    }
   }
 }
-
 
 @keyframes --popin {
   0% {
@@ -112,7 +112,7 @@ project-panel {
   100% {
     transform: perspective(100px) rotateX(0deg) scale(1.075);
   }
-} 
+}
 
 @keyframes --popout {
   100% {
@@ -130,13 +130,4 @@ project-panel {
   0% {
     transform: perspective(100px) rotateX(0deg) scale(1.075);
   }
-} 
-
-
-
-
-
-
-
-
-
+}

@@ -4,8 +4,7 @@
     <span class="chevron"></span>
   </summary>
   <div class="overflow-hidden">
-    <div class="content-wrapper">
-      <slot></slot>
-    </div>
+    <slot></slot>
+    <div class="spacer" />
   </div>
 </details>

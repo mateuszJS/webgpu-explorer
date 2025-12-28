@@ -1,4 +1,4 @@
-<h1>WebGPU Explorer</h1>
+<h1 class="hero-title">WebGPU Explorer</h1>
 <h2 class="hero-subtitle">Welcome! Which boundary of the browser are we pushing today?</h2>
 <!-- <h2 class="hero-subtitle">Welcome! Which browser's limits do we challenge today?</h2> -->
 <section class="panels-list">

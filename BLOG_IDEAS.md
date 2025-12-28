@@ -10,5 +10,5 @@
 - Frontend Alchemy
 - Browser Sorcery
 
-Description:
+Subtitle:
 This is the palce where we push/stretch browser limitations to the boudnaries.

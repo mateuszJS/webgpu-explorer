@@ -1,24 +1,26 @@
 home-link {
   display: inline-block;
   flex: 0 0 auto;
-  --anim-delay: .15s;
+  --anim-delay: 0.15s;
+  --anim-time: 0.3s;
 
   .btn-content.btn-content {
     padding: 7px 8px;
     svg {
-      transition: .3s ease margin-inline-end;
+      transition: margin-inline-end var(--anim-time) ease;
     }
   }
 
   .label-container {
     display: grid;
     grid-template-columns: 0fr;
-    transition: grid-template-columns .3s;
+    transition: grid-template-columns var(--anim-time);
+    overflow: hidden;
   }
 
   .label {
-    overflow: hidden;
-    transition: .3s ease opacity var(--anim-delay);
+    min-width: 0;
+    transition: opacity var(--anim-time) ease var(--anim-delay);
     opacity: 1;
   }
 
@@ -36,5 +38,4 @@ home-link {
       margin-inline-end: 0;
     }
   }
-
 }

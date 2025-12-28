@@ -1,25 +1,33 @@
 accordion-panel {
+  &.glass > * {
+    --force: 0.1;
+  }
+
   details summary::-webkit-details-marker {
     display: none;
   }
 
   .overflow-hidden {
-    overflow: hidden;
+    min-height: 0; /* otherwise overflow-hidden won't hide */
   }
 
-  .content-wrapper {
-    padding: 0 25px 15px;
+  .spacer {
+    height: 15px;
   }
 
   details::details-content {
     display: grid;
     grid-template-rows: 0fr;
+    padding-inline: 25px;
     content-visibility: auto; /* dirty hack for MacOS/Chrome where gird doesn't animate on first render.
     I have no clue how exactly it works, my suspecion is that it triggers additional reflow which refreshes CSS inside.
     Similar result can be achived just by opening devtools and clicking on details shadow root.
     It doesn't impact accessibility/semantic since it's getting instantly overridden by browser Shadow root inline styles: "content-visibility: hidden;" */
-    transition: grid-template-rows 500ms, content-visibility 500ms;
+    transition-property: grid-template-rows, content-visibility;
     transition-behavior: allow-discrete;
+    transition-duration: 0.5s;
+    overflow: hidden; /* do NOT move it on gird children!
+    it makes weird additional cut like in half of children height */
   }
 
   summary {
@@ -44,6 +52,9 @@ accordion-panel {
     transform: translateY(calc(var(--size) * 0.2)) rotate(-45deg);
     transition: transform 0.3s;
     filter: drop-shadow(0 0 7px white);
+
+    background-image: linear-gradient(135deg, #ffffff55 0%, transparent 70%);
+    color: #ffffff97;
 
     &:before,
     &:after {

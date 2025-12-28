@@ -1,15 +1,15 @@
 @property --border-gradient-angle {
-  syntax: "<angle>";
+  syntax: '<angle>';
   inherits: true;
   initial-value: 0turn;
 }
 
 :root {
   --background: #060515;
-  --background-accent-a: #1846F750;
-  --background-accent-b: #A1458560;
-  --background-accent-c: #4556a160;
-  --background-accent-d: #a100ff1f;
+  --background-accent-a: #1846f735;
+  --background-accent-b: #a1458545;
+  --background-accent-c: #4556a145;
+  --background-accent-d: #a100ff15;
   /* --background-accent-d: #00ff151f; */
   /* --background-accent-d: #00ffff1f; */
   --text-secondary: #ffffffbb;
@@ -17,14 +17,16 @@
 }
 
 html {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   /* font-family: -apple-system, "system-ui", "Segoe UI", Roboto, Helvetica; */
   font-weight: 400;
   font-style: normal;
   color-scheme: dark;
 }
 
-html, body, main {
+html,
+body,
+main {
   height: 100%;
 }
 
@@ -35,15 +37,13 @@ main {
 body {
   color: var(--text-primary);
 
-  background: 
-    radial-gradient(20vw 20vw at 10% 10%, var(--background-accent-a), transparent),
+  background: radial-gradient(20vw 20vw at 10% 10%, var(--background-accent-a), transparent),
     radial-gradient(50vw 50vw at 90% 30%, var(--background-accent-d), transparent),
     radial-gradient(40vw 40vw at 20% 90%, var(--background-accent-b), transparent),
     radial-gradient(30vw 30vw at 75% 70%, var(--background-accent-c), transparent),
     var(--background);
 
-
-     /* background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+  /* background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
              linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
              linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
    background:
@@ -64,26 +64,25 @@ body {
    ); */
   background-size: contain;
   background-repeat: no-repeat;
-  
 }
 
 .view {
   height: 100%;
   overflow: auto; /*to prevents vertical margins from transfering from children*/
-  transition: transform .5s ease, opacity .5s ease;
+  transition: transform 0.5s ease, opacity 0.5s ease;
   transform: translateY(0px);
   opacity: 1;
 
   &.delay {
-    transition-delay: .1s;
+    transition-delay: 0.1s;
   }
-  
+
   &.new {
     transform: translateY(30px);
     opacity: 0;
     /* transition-delay: 5s; */
   }
-  
+
   &.old {
     transform: translateY(-30px);
     opacity: 0;
@@ -91,7 +90,6 @@ body {
     width: 100%; /* remember position absoltue work as inline, shrinks width */
     transition-delay: 0;
     /* transition-delay: 5s;  this one works, odl one stays!!!! */
-
   }
 }
 
@@ -100,23 +98,18 @@ body {
 }
 
 h1 {
-  text-align: center;
   font-size: 70px;
   font-weight: 200;
   margin-block-start: 70px;
   margin-block-end: 30px;
-  text-shadow: 0 0 15px #fff;
+  text-shadow: 0 0 15px #fff, 0 0 15px #ffffff91;
 }
 
 .glass {
   border-radius: 15px; /* adds interesting accent at the corners */
   box-shadow: 0px 0px 11px 3px rgba(255, 255, 255, 0.1);
   transition: 0.5s ease;
-  transition-property:
-    background-color,
-    transform,
-    box-shadow,
-    border;
+  transition-property: background-color, transform, box-shadow, border;
 
   & > * {
     display: block;
@@ -128,10 +121,10 @@ h1 {
     background: linear-gradient(
       136deg,
       rgba(255, 255, 255, calc(0.25 * var(--force))) 0%,
-      rgba(255, 255, 255, calc(1 * var(--force))) 20%, 
-      rgba(255, 255, 255, calc(0.45 * var(--force))) 40%, 
-      rgba(255, 255, 255, calc(0.65 * var(--force))) 65%, 
-      rgba(255, 255, 255, calc(0.4 * var(--force))) 75%, 
+      rgba(255, 255, 255, calc(1 * var(--force))) 20%,
+      rgba(255, 255, 255, calc(0.45 * var(--force))) 40%,
+      rgba(255, 255, 255, calc(0.65 * var(--force))) 65%,
+      rgba(255, 255, 255, calc(0.4 * var(--force))) 75%,
       rgba(255, 255, 255, calc(0.55 * var(--force))) 85%
     );
     /* --force: 0.12;

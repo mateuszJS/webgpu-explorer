@@ -1,52 +1,164 @@
 <article-wrapper>
   <h1>Ultimate Popover Solution</h1>
 
-  <p>Are you the fan of components plug & play? Those ones you just add and magically works. We gonna explroe one of the
-    msot popular today!</p>
+  <p>Are you the fan of the components plug & play? Those ones that you just add and magically works. Today we are going
+    to utilize modern browser API to build popover like this, framework agnostic, just add CSS file to your project
+    and place your popover in HTML/JSX/Template, wherever you want.</p>
 
-  <h2>What's wrong with currently used popovers?</h2>
-  <p>Isn't it crazy how much JavaScript a popover/tooltip implementaiton requires and yet still might fail when trigger
-    moves around or dissapears. In almost every applciaiton there is always a case where popvoer is cut by the
-    screen/parent.
-    On the top of that tooltip contributes in non-trivial way to web applictions speed. Don't elive such a tiny detai
-    lcan imapct performance? YOu can checkout react devtools to see how much time is spend on rendering just tooltips
-    and claculatign their position. I'm not even gonna elaborate on more ca;culatio nregarding that little arrow poting
-    at tooltip/popvoer trigger. Today we are about to put stop to this misery.</p>
-
-
-  <a-h2 content="Enter Ultimate Popover" />
-  <p>New popover API arrived, it's baseline 2024 newly available. It can be used for tooltips, popovers and modals as
-    well! It leverages the power of CSS and HTML to provide stunning user experience without the need for JavaScript
-    libraries. Lack of Javascript allows your business logic to do not compete with tooltip implementation for computing
-    power of single tthreaded JS.</p>
-
-  <p>That's all sound good but... creating a popover is not that trivial even with new API, you have to:</p>
-  <ul>
-    <li>Be aware of containging block & inset-modified containing block to know how to correctly position popover</li>
-    <li>Ensure the trigger can be used as popover anchor(or anchors!). They both have to live in same containg block and
-      same DOM tree</li>
-    <li>Handle variosu edges cases especially with styling the border.</li>
-  </ul>
-
-  <p>That's why today we gonna take a look at implementation that should work in (almost) all cases.</p>
-
-  <h2>tl;dr if you wanna just code, copy CSS below and take a look how html example looks like.</h2>
-
+  <p><strong class="tldr">tl;dr</strong> if you wanna just code, copy <a href="Github">this CSS</a></p>
+  <iframe height="300" style="width: 100%;" scrolling="no" title="Untitled"
+    src="https://codepen.io/mateuszJS/embed/azZzyQx?default-tab=html%2Cresult" frameborder="no" loading="lazy"
+    allowtransparency="true">
+    See the Pen <a href="https://codepen.io/mateuszJS/pen/azZzyQx">
+      Untitled</a> by Mateusz (<a href="https://codepen.io/mateuszJS">@mateuszJS</a>)
+    on <a href="https://codepen.io">CodePen</a>.
+  </iframe>
 
   <p>You staying here means curiosity has won today! Let's dive!</p>
 
-  <h3>Firstly, browser popover API</h3>
-  <p>We have received plenty of new toys to play with.</p>
+
+
+  <h2>Why yet another popover implementation?</h2>
+  <p>If you have been doing frontend for a while you might have noticed there are tons of popover/tooltips
+    implementations. Sometimes they work, sometimes they render off the screen, sometimes styling is limited. Yet the
+    biggest issue is their performance. Reacting to changes in layout and keep recalculating a position in JS might not
+    seem
+    like a lot. The situation quickly changes if you have a list, table or just lots of buttons with tooltips. Suddenly
+    your
+    10ms spend on just attaching listeners and using <a
+      href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect" target="_blank">Bounding
+      box</a>/<a href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver"
+      target="_blank">ResizeObserver</a> to calculate initial position grows to 1 second! Doesn't it sound silly?
+    Slowing down the app due to something that trivial like tooltips?</p>
+
+  <!-- <p>And that god damn arrow! YOu mgih heck radix-ui implemtnatio nt osee how much logic needs to be ddicated to get the positio nright!</p> -->
+
+
+
+  <!-- <h2>Alright but what's wrong current popovers?</h2>
+  <p>If you build frotnend for a while you probably had to use a library for tooltip/popovers/dialogs. Isn't it crazy
+    how much JavaScript a popover/tooltip implementation requires and yet still might fail when trigger moves around or
+    dissapears.
+    On the top of that those little tiny tooltips contributes to overall performance of your project. You might think,
+    no way, , lots of JS needs to be loaded and even more has to be executed on. Don't elive such a tiny detai
+    lcan imapct performance? YOu can checkout react devtools to see how much time is spend on rendering just tooltips
+    and claculatign their position. I'm not even gonna elaborate on more ca;culatio nregarding that little arrow poting
+    at tooltip/popvoer trigger. Today we are about to put stop to this misery.</p> -->
+
+
+  <a-h2 content="New Popover API" />
+  <p>New popover API arrived, it's baseline 2024 newly available. It can be used for tooltips, popovers and modals as
+    well! It leverages the power of CSS and HTML to provide stunning user experience without a need for JavaScript
+    library. Lack of Javascript allows your business logic to do not compete with tooltips for computing
+    power of single tthreaded JS.</p>
+
+  <p>That's all sound good but... creating a popover is not that trivial, even with new API, you have to:</p>
   <ul>
-    <li><code>Popover</code>- an attribute on popover to indicate the behaviour. Three valeus allowed
+    <li>Be aware of containin block & inset-modified containing block to know how to correctly position popover</li>
+    <li>Ensure the trigger can be used as popover anchor. They both have to live in same containg block and
+      same DOM tree</li>
+    <li>Handle various edge cases with positioning tooltip when the space is limited.</li>
+  </ul>
+
+  <p>That's why today we gonna take a look at implementation that should work in (hopefully) all cases.</p>
+
+
+  <h3>What exactly new API gives us?</h3>
+  <p>We have received plenty of new tools to play with. The ones we are going to use today are:</p>
+  <ul>
+    <li>
+      HTML attribute <code>Popover</code>- an attribute on popover to indicate the behaviour. Three values allowed
       <code>auto</code>(default), <code>hint</code> and <code>manual</code>. First two can dismisse popover by clicking
-      outside the popvoer area or pressing Esc. General difference is that openign popvoer with type auto closes other
-      popover with type auto and similar with type <code>hint</code> which closes other popvoer with type
-      <code>hint</code>, unless popvoers are nested!. <a
+      outside the popvoer area or pressing Esc, last one require manual click on tirgger/closing button to dismiss.
+      General difference between <code>auto</code> and code>hint</code> is that opening popvoer with type
+      <code>auto</code> closes other
+      popover with type <code>auto</code> and opening popover with type <code>hint</code> closes other popovers with
+      type
+      <code>hint</code>, unless popovers are nested!. <a
         href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover">Read more on
         MDN.</a>
     </li>
+    <li>
+      HTML attribute <code>popovertarget</code> - Turn a button into trigger for a popover. This attibute expect id of
+      the popover as
+      the
+      value. Read more on <a
+        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button#popovertarget"
+        target="_blank">MDN</a>.
+    </li>
+    <li>
+      CSS rule <code>position-anchor</code> - allows to position the popover relative to the desired element/trigger.
+      Along with that new CSS math function can be used <code>anchor()</code> which accept <code>inset</code>
+      properties(<code>top</code>, <code>right</code>, <code>bottom</code>, <code>left</code>) and return
+      <code>length</code> value.
+    </li>
+    <li>
+      CSS rule <code>anchor-name</code> - allows an element to be used as an anchor for popover positioning.
+    </li>
   </ul>
+
+  <h3>Enough of introductions, lets start!</h3>
+  <p>Firstly, we need some HTML with trigger(a button) and popover(a div).</p>
+
+  <iframe height="379" style="width: 100%;" scrolling="no" title="Ultimate Popover - Initial Structure"
+    src="https://codepen.io/mateuszJS/embed/zxBGYGq?default-tab=html%2Cresult&editable=true" frameborder="no"
+    loading="lazy" allowtransparency="true">
+    See the Pen <a href="https://codepen.io/mateuszJS/pen/zxBGYGq">
+      Ultimate Popover - Initial Structure</a> by Mateusz (<a href="https://codepen.io/mateuszJS">@mateuszJS</a>)
+    on <a href="https://codepen.io">CodePen</a>.
+  </iframe>
+
+  <p>As you can see, nothing is happening there... YET!</p>
+
+  <p>Now, let's create a connection between trigger and popover. As discussed before, we have to add
+    <code>popover</code> attribute to turn div into actual popover and we also need to connect button via attribute
+    <code>popovertarget</code> to turn it into a trigger and as a value provide id of our div/popover.
+  </p>
+  <iframe height="300" style="width: 100%;" scrolling="no" title="Ultimate Popover - New API"
+    src="https://codepen.io/mateuszJS/embed/raLVNWe?default-tab=html%2Cresult&editable=true" frameborder="no"
+    loading="lazy" allowtransparency="true">
+    See the Pen <a href="https://codepen.io/mateuszJS/pen/raLVNWe">
+      Ultimate Popover - New API</a> by Mateusz (<a href="https://codepen.io/mateuszJS">@mateuszJS</a>)
+    on <a href="https://codepen.io">CodePen</a>.
+  </iframe>
+  <p>Try to click on the button!</p>
+  <p>YES! Disgusting popover just covered our button! Since we have chosen value of popover different than
+    <code>manual</code> we can close popover by pressing Esc or clicking outside popover area.
+  </p>
+
+  <p>As you can see, we have used <code>popovertarget</code> with the id of the popover and also div itself received a
+    popover
+    attribute to turn it into actual popover. And the results are:</p>
+
+
+  <h3>Popover position</h3>
+  <p>Before anytihng else, lets fix that poor positioning of our popover.</p>
+  <p>But firstly let's refresh some fundaments of CSS.</p>
+  <p>I'm sure you have used <code>position: absolute</code> or <code>fixed</code> many times. The element that you are
+    positioning this way uses closest ansestor with containing block and also can create own inset-modified containing
+    block. The similar way we can position our popover with brand new math function <code>anchor()</code>.</p>
+
+  <accordion-panel title="What is a contain block & inset-modified containing block?">
+    <p>Containing block is an ancestor element that defines the coordinate system for positioning an element. An
+      element's containing block is determined by the nearest ancestor that has a position value other than static
+      (i.e., relative, absolute, fixed, or sticky) or certain CSS properties like transform, filter, perspective, etc.
+    </p>
+
+    <p>Inset-modified containing block is a special type of containing block that is created when an element has certain
+      CSS properties applied to it, such as transform, filter, perspective, or will-change. These properties create a
+      new coordinate system for the element and its descendants, allowing for more complex positioning and layout
+      behaviors.</p>
+  </accordion-panel>
+
+  <h3>Using anchor() for positioning</h3>
+  Function <code>anchor()</code> accepts inset properties(<code>top</code>, <code>right</code>, <code>bottom</code>,
+  <code>left</code>). Additionaly we can provide which anchor are we using. Function returns <code>&ltlength&gt</code>
+  value. Because it's a <code>&ltlength&gt</code>length.
+
+  <p class="warning"><code>anchor()</code> function can be used only in <a
+      href="https://developer.mozilla.org/en-US/docs/Glossary/Inset_properties" target="_blank">inset properties</a>
+  </p>
+
 
 
 </article-wrapper>

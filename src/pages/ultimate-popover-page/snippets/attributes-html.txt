@@ -1,0 +1,7 @@
+<button popovertarget="my-popover">
+  Popover trigger
+</button>
+
+<div id="my-popover" popover="auto">
+  Content of the popover
+</div>

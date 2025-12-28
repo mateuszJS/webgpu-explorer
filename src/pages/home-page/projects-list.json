@@ -2,7 +2,7 @@
   {
     "icon": "play",
     "projectSlug": "webgpu-setup",
-    "headline": "Setup, Set, Go!",
+    "headline": "WebGPU Setup",
     "tagId": "webgpu",
     "text": "Skip the struggle. Build strong knowledge about WebGPU fundation quickly!"
   },
@@ -10,7 +10,7 @@
     "icon": "triangle",
     "projectSlug": "webgpu-triangle",
     "headline": "Triangle",
-    "tagId": "html-css",
+    "tagId": "webgpu",
     "text": "The Triangle - fundamental element of modern rendering."
   },
   {
@@ -23,15 +23,29 @@
   {
     "icon": "triangle",
     "projectSlug": "project-2",
-    "headline": "Triangle",
-    "tagId": "general",
-    "text": "The fundamental element of modern rendering - triangle."
+    "headline": "Getting rid of React",
+    "tagId": "web-components",
+    "text": "A wild attempt to replace react with \"simple\" implementation using web components."
   },
   {
     "icon": "triangle",
     "projectSlug": "project-2",
-    "headline": "Triangle",
-    "tagId": "web-components",
-    "text": "The fundamental element of modern rendering - triangle."
+    "headline": "WASM Benchmarks",
+    "tagId": "wasm",
+    "text": "Let's take a look at most popular choices to write WebAssembly: Rust, Zig and C++"
+  },
+  {
+    "icon": "tooltips",
+    "projectSlug": "animate-size-css-page",
+    "headline": "Animate Height Auto",
+    "tagId": "html-css",
+    "text": "Still living in the era when height auto is not animatable? Let's debunk those myths!"
+  },
+  {
+    "icon": "cloud-race",
+    "projectSlug": "project-2",
+    "headline": "Cloud benchmarks",
+    "tagId": "cloud",
+    "text": "Sharing my reseearch to choose cloud provider for the next project."
   }
 ]

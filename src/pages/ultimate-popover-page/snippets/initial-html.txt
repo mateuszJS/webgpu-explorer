@@ -1,0 +1,7 @@
+<button>
+  Popover trigger
+</button>
+
+<div>
+  Content of the popover
+</div>

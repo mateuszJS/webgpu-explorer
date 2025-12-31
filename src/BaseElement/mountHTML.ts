@@ -12,7 +12,7 @@ export default function mountHTML(root: BaseElement, html: HTMLTemplateElement |
     root.appendChild(node) // attach content of the template
   }
 
-  // how to save the posotion of the slot to use it later?
+  // how to save the position of the slot to use it later?
   const slot = root.querySelector('slot')
 
   if (!slot) return

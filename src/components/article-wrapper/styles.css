@@ -2,6 +2,8 @@ article-wrapper {
   --code-background: #272822;
   nav {
     padding: 20px;
+    position: fixed;
+    top: 0;
   }
 
   .content-grid {

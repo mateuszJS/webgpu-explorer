@@ -5,7 +5,35 @@
     to utilize modern browser API to build popover like this, framework agnostic, just add CSS file to your project
     and place your popover in HTML/JSX/Template, wherever you want.</p>
 
+  <h1>WebM WITH RECORDED POPOVER</h1>
+
   <p><strong class="tldr">tl;dr</strong> if you wanna just code, copy <a href="Github">this CSS</a></p>
+  <p>You can:</p>
+  <ul>
+    <li>
+      Specify position of the popover, just add class <code>top</code>, <code>bottom</code>, <code>left</code>.
+      By default popover has position right if no class specified.
+    </li>
+    <li>
+      Specify behaviour of popover. If you want popvoer to be dissmised on click outside the popover area/press
+      Escape, use attribute
+      <code>popover</code> with value <code>auto</code> or <code>hint</code>. If you want users to manually click on
+      trigger/closing button to dismiss use value <code>manual</code>. <span>Read more about <code>popover</code>
+        attribute on
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover"
+          target="_blank">MDN.</a></span>
+    </li>
+    <li>Size of the arrow can be set by CSS variables <code>--arrow-size</code>. If not specified size will be relative
+      to the <code>font-size</code>.
+    </li>
+    <li>Push popover by simply specifying <code>margin</code> on popover element.</li>
+  </ul>
+
+  <p class="fireworks">
+    Position of the tooltip, position of the arrow will be calculated automatically! Also arrows inherits style like
+    background or border! There is no need for special styling dedicated for the arrow, just style popover element.
+  </p>
+
   <iframe height="300" style="width: 100%;" scrolling="no" title="Untitled"
     src="https://codepen.io/mateuszJS/embed/azZzyQx?default-tab=html%2Cresult" frameborder="no" loading="lazy"
     allowtransparency="true">
@@ -14,13 +42,18 @@
     on <a href="https://codepen.io">CodePen</a>.
   </iframe>
 
+  <p class="warning">
+    This solution works in Chrome
+  </p>
+
   <p>You staying here means curiosity has won today! Let's dive!</p>
-
-
 
   <h2>Why yet another popover implementation?</h2>
   <p>If you have been doing frontend for a while you might have noticed there are tons of popover/tooltips
-    implementations. Sometimes they work, sometimes they render off the screen, sometimes styling is limited. Yet the
+    implementations. Sometimes they work, sometimes they render off the screen, sometimes styling is limited.
+  </p>
+  <p>
+    Yet the
     biggest issue is their performance. Reacting to changes in layout and keep recalculating a position in JS might not
     seem
     like a lot. The situation quickly changes if you have a list, table or just lots of buttons with tooltips. Suddenly
@@ -28,7 +61,9 @@
     10ms spend on just attaching listeners and using <a
       href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect" target="_blank">Bounding
       box</a>/<a href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver"
-      target="_blank">ResizeObserver</a> to calculate initial position grows to 1 second! Doesn't it sound silly?
+      target="_blank">ResizeObserver</a> to calculate initial position grows to 1 second!
+  </p>
+  <p>Doesn't it sound silly?
     Slowing down the app due to something that trivial like tooltips?</p>
 
   <!-- <p>And that god damn arrow! YOu mgih heck radix-ui implemtnatio nt osee how much logic needs to be ddicated to get the positio nright!</p> -->
@@ -48,9 +83,9 @@
 
   <a-h2 content="New Popover API" />
   <p>New popover API arrived, it's baseline 2024 newly available. It can be used for tooltips, popovers and modals as
-    well! It leverages the power of CSS and HTML to provide stunning user experience without a need for JavaScript
+    well! It's pure CSS and HTML without a need for JavaScript
     library. Lack of Javascript allows your business logic to do not compete with tooltips for computing
-    power of single tthreaded JS.</p>
+    power of single threaded JS.</p>
 
   <p>That's all sound good but... creating a popover is not that trivial, even with new API, you have to:</p>
   <ul>
@@ -58,9 +93,11 @@
     <li>Ensure the trigger can be used as popover anchor. They both have to live in same containg block and
       same DOM tree</li>
     <li>Handle various edge cases with positioning tooltip when the space is limited.</li>
+    <li>And yes, that little visious arrow 👹</li>
   </ul>
 
-  <p>That's why today we gonna take a look at implementation that should work in (hopefully) all cases.</p>
+  <p>That's why today we gonna take a look at implementation that should work in (hopefully) all cases, so we can
+    implement it once and just reuse it across all our projects.</p>
 
 
   <h3>What exactly new API gives us?</h3>
@@ -122,17 +159,17 @@
     on <a href="https://codepen.io">CodePen</a>.
   </iframe>
   <p>Try to click on the button!</p>
-  <p>YES! Disgusting popover just covered our button! Since we have chosen value of popover different than
+  <p>YES! Not the prettiest popover just covered our button! Since we have chosen value of popover different than
     <code>manual</code> we can close popover by pressing Esc or clicking outside popover area.
   </p>
 
   <p>As you can see, we have used <code>popovertarget</code> with the id of the popover and also div itself received a
     popover
-    attribute to turn it into actual popover. And the results are:</p>
+    attribute to turn it into actual popover. Magic ✨</p>
 
 
   <h3>Popover position</h3>
-  <p>Before anytihng else, lets fix that poor positioning of our popover.</p>
+  <p>Before anything else, lets fix that poor positioning of our popover.</p>
   <p>But firstly let's refresh some fundaments of CSS.</p>
   <p>I'm sure you have used <code>position: absolute</code> or <code>fixed</code> many times. The element that you are
     positioning this way uses closest ansestor with containing block and also can create own inset-modified containing
@@ -151,9 +188,10 @@
   </accordion-panel>
 
   <h3>Using anchor() for positioning</h3>
-  Function <code>anchor()</code> accepts inset properties(<code>top</code>, <code>right</code>, <code>bottom</code>,
-  <code>left</code>). Additionaly we can provide which anchor are we using. Function returns <code>&ltlength&gt</code>
-  value. Because it's a <code>&ltlength&gt</code>length.
+  <p>Function <code>anchor()</code> accepts inset properties(<code>top</code>, <code>right</code>, <code>bottom</code>,
+    <code>left</code>). Additionaly we can provide which anchor are we using. Function returns <code>&ltlength&gt</code>
+    value. Because it's a <code>&ltlength&gt</code>length.
+  </p>
 
   <p class="warning"><code>anchor()</code> function can be used only in <a
       href="https://developer.mozilla.org/en-US/docs/Glossary/Inset_properties" target="_blank">inset properties</a>

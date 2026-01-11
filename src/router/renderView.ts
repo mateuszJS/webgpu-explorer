@@ -44,7 +44,7 @@ export default function renderView(tagName: PageTagName, doneCallback: VoidFunct
   if (isDuringTransition) return
   isDuringTransition = true
 
-  const currView = document.main.querySelector('.view')
+  const currView = document.main.querySelector<HTMLDivElement>('.view')
 
   document.main.classList.add('in-transition')
 
@@ -57,9 +57,9 @@ export default function renderView(tagName: PageTagName, doneCallback: VoidFunct
   // but not in case for a new element(commtied changes) apparently
   // transition-delay on .new class doesn't work
   document.main.appendChild(newView)
-  
+
   newView.offsetLeft // just triggerring submit changes, reflow & repaint
-  
+
   newView.classList.remove('new')
 
   function removeArtifacts(event: TransitionEvent) {
@@ -71,10 +71,10 @@ export default function renderView(tagName: PageTagName, doneCallback: VoidFunct
 
     document.main.classList.remove('in-transition')
 
-    newView.removeEventListener("transitionend", removeArtifacts);
+    newView.removeEventListener('transitionend', removeArtifacts)
     isDuringTransition = false
     doneCallback()
   }
 
-  newView.addEventListener("transitionend", removeArtifacts);
+  newView.addEventListener('transitionend', removeArtifacts)
 }

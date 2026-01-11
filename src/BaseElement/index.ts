@@ -1,13 +1,13 @@
-import { subscribeUrl } from "router"
-import mountHTML from "./mountHTML"
-import {getStorage, setStorage} from 'complex-storage'
-import { PageDetails } from "router/renderView"
+import { subscribeUrl } from 'router'
+import mountHTML from './mountHTML'
+import { getStorage, setStorage } from 'complex-storage'
+import { PageDetails } from 'router/renderView'
 
 type State = Record<string, any>
 type EventHandler = (e: Event, elWithListener: HTMLElement, additionalSource?: unknown) => void
 
 // all camelCaseToKebab is used in loader only
-const kebabToCamelCase = (str: string) => str.replace(/-[a-z]/g, chars => chars[1].toUpperCase());
+const kebabToCamelCase = (str: string) => str.replace(/-[a-z]/g, (chars) => chars[1].toUpperCase())
 
 export default class BaseElement extends HTMLElement {
   public slotParentNode?: HTMLElement // used only in mountHTML
@@ -17,7 +17,7 @@ export default class BaseElement extends HTMLElement {
 
   static attachCSS(source: string) {
     // we may also check if already doesn't exist, because of inital SSG HTML
-    const style = document.createElement("style")
+    const style = document.createElement('style')
     style.textContent = source
     document.head.appendChild(style)
   }
@@ -25,19 +25,22 @@ export default class BaseElement extends HTMLElement {
   constructor(initialState: State = {}) {
     super()
 
-    const observedAttrs = (this.constructor as unknown as { observedAttributes?: string[] }).observedAttributes || []
+    const observedAttrs =
+      (this.constructor as unknown as { observedAttributes?: string[] }).observedAttributes || []
 
     /* ========= PHASE 1: initialize state ==========*/
     this.state = initialState
 
-    Array.from(this.attributes).forEach(attr => {
-      if (observedAttrs.includes(attr.nodeName)) { // call callback only for tracked attributes
+    Array.from(this.attributes).forEach((attr) => {
+      if (observedAttrs.includes(attr.nodeName)) {
+        // call callback only for tracked attributes
         this.attributeChangedCallback(attr.nodeName, null, attr.nodeValue as string)
       }
       // how is it even posssible that this.attribute(NamedNodeMap) can have value null??
     })
 
-    const observedUrlParams = (this.constructor as unknown as { observedUrlParams?: string[] }).observedUrlParams
+    const observedUrlParams = (this.constructor as unknown as { observedUrlParams?: string[] })
+      .observedUrlParams
     if (observedUrlParams) {
       this.unsubscribeUrl = subscribeUrl(this.onChangeUrlParams)
     }
@@ -45,9 +48,9 @@ export default class BaseElement extends HTMLElement {
     /* ========= PHASE 2: perform mounting of HTML ==========*/
 
     if (!this.getAttribute('hydration')) {
-      const {dynamics, html} = this.heart
+      const { dynamics, html } = this.heart
       mountHTML(this, html)
-      dynamics.forEach(dynamic => this.updateDynamic(dynamic))
+      dynamics.forEach((dynamic) => this.updateDynamic(dynamic))
     } else {
       this.removeAttribute('hydration')
     }
@@ -67,34 +70,37 @@ export default class BaseElement extends HTMLElement {
         obj[prop] = value
         this.onStateChange(prop)
         return true
-      }
-    };
+      },
+    }
 
     this.state = new Proxy(this.state, handler)
   }
 
-
   // TODO: Handle multiple params changing,
   private onChangeUrlParams = (pageDetails: PageDetails) => {
-    const observedUrlParams = (this.constructor as unknown as { observedUrlParams?: string[] }).observedUrlParams
+    const observedUrlParams = (this.constructor as unknown as { observedUrlParams?: string[] })
+      .observedUrlParams
     if (!observedUrlParams) return
 
     /*
       So this.state updates, 
     */
-    observedUrlParams.forEach(paramName => {
+    observedUrlParams.forEach((paramName) => {
       const value = pageDetails.params?.[paramName] || pageDetails.query?.[paramName]
-      if (this.state[paramName] !== value) { // TODO: check if needed
+      if (this.state[paramName] !== value) {
+        // TODO: check if needed
         this.state[paramName] = value
       }
     })
   }
 
-  get heart(): Heart { // abstract
-    return {dynamics: [], html: '', listeners: []}
+  get heart(): Heart {
+    // abstract
+    return { dynamics: [], html: '', listeners: [] }
   }
 
-  get debug() { // abstract
+  get debug() {
+    // abstract
     return ''
   }
 
@@ -103,16 +109,14 @@ export default class BaseElement extends HTMLElement {
   attributeChangedCallback(kebabCaseName: string, _oldVal: string | null, newVal: string | null) {
     const name = kebabToCamelCase(kebabCaseName)
 
-    this.state[name] = newVal?.[0] === '#'
-      ? getStorage(newVal)
-      : newVal
+    this.state[name] = newVal?.[0] === '#' ? getStorage(newVal) : newVal
   }
 
   onStateChange(name: string) {
     // TODO, if we change multiple props, we call same dynamic multiple time
     // the following part should be called when JS stack is empty
 
-    this.heart.dynamics.forEach(dynamic => {
+    this.heart.dynamics.forEach((dynamic) => {
       if (dynamic.inputs.includes(name)) {
         this.updateDynamic(dynamic)
       }
@@ -122,14 +126,14 @@ export default class BaseElement extends HTMLElement {
   }
 
   callOnChangeCallback(propName: string) {
-    const callbackName = 'onChange_' + propName as keyof typeof this
+    const callbackName = ('onChange_' + propName) as keyof typeof this
     ;(this[callbackName] as Function)?.(this.state[propName])
   }
 
   updateDynamic = (
     dynamic: Dynamic,
     nodeQueryScope: BaseElement | HTMLElement = this,
-    additionalSource?: unknown,
+    additionalSource?: unknown
   ) => {
     // TODO: doesn't work if x-for is on the same node as dynamics!
     // TODO: would be great to move it to just x-for case, not for every dynamic
@@ -147,12 +151,14 @@ export default class BaseElement extends HTMLElement {
         // TODO: supprot removing, replacing, adding
         const allItems = Array.from(node.children) as HTMLElement[] // not sure if it's the right assuption
         allItems.forEach((el, index) => {
-          dynamic.loop!.dynamics.forEach(loopDynamic => this.updateDynamic(loopDynamic, el, list[index]))
+          dynamic.loop!.dynamics.forEach((loopDynamic) =>
+            this.updateDynamic(loopDynamic, el, list[index])
+          )
         })
         // TODO: remove them also!!!!
         return
       }
-      
+
       if (!list) return
       const html = list.reduce((acc, item) => {
         return acc + dynamic.loop!.html
@@ -162,7 +168,9 @@ export default class BaseElement extends HTMLElement {
 
       const allItems = Array.from(node.children) as HTMLElement[] // not sure if it's the right assuption
       allItems.forEach((el, index) => {
-        dynamic.loop!.dynamics.forEach(loopDynamic => this.updateDynamic(loopDynamic, el, list[index]))
+        dynamic.loop!.dynamics.forEach((loopDynamic) =>
+          this.updateDynamic(loopDynamic, el, list[index])
+        )
         this.attachListeners(dynamic.loop!.listeners, el, list[index])
       })
       // TODO: remove them also!!!!
@@ -170,20 +178,16 @@ export default class BaseElement extends HTMLElement {
     }
 
     const sourceAttrValue = dynamic.sourceAttr(this, additionalSource)
-    
+
     if (dynamic.destAttr) {
       if (dynamic.destAttr === 'x-if') {
         // we can remove but then we lose ability to reattach
         // maybe we should just replace it with <template> with h3t-selector???
-
         // And similar could be done with <slot> and x-for
-
         // or maybe just smart way ot locating those positions depending on paren and order level?
         // but that might be really difficuly
-
         // also what about x-if inside x-if??????
       }
-
 
       // attribute
       if (sourceAttrValue === null || sourceAttrValue === undefined) {
@@ -191,22 +195,19 @@ export default class BaseElement extends HTMLElement {
         return
       }
 
-      const value = typeof sourceAttrValue === 'string'
-        ? sourceAttrValue
-        : setStorage(sourceAttrValue)
+      const value =
+        typeof sourceAttrValue === 'string' ? sourceAttrValue : setStorage(sourceAttrValue)
       node.setAttribute(dynamic.destAttr, value)
     } else {
-      if(this.debug) {
-        console.log(dynamic)
-      }
-
       // if we assign textContent before node is mounted, then we override slotParentNode?
 
       // textContent
       // TODO: check if that component is even mounted yet!
-      if ('slotParentNode' in node) { // gives false
+      if ('slotParentNode' in node) {
+        // gives false
         node.slotParentNode!.textContent = sourceAttrValue
-        if ('onChangeText' in node) { // gives false
+        if ('onChangeText' in node) {
+          // gives false
           node.onChangeText?.()
         }
       } else {
@@ -218,7 +219,7 @@ export default class BaseElement extends HTMLElement {
   }
 
   private callAllOnChangeCallbacks() {
-    Object.keys(this.state).forEach(name => {
+    Object.keys(this.state).forEach((name) => {
       this.callOnChangeCallback(name)
     })
   }
@@ -234,7 +235,7 @@ export default class BaseElement extends HTMLElement {
   ) {
     // 99% of the complication of this fuction comes from x-for directive
     const baseElementContext = this
-    listeners.forEach(listener => {
+    listeners.forEach((listener) => {
       const node = (
         querySelectScope.matches(listener.selector)
           ? querySelectScope // only useful for loops
@@ -243,8 +244,12 @@ export default class BaseElement extends HTMLElement {
 
       // const node = querySelectScope.querySelector<HTMLElement>(listener.selector)!
 
-      node.addEventListener(listener.event, function(this: HTMLElement, event) {
-        (baseElementContext[listener.callback as keyof typeof baseElementContext] as unknown as EventHandler)(event, this, additionalSource)
+      node.addEventListener(listener.event, function (this: HTMLElement, event) {
+        ;(
+          baseElementContext[
+            listener.callback as keyof typeof baseElementContext
+          ] as unknown as EventHandler
+        )(event, this, additionalSource)
       })
     })
   }

@@ -1,5 +1,10 @@
-import importPage from "./importsMap"
-import renderView, { PageDetails, getPageDetails } from "./renderView"
+import importPage from './importsMap'
+import renderView, { PageDetails, getPageDetails } from './renderView'
+import {
+  initScrollRestoration,
+  restoreScrollPosition,
+  saveScrollPosition,
+} from './scrollRestoration'
 
 type PageDetailsCallback = (pageDetails: PageDetails) => void
 
@@ -13,30 +18,45 @@ export function subscribeUrl(callback: PageDetailsCallback): VoidFunction {
   listeners.push(callback)
   callback(getPageDetails(getCurrUrl()))
   return () => {
-    listeners = listeners.filter(cb => cb !== callback)
+    listeners = listeners.filter((cb) => cb !== callback)
   }
 }
 
-let lastNavigationPage: PageDetails | undefined;
+export function navigateUrl(to: string) {
+  saveScrollPosition()
+  window.history.pushState({}, '', window.location.origin + to)
+  updateViewHTML(getPageDetails(to))
+}
 
-export async function navigate(newPage: PageDetails, bypassCheck?: boolean) {
+let lastNavigationPage: PageDetails | undefined
+
+/**
+ * Updates html code accordingly to current url.
+ * @param newPage
+ * @param bypassCheck
+ */
+export async function updateViewHTML(newPage: PageDetails, bypassCheck?: boolean) {
   if (bypassCheck || lastNavigationPage?.tagName !== newPage.tagName) {
     listeners = [] // otherwise all callbacks will be called, while new URL doesn't match currently rendered page
     renderView(newPage.tagName, () => {
       if (newPage.tagName !== lastNavigationPage!.tagName) {
-        navigate(lastNavigationPage!, true)
+        updateViewHTML(lastNavigationPage!, true)
+        return
       }
+
+      restoreScrollPosition()
+      // Restore only after the view transition finishes.
     })
   }
 
   lastNavigationPage = newPage
-  listeners.forEach(callback => callback(newPage))
+  listeners.forEach((callback) => callback(newPage))
 }
 
 export default function initRouter() {
   // handles back and forward history buttons in browser
   window.onpopstate = () => {
-    navigate(getPageDetails(getCurrUrl()))
+    updateViewHTML(getPageDetails(getCurrUrl()))
   }
 
   document.main = document.querySelector('main')!
@@ -45,7 +65,12 @@ export default function initRouter() {
   importPage(currPage.tagName)
 
   if (document.main.children.length === 0) {
-    // so during development and server side generating we gonna renderView, but not when serving static HTML(bcuz alreayd got children in main)
-    navigate(currPage)
+    // so during development and server side generating we gonna updateViewHTML, but not when serving static HTML(because already got children in main)
+    updateViewHTML(currPage)
+  } else {
+    // Static HTML already rendered; restore immediately.
+    // restoreScrollPosition()
   }
+
+  initScrollRestoration()
 }

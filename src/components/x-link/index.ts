@@ -1,11 +1,11 @@
-import HEART, {propsUsedInTemplate} from './index.heart'
-import { getPageDetails } from 'router/renderView';
-import BaseElement from 'BaseElement';
-import importPage from 'router/importsMap';
-import { navigate } from 'router';
+import HEART, { propsUsedInTemplate } from './index.heart'
+import { getPageDetails } from 'router/renderView'
+import BaseElement from 'BaseElement'
+import importPage from 'router/importsMap'
+import { navigateUrl } from 'router'
 
 class XLink extends BaseElement {
-  static observedAttributes = propsUsedInTemplate;
+  static observedAttributes = propsUsedInTemplate
 
   get heart() {
     return HEART
@@ -18,12 +18,8 @@ class XLink extends BaseElement {
   }
 
   handleRedirect = (e: MouseEvent) => {
-    e.preventDefault();
-    const to = this.state.to
-
-    window.history.pushState({}, to, window.location.origin + to);
-    navigate(getPageDetails(to))
-
+    e.preventDefault()
+    navigateUrl(this.state.to as string)
     return false
   }
 
@@ -32,4 +28,4 @@ class XLink extends BaseElement {
   // }
 }
 
-window.customElements.define('x-link', XLink);
+window.customElements.define('x-link', XLink)

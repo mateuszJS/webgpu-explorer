@@ -137,7 +137,7 @@
   <h3>Enough of introductions, lets start!</h3>
   <p>Firstly, we need some HTML with trigger(a button) and popover(a div).</p>
 
-  <iframe height="379" style="width: 100%;" scrolling="no" title="Ultimate Popover - Initial Structure"
+  <iframe height="300" style="width: 100%;" scrolling="no" title="Ultimate Popover - Initial Structure"
     src="https://codepen.io/mateuszJS/embed/zxBGYGq?default-tab=html%2Cresult&editable=true" frameborder="no"
     loading="lazy" allowtransparency="true">
     See the Pen <a href="https://codepen.io/mateuszJS/pen/zxBGYGq">

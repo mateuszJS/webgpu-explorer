@@ -1,5 +1,8 @@
 <h1 class="hero-title">WebGPU Explorer</h1>
 <h2 class="hero-subtitle">Welcome! Which boundary of the browser are we pushing today?</h2>
+<p class="corner-ribbon glass">
+  <span>Area free from<br>AI generated slop</span>
+</p>
 <!-- <h2 class="hero-subtitle">Welcome! Which browser's limits do we challenge today?</h2> -->
 <section class="panels-list">
   <project-panel x-for="project in projectList" class="panel" icon="{project.icon}" projectSlug="{project.projectSlug}"
